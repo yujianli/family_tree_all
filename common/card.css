@@ -1,0 +1,61 @@
+.card_list {
+	/* padding-left: 18px;
+	padding-right: 18px; */
+}
+
+.more {
+	text-align: right;
+	margin-bottom: 22px;
+	padding-right: 18px;
+}
+
+.card_pic {
+	width: 123px;
+	height: 92px;
+	margin-right: 12px;
+}
+
+.card_item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+	padding-left: 15px;
+	padding-right: 15px;
+
+}
+
+.card_inner {
+
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.card_title {
+	font-size: 17px;
+	color: #333;
+	font-weight: 600;
+}
+
+.card_others {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 32px;
+}
+
+.tags {
+	font-size: 13px;
+	color: #56D282;
+}
+
+.tags_text {
+	margin-right: 8px;
+}
+
+.time {
+	font-size: 13px;
+	color: #999;
+
+}

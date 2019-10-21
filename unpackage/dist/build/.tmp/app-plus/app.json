@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/hobby/list/list",
+    "pages/hobby/detail/detail",
+    "pages/personalInfo/personalInfo",
+    "pages/setting/setting",
+    "pages/funcList/funcList"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "世纪图谱",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#ffffff"
+  },
+  "nvueCompiler": "uni-app",
+  "renderer": "auto",
+  "splashscreen": {
+    "alwaysShowBeforeRender": true,
+    "autoclose": false
+  },
+  "appname": "family_app",
+  "compilerVersion": "2.3.3",
+  "usingComponents": {}
+}

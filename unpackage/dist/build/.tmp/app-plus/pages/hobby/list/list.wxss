@@ -1,0 +1,120 @@
+.card_list {
+	/* padding-left: 18px;
+	padding-right: 18px; */
+}
+.more {
+	text-align: right;
+	margin-bottom: 22px;
+	padding-right: 18px;
+}
+.card_pic {
+	width: 123px;
+	height: 92px;
+	margin-right: 12px;
+}
+.card_item {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	margin-bottom: 30px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.card_inner {
+
+	-webkit-box-orient: vertical;
+
+	-webkit-box-direction: normal;
+
+	-webkit-flex-direction: column;
+
+	    -ms-flex-direction: column;
+
+	        flex-direction: column;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+}
+.card_title {
+	font-size: 17px;
+	color: #333;
+	font-weight: 600;
+}
+.card_others {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	margin-top: 32px;
+}
+.tags {
+	font-size: 13px;
+	color: #56D282;
+}
+.tags_text {
+	margin-right: 8px;
+}
+.time {
+	font-size: 13px;
+	color: #999;
+}
+.category_container {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	-webkit-justify-content: space-around;
+	    -ms-flex-pack: distribute;
+	        justify-content: space-around;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+}
+.category_hd {
+	font-size: 16px;
+	color: #000;
+	padding-bottom: 17px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-color: #ffffff;
+}
+.category_hd_active {
+	color: #4DC578;
+	border-color: #4DC578;
+}
+.search_info {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 34px;
+}
+

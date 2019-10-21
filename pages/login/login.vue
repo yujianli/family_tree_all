@@ -7,17 +7,8 @@
 			<view class="input-view"><input class="input" type="text" v-model="quickLoginInfo.mobile" placeholder="请输入手机号" name="mobile" placeholder-style="color:#999" /></view>
 
 			<view class="input-view" style="position: relative;">
-				<input class="input" password v-model="quickLoginInfo.code" placeholder="输入验证码" name="code" placeholder-style="color:#999" />
-				<button
-					style="width: 89px;height: 26px;line-height: 26px;
-				position: absolute;
-				top:18px;
-				right: 0;
-				border-radius: 2px;border-style:solid;border-width: 1px;border-color: #999;
-				font-size: 16px;padding-left: 0;padding-right: 0;color: #999;"
-				:disabled="sendCodeInfo.hasSend"
-					@tap="sendCode"
-				>
+				<input class="input" v-model="quickLoginInfo.code" placeholder="输入验证码" name="code" placeholder-style="color:#999" />
+				<button class="sendCode" :disabled="sendCodeInfo.hasSend" @tap="sendCode">
 				<!-- :class="{disabled: sendCodeInfo.hasSend}" -->
 					{{ sendCodeInfo.msg }}
 				</button>
@@ -28,11 +19,14 @@
 </template>
 
 <script>
+//来自 graceUI 的表单验证， 使用说明见手册 http://grace.hcoder.net/doc/info/73-3.html
+import graceChecker from '@/common/graceChecker.js'
 import http from '@/common/vmeitime-http/interface.js'
+
 export default {
 	data() {
 		return {
-			isShow: true,
+			isShow: false,
 			quickLoginInfo: {
 				nickname: '',
 				mobile: '',
@@ -45,20 +39,22 @@ export default {
 			}
 		};
 	},
-	onLoad() {},
 	methods: {
 		//发送验证码
 		sendCode: function() {
-			if (!this.quickLoginInfo.mobile) {
-				uni.showToast({
-					title: '请填写手机号',
-					icon: 'none',
-					duration: 800
-				});
+			let mobile = this.quickLoginInfo.mobile;
+			let rule = [
+				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" }
+			];
+			let checkSendCode = graceChecker.check({mobile}, rule);
+			if(!checkSendCode){
+				uni.showToast({ title: graceChecker.error, icon: "none" });
 				return false;
 			}
-			http.post('auth/requestCode', {mobile:this.quickLoginInfo.mobile, language: 'en_US'}).then((res)=>{
-				//console.log(res);
+			http.post('auth/requestCode', {
+				mobile, 
+				language: 'zh_CN',
+			}).then((res)=>{
 				if(res.data.code===200){
 					this.isShow = res.data.data;
 					let sendInfo = this.sendCodeInfo;
@@ -85,18 +81,36 @@ export default {
 					return false;
 				}
 			})
+			
 		},
 		submit: function(e){
 			let {nickname, mobile, code} = e.detail.value;
-			http.post('auth/autoLogin', 
-			{name:nickname,username:mobile, validateCode: code, language: 'zn_CH'}).then((res)=>{
-				console.log(res);
+			let rule = [
+				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" },
+				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" }
+			];
+			if(this.isShow){
+				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_-]{4,16}$", errorMsg: "请填写姓名"})
+			}
+			let checkLogin = graceChecker.check(e.detail.value, rule);
+			if(!checkLogin){
+				uni.showToast({ title: graceChecker.error, icon: "none" });
+				return false;
+			}
+			
+			http.post('auth/autoLogin', {
+				name:nickname,
+				username:mobile, 
+				validateCode: code, 
+				language: 'zn_CH',
+			}).then((res)=>{
+				//console.log(res);
 				if(res.data.code===200){
 					//缓存用户信息
 					uni.setStorageSync("USER", res.data.user);
 					//跳转到主页
 					uni.navigateTo({
-						url: ''
+						url: '/pages/index/index'
 					});
 				}else {
 					uni.showToast({
@@ -157,5 +171,24 @@ view {
 	background-color: #4dc578;
 	height: 46px;
 	line-height: 46px;
+}
+.sendCode{
+	width: 89px;height: 26px;line-height: 26px;
+	position: absolute;
+	top:18px;
+	right: 0;
+	border-radius: 2px;
+	border-style:solid;
+	border-width: 1px;
+	border-color: #999;
+	font-size: 16px;
+	padding-left: 0;
+	padding-right: 0;
+	color: #999;
+	z-index: 999999;
+}
+button:after{
+	border:0;
+	border-radius: 0;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<view class="status_bar"></view>
 		<view class="person_tabs">
 			<view>
 				<text class="person_name person_name_active">万少波（本人）</text>
@@ -11,14 +12,15 @@
 			</view>
 		</view>
 		<view class="func_container">
-			<view class="func_wrapper" v-for="(basicFunc,index) in basicFuncList">
-				<image class="pic_menu" :src="basicFunc.pic"></image>
-				<text class="text">{{basicFunc.name}}</text>
-				<image src="../../static/images/icon_menu_delete.png"  class="pic_opt"></image>
-			</view>	
+			<!-- <navigator url="/pages/hobby/list/list" hover-class="navigator-hover"> -->
+				<view class="func_wrapper" v-for="(basicFunc,index) in basicFuncList" @tap="jumpToList">
+					<image class="pic_menu" :src="basicFunc.pic"></image>
+					<text class="text">{{basicFunc.name}}</text>
+				</view>
+			
 		</view>
 		<view class="person_intro">
-			<image src="../../static/images/avatar.png" style="width: 44px;height: 44px;"></image>
+			<image src="../../static/images/test.png" style="width: 44px;height: 44px;"></image>
 			<text class="name">万某某</text>
 		</view>
 		<view style="margin-bottom: 26px;">
@@ -33,28 +35,28 @@
 			
 		</view>
 		
-		<view class="card_list" style="padding-left: 18px;padding-right: 18px;">
-			<view style="text-align: right;margin-bottom: 22px;"><text style="font-size: 16px;color: $999;">更多</text></view>
+		<view class="card_list">
+			<view class="more">更多</view>
 			<view class="card_item">
-				<image src="../../static/images/icon_func_1.png" class="card_pic"></image>
+				<image src="../../static/images/test.png" class="card_pic"></image>
 				<view class="card_inner">
 					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
 					<view class="card_others">
 						<view class="tags">
-							<text>旅行</text>
-							<text>游记</text>
+							<text class="tags_text">旅行</text>
+							<text class="tags_text">游记</text>
 						</view>
 						<text class="time">2018/10/12</text>
 					</view>
 				</view>
 			</view>
 			<view class="card_item">
-				<image src="../../static/images/icon_func_1.png" class="card_pic"></image>
+				<image src="../../static/images/test.png" class="card_pic"></image>
 				<view class="card_inner">
 					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
 					<view class="card_others">
 						<view class="tags">
-							<text>旅行</text>
+							<text class="tags_text">旅行</text>
 						</view>
 						<text class="time">2018/10/12</text>
 					</view>
@@ -65,7 +67,11 @@
 					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
 					<view class="card_others">
 						<view class="tags">
-							<text>旅行</text>
+							<text class="tags_text">旅行</text>
+							<text class="tags_text">旅行</text>
+							<text class="tags_text">旅行</text>
+							<text class="tags_text">旅行</text>
+							<text class="tags_text">旅行</text>
 						</view>
 						<text class="time">2018/10/12</text>
 					</view>
@@ -123,12 +129,21 @@
 			}
 		},
 		methods: {
-			
+			jumpToList:function(){
+				uni.navigateTo({
+				    url: '/pages/hobby/list/list'
+				});
+			}
 		}
 	}
 </script>
 
 <style>
+	@import '../../common/card.css';
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+	}
 	.person_tabs{
 		display: flex;flex-direction: row;justify-content: space-around; align-items: center;
 		height: 50px;
@@ -201,51 +216,14 @@
 		display: flex;
 		justify-content: space-between;
 		margin-top: 8px;
-		margin-left: 25px;
-		margin-right: 35px;
+		margin-left: 15px;
+		margin-right: 15px;
 	}
 	.other_info{
 		margin-top: 18px;
 		font-size: 14px;
 		color: #333;
-		
-		
 	}
-	.card_item{
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 30px;
-		
-	}
-	.card_inner{
-		
-		flex-direction: column;
-		justify-content:space-between;
-	}
-	.card_pic{
-		width: 123px;height: 92px;
-		margin-right: 12px;
-	}
-	.card_title{
-		font-size: 17px;color: #333;font-weight: 600;
-	}
-	.card_others{
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		margin-top: 32px;
-	}
-	.tags{
-		font-size: 13px;
-		color: #56D282;
-		margin-right: 8px;
-	}
-	.time{
-		font-size: 13px;
-		color: #999;
-		
-	}
+	
 	
 </style>

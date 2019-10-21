@@ -1,11 +1,14 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-		    "path" : "pages/funcList/funcList",
-		    "style" : {
-				"navigationBarTitleText":"功能列表"
+			"path": "pages/login/login",
+			"style": {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
 			}
-		},{
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"app-plus": {
@@ -13,30 +16,34 @@
 				}
 			}
 		},
-		// {
-		// 	"path": "pages/quickLogin/quickLogin",
-		// 	"style": {
-		// 		"app-plus": {
-		// 			"titleNView": false //禁用原生导航栏
-		// 		}
-		// 	}
-		// },
+		{
+		    "path" : "pages/hobby/list/list",
+		    "style" : {
+		    	"navigationBarTitleText":"爱好"
+		    }
+		},
+		{
+		    "path" : "pages/hobby/detail/detail",
+		    "style" : {
+		    	"navigationBarTitleText":"爱好详情"
+		    }
+		},		
 		{
 		    "path" : "pages/personalInfo/personalInfo",
 		    "style" : {
 				"navigationBarTitleText":"个人信息"
 			}
-		},{
+		},
+		{
 		    "path" : "pages/setting/setting",
 		    "style" : {
 				"navigationBarTitleText":"系统设置"
 			}
-		},{
-			"path": "pages/login/login",
-			"style": {
-				"app-plus": {
-					"titleNView": false //禁用原生导航栏
-				}
+		},
+		{
+		    "path" : "pages/funcList/funcList",
+		    "style" : {
+				"navigationBarTitleText":"功能列表"
 			}
 		}
     ],
@@ -44,7 +51,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
 		// "navigationStyle":"custom",
-		"navigationBarBackgroundColor": "transparent",
-		"backgroundColor": "transparent"
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#ffffff"
 	}
 }
