@@ -39,8 +39,43 @@ export const banner = (data) => {
     })
 }
 
+export const getByToken = (url, data) => {
+	http.interceptor.request = (config) => {
+		let info = uni.getStorageInfoSync('USER');
+		config.header = {
+			// "token": info.token
+			"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ"
+		}
+	}
+	if(data){
+		let _url = '';
+		for(var i in data) {
+			if(!i) break;
+			_url = _url + '&' + i + '=' + data[i];
+		}
+		if(_url){
+			_url = _url.replace('&', '?');
+			url += _url;
+		}
+	}
+	return http.request({url: url});
+}
+
+export const postByToken = (url, data) => {
+	http.interceptor.request = (config) => {
+		let info = uni.getStorageInfoSync('USER');
+		config.header = {
+			// "token": info.token,
+			"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ"
+		}
+	}
+	return http.request({url: url, data: data, method: 'post'});
+}
+
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 	test,
-    banner
+    banner,
+	getByToken,
+	postByToken
 }
