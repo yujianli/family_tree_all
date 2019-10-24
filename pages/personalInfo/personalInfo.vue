@@ -13,9 +13,8 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">性别</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.sex" placeholder-style="color:#999" placeholder="性别"/> -->
-		<picker @change="bindPickerChange" :value="sexIndex" :range="sexArray">
-			<view class="uni-input">{{ sexArray[sexIndex] }}</view>
+		<picker @change="sexBindPickerChange" :value="sexIndex" :range="sexArray" range-key="value">
+			<view class="uni-input">{{ sexArray[sexIndex].value }}</view>
 		</picker>
 		</view>
 		<view class="wrapper">
@@ -24,11 +23,17 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">生肖</text>
-			<input class="input" type="text" v-model="baseInfo.zodiac" placeholder-style="color:#999" placeholder="生肖" value="猴"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.zodiac" placeholder-style="color:#999" placeholder="生肖" value="猴"/> -->
+			<picker @change="zodiacBindPickerChange" :value="zodiacIndex" :range="zodiacArray" range-key="value">
+				<view class="uni-input">{{ zodiacArray[zodiacIndex].value }}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生年月</text>
-			<input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/> -->
+		<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="birthIndex" :range="birthArray">
+			<view class="uni-input">{{birthArray[0][birthIndex[0]]}}，{{birthArray[1][birthIndex[1]]}}，{{birthArray[2][birthIndex[2]]}}</view>
+		</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
@@ -96,6 +101,9 @@
 			return {
 				sexArray: dataJson['sex'],
 				sexIndex: 0,
+				zodiacArray: dataJson['zodiac'],
+				zodiacIndex: 0,
+				
 				baseInfo: {
 				            name: '',
 				            sex: '',
@@ -122,6 +130,7 @@
 			}
 		},
 		onLoad: function (option) {
+			console.log(dataJson)
 			this.loadData(option.id)
 		},
 		methods: {
@@ -136,7 +145,15 @@
 						});
 					}
 				})
-			}
+			},
+			sexBindPickerChange: function(e) {
+			    console.log('性別，携带值为', e.target.value)
+			    this.sexIndex = e.target.value
+			},
+			zodiacBindPickerChange: function(e) {
+			    console.log('生肖，携带值为', e.target.value)
+			    this.zodiacIndex = e.target.value
+			},
 		}
 	}
 </script>

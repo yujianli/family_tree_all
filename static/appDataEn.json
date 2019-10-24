@@ -1,0 +1,30 @@
+{
+	"sex":[{"key":1,"":"男","value":"man"},{"key":2,"":"女","value":"woman"}],
+	"bloodType":[
+		{"key":0,"value":"A Type"},
+		{"key":1,"value":"B Type"},
+		{"key":2,"value":"AB Type"},
+		{"key":3,"value":"O Type"}
+	],
+	"zodiac":[
+		{"key":0,"value":"鼠"},{"key":1,"value":"牛"},{"key":2,"value":"虎"},{"key":3,"value":"兔"},
+		{"key":4,"value":"龙"},{"key":5,"value":"蛇"},{"key":6,"value":"马"},{"key":7,"value":"羊"},
+		{"key":8,"value":"猴"},{"key":9,"value":"鸡"},{"key":10,"value":"狗"},{"key":11,"value":"猪"}
+	],
+	"birthTime":[
+		{"key":0,"value":"23:00-00:59"},{"key":1,"value":"01:00-02:59"},{"key":2,"value":"03:00-04:59"},{"key":3,"value":"05:00-06:59"},
+		{"key":4,"value":"07:00-08:59"},{"key":5,"value":"09:00-10:59"},{"key":6,"value":"11:00-12:59"},{"key":7,"value":"13:00-14:59"},
+		{"key":8,"value":"15:00-16:59"},{"key":9,"value":"17:00-18:59"},{"key":10,"value":"19:00-20:59"},{"key":11,"value":"21:00-22:59"}
+	],
+	"corporeity":[
+		{"key":0,"value":"Peace"},
+		{"key":1,"value":"Deficiency of Vital Energy"},
+		{"key":2,"value":"Deficiency of Yang"},
+		{"key":3,"value":"Deficiency of Yin 3"},
+		{"key":4,"value":"Phlegm Dampness 4"},
+		{"key":5,"value":"Damp Deat 5"},
+		{"key":6,"value":"Blood Stasis 6"},
+		{"key":7,"value":"Qi Stagnation 7"},
+		{"key":8,"value":"Intrinsic Quality 8"}
+	]
+}
