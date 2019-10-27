@@ -13,8 +13,8 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">性别</text>
-		<picker @change="sexBindPickerChange" :value="sexIndex" :range="sexArray" range-key="value">
-			<view class="uni-input">{{ sexArray[sexIndex].value }}</view>
+		<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
+			<view class="uni-input">{{  arr.sex[idx.sex].value }}</view>
 		</picker>
 		</view>
 		<view class="wrapper">
@@ -24,8 +24,8 @@
 		<view class="wrapper">
 			<text class="inner_title">生肖</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.zodiac" placeholder-style="color:#999" placeholder="生肖" value="猴"/> -->
-			<picker @change="zodiacBindPickerChange" :value="zodiacIndex" :range="zodiacArray" range-key="value">
-				<view class="uni-input">{{ zodiacArray[zodiacIndex].value }}</view>
+			<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
+				<view class="uni-input">{{  arr.zodiac[idx.zodiac].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -39,8 +39,8 @@
 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.birthTime" placeholder-style="color:#999" placeholder="出生时辰"/> -->
-			<picker @change="birthTimeBindPickerChange" :value="birthTimeIndex" :range="birthTimeArray" range-key="value">
-				<view class="uni-input">{{ birthTimeArray[birthTimeIndex].value }}</view>
+			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
+				<view class="uni-input">{{  arr.birthTime[idx.birthTime].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -83,15 +83,15 @@
 		<view class="wrapper">
 			<text class="inner_title">体质</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.corporeity" placeholder-style="color:#999" placeholder="体质" value="湿热质"/> -->
-			<picker @change="corporeityBindPickerChange" :value="corporeityIndex" :range="corporeityArray" range-key="value">
-				<view class="uni-input">{{ corporeityArray[corporeityIndex].value }}</view>
+			<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
+				<view class="uni-input">{{  arr.corporeity[idx.corporeity].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">血型</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.bloodType" placeholder-style="color:#999" placeholder="血型" value="O型"/> -->
-			<picker @change="bloodTypeBindPickerChange" :value="bloodTypeIndex" :range="bloodTypeArray" range-key="value">
-				<view class="uni-input">{{ bloodTypeArray[bloodTypeIndex].value }}</view>
+			<picker @change="bloodTypeBindPickerChange" :value="idx.bloodType" :range=" arr.bloodType" range-key="value">
+				<view class="uni-input">{{  arr.bloodType[idx.bloodType].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -104,8 +104,8 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">星座</text>
-			<picker @change="constellationBindPickerChange" :value="constellationIndex" :range="constellationArray" range-key="value">
-				<view class="uni-input">{{ constellationArray[constellationIndex].value }}</view>
+			<picker @change="constellationBindPickerChange" :value="idx.constellation" :range=" arr.constellation" range-key="value">
+				<view class="uni-input">{{  arr.constellation[idx.constellation].value }}</view>
 			</picker>
 		</view>
 		<view class="mul_wrapper">
@@ -138,18 +138,34 @@
 	export default {
 		data() {
 			return {
-				sexArray: dataJson['sex'],
-				sexIndex: 0,
-				zodiacArray: dataJson['zodiac'],
-				zodiacIndex: 0,
-				birthTimeArray: dataJson['birthTime'],
-				birthTimeIndex: 0,
-				corporeityArray: dataJson['corporeity'],
-				corporeityIndex: 0,
-				bloodTypeArray: dataJson['bloodType'],
-				bloodTypeIndex: 0,
-				constellationArray: dataJson['constellation'],
-				constellationIndex: 0,
+				 arr:{
+					sex:dataJson['sex'],
+					zodiac: dataJson['zodiac'],
+					birthTime: dataJson['birthTime'],
+					corporeity: dataJson['corporeity'],
+					bloodType: dataJson['bloodType'],
+					constellation: dataJson['constellation']
+				},
+				idx:{
+					sex:0,
+					zodiac:0,
+					birthTime:0,
+					corporeity:0,
+					bloodType:0,
+					constellation:0
+				},
+				// sexArray: dataJson['sex'],
+				// sexIndex: 0,
+				// zodiacArray: dataJson['zodiac'],
+				// zodiacIndex: 0,
+				// birthTimeArray: dataJson['birthTime'],
+				// birthTimeIndex: 0,
+				// corporeityArray: dataJson['corporeity'],
+				// corporeityIndex: 0,
+				// bloodTypeArray: dataJson['bloodType'],
+				// bloodTypeIndex: 0,
+				// constellationArray: dataJson['constellation'],
+				// constellationIndex: 0,
 				birthDate: getDate(),
 				passingAwayDate: '请选择',
 				startDate:getDate('start'),
@@ -192,14 +208,14 @@
 					if(res.data.code === 200){
 						let _info = res.data.data.baseInfo;
 						util.loadObj(this.baseInfo, _info);
-						this.sexIndex = _info.sex;
-						this.zodiacIndex=_info.zodiac;
-						this.birthTimeIndex=_info.birthTime;
+						this.initProp('sex',_info.sex);
+						this.initProp('zodiac',_info.zodiac);
+						this.initProp('birthTime',_info.birthTime);
+						this.initProp('corporeity',_info.corporeity);
+						this.initProp('bloodType',_info.bloodType);
+						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
 						this.isPassedAway=_info.birth==1;
-						this.corporeityIndex=_info.corporeity;
-						this.bloodTypeIndex=_info.bloodType;
-						this.constellationIndex=_info.constellation;
 					}else{
 						uni.showToast({
 							title: res.data.message,
@@ -213,11 +229,11 @@
 				this.selProp('sex', e.target.value)
 			},
 			zodiacBindPickerChange: function(e) {
-			    this.zodiacIndex = e.target.value
+			    // this.zodiacIndex = e.target.value
 				this.selProp('zodiac', e.target.value)
 			},
 			birthTimeBindPickerChange: function(e) {
-			    this.birthTimeIndex = e.target.value
+			    // this.birthTimeIndex = e.target.value
 				this.selProp('birthTime', e.target.value)
 			},
 			bindDateChange: function(e) {
@@ -251,19 +267,28 @@
 				this.passingAwayDate = _date.replace('-','年')+ '月'
 			},
 			corporeityBindPickerChange: function(e) {
-			    this.corporeityIndex = e.target.value
+			    // this.corporeityIndex = e.target.value
 				this.selProp('corporeity', e.target.value)
 			},
 			bloodTypeBindPickerChange: function(e) {
-			    this.bloodTypeIndex = e.target.value
+			    // this.bloodTypeIndex = e.target.value
 				this.selProp('bloodType', e.target.value)
 			},
 			constellationBindPickerChange: function(e) {
-			    this.constellationIndex = e.target.value
+			    // this.constellationIndex = e.target.value
 				this.selProp('constellation', e.target.value)
 			},
 			selProp:function(prop, index){
+				this.idx[prop]=index;
 				this.baseInfo[prop]=dataJson[prop][index].key;
+			},
+			initProp:function(prop, val){
+				for(var i=0;i<dataJson[prop].length;i++){
+					if(dataJson[prop][i].value===val){
+						this.idx[prop]=dataJson[prop][i].key;
+						break;
+					}
+				}
 			},
 			regValid:function(type, value){
 				var _title = '';
