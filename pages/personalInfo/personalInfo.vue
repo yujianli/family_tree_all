@@ -216,6 +216,7 @@
 						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
 						this.isPassedAway=_info.birth==1;
+						
 					}else{
 						uni.showToast({
 							title: res.data.message,
