@@ -9,7 +9,7 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">身份证</text>
-			<input class="input" type="text" v-model="baseInfo.idCard" placeholder-style="color:#999" placeholder="身份证"/>
+			<input class="input" type="text" v-model="baseInfo.idCard" placeholder-style="color:#999" placeholder="身份证" @blur="regValid('idcard', baseInfo.idCard)"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">性别</text>
@@ -31,25 +31,34 @@
 		<view class="wrapper">
 			<text class="inner_title">出生年月</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/> -->
-		<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="birthIndex" :range="birthArray">
-			<view class="uni-input">{{birthArray[0][birthIndex[0]]}}，{{birthArray[1][birthIndex[1]]}}，{{birthArray[2][birthIndex[2]]}}</view>
+		<picker mode="date" :value="baseInfo.birth" :start="startDate" 
+		:end="endDate" @change="bindDateChange" :fields="'month'">
+			<view class="uni-input">{{birthDate}}</view>
 		</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
-			<input class="input" type="text" v-model="baseInfo.birthTime" placeholder-style="color:#999" placeholder="出生时辰"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.birthTime" placeholder-style="color:#999" placeholder="出生时辰"/> -->
+			<picker @change="birthTimeBindPickerChange" :value="birthTimeIndex" :range="birthTimeArray" range-key="value">
+				<view class="uni-input">{{ birthTimeArray[birthTimeIndex].value }}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生地</text>
 			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地"/>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">是否在世</text>
-			<input class="input" type="text" v-model="baseInfo.isPassedAway" placeholder-style="color:#999" placeholder="是否在世"/>
+			<text class="inner_title">是否过世</text>
+			<!-- <input class="input" type="text" v-model="baseInfo.isPassedAway" placeholder-style="color:#999" placeholder="是否在世"/> -->
+			<switch checked="isPassedAway" @change="switchChange" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">过世年月</text>
-			<input class="input" type="text" v-model="baseInfo.passingAway" placeholder-style="color:#999" placeholder="过世年月"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.passingAway" placeholder-style="color:#999" placeholder="过世年月"/> -->
+			<picker class="input" mode="date" :value="baseInfo.passingAway" :start="startDate"
+			:end="endDate" @change="bindPassingAwayDateChange" :fields="'month'">
+				<view>{{passingAwayDate}}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">居住地</text>
@@ -73,11 +82,17 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">体质</text>
-			<input class="input" type="text" v-model="baseInfo.corporeity" placeholder-style="color:#999" placeholder="体质" value="湿热质"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.corporeity" placeholder-style="color:#999" placeholder="体质" value="湿热质"/> -->
+			<picker @change="corporeityBindPickerChange" :value="corporeityIndex" :range="corporeityArray" range-key="value">
+				<view class="uni-input">{{ corporeityArray[corporeityIndex].value }}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">血型</text>
-			<input class="input" type="text" v-model="baseInfo.bloodType" placeholder-style="color:#999" placeholder="血型" value="O型"/>
+			<!-- <input class="input" type="text" v-model="baseInfo.bloodType" placeholder-style="color:#999" placeholder="血型" value="O型"/> -->
+			<picker @change="bloodTypeBindPickerChange" :value="bloodTypeIndex" :range="bloodTypeArray" range-key="value">
+				<view class="uni-input">{{ bloodTypeArray[bloodTypeIndex].value }}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">基因</text>
@@ -87,15 +102,39 @@
 			<text class="inner_title">气质</text>
 			<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" placeholder="气质"/>
 		</view>
+		<view class="wrapper">
+			<text class="inner_title">星座</text>
+			<picker @change="constellationBindPickerChange" :value="constellationIndex" :range="constellationArray" range-key="value">
+				<view class="uni-input">{{ constellationArray[constellationIndex].value }}</view>
+			</picker>
+		</view>
 		<view class="mul_wrapper">
 			<text class="inner_title">个人简介</text>
 			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" value="我是一个XX的人 我是一个XX的人 我是一个XX的人"/>
 		</view>
+		<button type="primary"  class="login" @tap="save">保存</button>
 	</view>
+
 </template>
 
 <script>
 	import dataJson from '@/static/appData.json'
+	import util from '@/common/util.js'
+	import reg from '@/common/bizRule.js'
+	function getDate(type){
+				const date = new Date();
+			
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+			
+			
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				return `${year}年${month}月`;
+			}
 	export default {
 		data() {
 			return {
@@ -103,41 +142,64 @@
 				sexIndex: 0,
 				zodiacArray: dataJson['zodiac'],
 				zodiacIndex: 0,
-				
+				birthTimeArray: dataJson['birthTime'],
+				birthTimeIndex: 0,
+				corporeityArray: dataJson['corporeity'],
+				corporeityIndex: 0,
+				bloodTypeArray: dataJson['bloodType'],
+				bloodTypeIndex: 0,
+				constellationArray: dataJson['constellation'],
+				constellationIndex: 0,
+				birthDate: getDate(),
+				passingAwayDate: '请选择',
+				startDate:getDate('start'),
+				endDate:getDate('end'),
+				isPassedAway: false,
 				baseInfo: {
+							userId:'',
 				            name: '',
 				            sex: '',
-				            career: '',
 				            birthPlace: '',
 				            placeResidence: '',
 				            mobile: '',
+							headUrl: '../../static/images/avatar.png',
+							birth: getDate({format:true}),
+							bloodType: '',
+							birthTime: '',
 				            fixedTelephone: '',
 				            nationality: '',
-				            birthTime: '',
-				            birth: '',
 				            zodiac: '',
 				            corporeity: '',
-				            bloodType: '',
 				            gene: '',
-				            headUrl: '../../static/images/avatar.png',
 				            brief: '',
-				            idCard: '',
-				            emailAddress: '',
+							language:'zh_CN',
+							constellation: '',
+							career: '',
+							emailAddress: '',
+							isPassedAway: 0,
+							passingAway: '',
 				            temperament: '',
-				            passingAway: '',
-				            isPassedAway: ''
+				            idCard: ''
 				        }
 			}
 		},
 		onLoad: function (option) {
-			console.log(dataJson)
 			this.loadData(option.id)
 		},
 		methods: {
 			loadData: function(id){
 				this.$api.getByToken('base/detailBase', {'baseId':id, 'language':'zn_CH'}).then((res)=>{
 					if(res.data.code === 200){
-						this.baseInfo = res.data.data.baseInfo;
+						let _info = res.data.data.baseInfo;
+						util.loadObj(this.baseInfo, _info);
+						this.sexIndex = _info.sex;
+						this.zodiacIndex=_info.zodiac;
+						this.birthTimeIndex=_info.birthTime;
+						this.date=_info.birth;
+						this.isPassedAway=_info.birth==1;
+						this.corporeityIndex=_info.corporeity;
+						this.bloodTypeIndex=_info.bloodType;
+						this.constellationIndex=_info.constellation;
 					}else{
 						uni.showToast({
 							title: res.data.message,
@@ -147,13 +209,99 @@
 				})
 			},
 			sexBindPickerChange: function(e) {
-			    console.log('性別，携带值为', e.target.value)
 			    this.sexIndex = e.target.value
+				this.selProp('sex', e.target.value)
 			},
 			zodiacBindPickerChange: function(e) {
-			    console.log('生肖，携带值为', e.target.value)
 			    this.zodiacIndex = e.target.value
+				this.selProp('zodiac', e.target.value)
 			},
+			birthTimeBindPickerChange: function(e) {
+			    this.birthTimeIndex = e.target.value
+				this.selProp('birthTime', e.target.value)
+			},
+			bindDateChange: function(e) {
+				let _date = e.target.value
+				console.log(e.target.value);
+				if(_date.length<5){
+					uni.showToast({
+						title: '请选择日期', icon:'none'
+					});
+					return false;
+				}
+				this.baseInfo.birth = _date;
+				console.log(_date);
+
+				this.birthDate = _date.replace('-','年')+ '月'
+			},
+			switchChange: function(e){
+				this.isPassedAway = e.target.value
+				this.baseInfo.isPassedAway = e.target.value?1:0
+				console.log('是否在世，携带值为', this.baseInfo.isPassedAway)
+			},
+			bindPassingAwayDateChange: function(e) {
+				let _date = e.target.value
+				if(_date.length<5){
+					uni.showToast({
+						title: '请选择日期', icon:'none'
+					});
+					return false;
+				}
+				this.baseInfo.passingAway=_date;
+				this.passingAwayDate = _date.replace('-','年')+ '月'
+			},
+			corporeityBindPickerChange: function(e) {
+			    this.corporeityIndex = e.target.value
+				this.selProp('corporeity', e.target.value)
+			},
+			bloodTypeBindPickerChange: function(e) {
+			    this.bloodTypeIndex = e.target.value
+				this.selProp('bloodType', e.target.value)
+			},
+			constellationBindPickerChange: function(e) {
+			    this.constellationIndex = e.target.value
+				this.selProp('constellation', e.target.value)
+			},
+			selProp:function(prop, index){
+				this.baseInfo[prop]=dataJson[prop][index].key;
+			},
+			regValid:function(type, value){
+				var _title = '';
+				switch(type){
+					case 'idcard':
+						_title = reg.idcard(value);
+						break;
+					case 'email': 
+						_title=reg.email(value);
+						break;
+					case 'telephone':
+						_title = reg.telephone(value);
+						break;
+					case 'mobile':
+						_title = reg.mobile(value);
+						break;
+				}
+				if(_title){
+					uni.showToast({
+						title: _title,icon:'none'
+					});
+				}
+			},
+			save:function(){
+				this.baseInfo['dateOfBirth']= this.baseInfo.birth;
+				delete this.baseInfo['birth'];
+				this.$api.postByToken('base/editBase', this.baseInfo).then((res)=>{
+					if(res.data.code===200){
+						uni.showToast({
+							title: '保存成功',icon:'none'
+						});
+					}else{
+						uni.showToast({
+							title: '保存失败', icon:'none'
+						});
+					}
+				});
+			}
 		}
 	}
 </script>

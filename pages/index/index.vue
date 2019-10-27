@@ -13,24 +13,24 @@
 		</view>
 		<view class="func_container">
 			<!-- <navigator url="/pages/hobby/list/list" hover-class="navigator-hover"> -->
-				<view class="func_wrapper" v-for="(basicFunc,index) in basicFuncList" @tap="jumpToList">
-					<image class="pic_menu" :src="basicFunc.pic"></image>
+				<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" @tap="jumpToList(basicFunc.id)">
+					<image class="pic_menu" :src="basicFunc.icon"></image>
 					<text class="text">{{basicFunc.name}}</text>
 				</view>
 			
 		</view>
 		<view class="person_intro">
-			<image src="../../static/images/test.png" style="width: 44px;height: 44px;"></image>
-			<text class="name">万某某</text>
+			<image src="personInfo.headUrl" style="width: 44px;height: 44px;"></image>
+			<text class="name">{{personInfo.name}}</text>
 		</view>
 		<view style="margin-bottom: 26px;">
 			<view class="other_info_container">
-				<text class="other_info">出生：2018/10-2019/11</text>
-				<text class="other_info">出生地：浙江杭州</text>
+				<text class="other_info">出生：{{personInfo.birth}}</text>
+				<text class="other_info">出生地：{{personInfo.birthPlace}}</text>
 			</view>
 			<view class="other_info_container">
-				<text class="other_info">民族：汉族</text>
-				<text class="other_info">职业：程序员</text>
+				<text class="other_info">民族：{{personInfo.nationality}}</text>
+				<text class="other_info">职业：{{personInfo.career}}</text>
 			</view>
 			
 		</view>
@@ -82,57 +82,69 @@
 </template>
 
 <script>
+	import util from '@/common/util.js'
+	import moduleLink from '@/common/moduleLink.js'
 	export default {
 		data() {
 			return {
 				basicFuncList:[{
-					id:1,
-					name:'基本信息',
-					pic:'../../static/images/icon_func_1.png'
-				},{
-					id:2,
-					name:'体貌特征',
-					pic:'../../static/images/icon_func_2.png'
-				},{
-					id:3,
-					name:'主要大事',
-					pic:'../../static/images/icon_func_3.png'
-				},{
-					id:4,
-					name:'计划安排',
-					pic:'../../static/images/icon_func_4.png'
-				},{
-					id:5,
-					name:'照片视频',
-					pic:'../../static/images/icon_func_5.png'
-				},{
-					id:6,
-					name:'工资理财',
-					pic:'../../static/images/icon_func_6.png'
-				},{
-					id:7,
-					name:'爱好',
-					pic:'../../static/images/icon_func_7.png'
-				},{
-					id:8,
-					name:'健康状况',
-					pic:'../../static/images/icon_func_8.png'
-				},{
-					id:9,
-					name:'生活习惯',
-					pic:'../../static/images/icon_func_9.png'
-				},{
 					id:10,
 					name:'更多',
-					pic:'../../static/images/icon_func_0.png'
-				}]
+					icon:'../../static/images/icon_func_0.png'
+				}],
+				userId: -1,
+				personInfo:{
+					id: -1,
+					headUrl: '../../static/images/test.png',
+					name: '',
+					birth: '',
+					birthPlace:'',
+					nationality:'',
+					career:''
+				}
 			}
 		},
+		onLoad: function(option){
+			this.userId = option.userId;
+			this.loadModule(option.userId);
+			this.loadUserInfo(option.userId);
+		},
 		methods: {
-			jumpToList:function(){
+			jumpToList:function(moduleId){
+				let linkUrl=moduleLink[moduleId];
+				switch(moduleId){
+					case 1: 
+						linkUrl = linkUrl + '?id='+this.personInfo.id;
+						break;
+					case 7:
+						linkUrl = linkUrl + '?userId='+ this.userId;
+						break;
+				}
 				uni.navigateTo({
-				    url: '/pages/hobby/list/list'
+				    url: linkUrl
 				});
+			},
+			loadModule:function(userId){
+				this.$api.getByToken('module/user/all', {'isFamily':1,'language':'zn_CH','userId':userId}).then((res)=>{
+					if(res.data.code===200){
+						this.basicFuncList = res.data.data.module;
+					}else {
+						uni.showToast({
+							title: '模块信息加载失败',icon:'none'
+						});
+					}
+				})
+			},
+			loadUserInfo:function(userId){
+				this.$api.getByToken('base/selectBase',{'language':'zn_CH','userId':userId}).then((res)=>{
+					if(res.data.code===200){
+						util.loadObj(this.personInfo, res.data.data.baseInfo);
+					}else {
+						uni.showToast({
+							title: '人物信息加载失败',icon:'none'
+						});
+					}
+				})
 			}
 		}
 	}
