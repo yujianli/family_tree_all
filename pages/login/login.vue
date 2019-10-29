@@ -89,7 +89,7 @@ export default {
 				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" },
 				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" }
 			];
-			if(this.isShow){
+			if(this.isShow && !nickname){
 				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_-]{4,16}$", errorMsg: "请填写姓名"})
 			}
 			let checkLogin = graceChecker.check(e.detail.value, rule);
