@@ -17,42 +17,210 @@
 			}
 		},
 		{
-		    "path" : "pages/hobby/list/list",
-		    "style" : {
-		    	"navigationBarTitleText":"爱好"
-		    }
-		},
-		{
-		    "path" : "pages/funcList/funcList",
-		    "style" : {
-		    	"navigationBarTitleText":"功能模块"
-		    }
-		},
-		{
-		    "path" : "pages/hobby/detail/detail",
-		    "style" : {
-		    	"navigationBarTitleText":"爱好详情"
-		    }
-		},		
-		{
-		    "path" : "pages/personalInfo/personalInfo",
-		    "style" : {
-				"navigationBarTitleText":"个人信息"
+			"path": "pages/hobby/list/list",
+			"style": {
+				"navigationBarTitleText": "爱好"
 			}
 		},
 		{
-		    "path" : "pages/setting/setting",
-		    "style" : {
-				"navigationBarTitleText":"系统设置"
+			"path": "pages/hobby/detail/detail",
+			"style": {
+				"navigationBarTitleText": "爱好",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
 		},
 		{
-		    "path" : "pages/funcList/funcList",
-		    "style" : {
-				"navigationBarTitleText":"功能列表"
+			"path": "pages/hobby/edit/edit",
+			"style": {
+				"navigationBarTitleText": "爱好",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
+		},
+		{
+			"path": "pages/funcList/funcList",
+			"style": {
+				"navigationBarTitleText": "功能模块"
+			}
+		},
+		{
+			"path": "pages/hobby/detail/detail",
+			"style": {
+				"navigationBarTitleText": "爱好详情"
+			}
+		},
+		{
+			"path": "pages/personalInfo/personalInfo",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/setting/setting",
+			"style": {
+				"navigationBarTitleText": "系统设置"
+			}
+		},
+		{
+			"path": "pages/funcList/funcList",
+			"style": {
+				"navigationBarTitleText": "功能列表"
+			}
+		},
+		{
+			"path": "pages/family/family",
+			"style": {
+				"navigationBarTitleText": "族谱"
+			}
+		},
+		{
+			"path": "pages/appearance/list/list",
+			"style": {
+				"navigationBarTitleText": "体貌特征"
+			}
+		}, {
+			"path": "pages/appearance/detail/detail",
+			"style": {
+				"navigationBarTitleText": "新体貌特征",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/language/language",
+			"style": {
+				"navigationBarTitleText": "选择语言",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "完成",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/fee/fee",
+			"style": {
+				"navigationBarTitleText": "支付年费",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "完成",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/video/video",
+			"style": {
+				"navigationBarTitleText": "图片视频",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/all/all",
+			"style": {
+				"navigationBarTitleText": "全部",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "筛选条件",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/daily/list/list",
+			"style": {
+				"navigationBarTitleText": "日记"
+			}
+		},
+		{
+			"path": "pages/daily/detail/detail",
+			"style": {
+				"navigationBarTitleText": "日记",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/daily/edit/edit",
+			"style": {
+				"navigationBarTitleText": "日记"
+			}
+		}, {
+			"path": "pages/article/list/list",
+			"style": {
+				"navigationBarTitleText": "文摘"
+			}
+		},
+		{
+			"path": "pages/article/detail/detail",
+			"style": {
+				"navigationBarTitleText": "文摘",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/article/edit/edit",
+			"style": {
+				"navigationBarTitleText": "文摘"
+			}
+		}, {
+			"path": "pages/family/family",
+			"style": {}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
@@ -60,14 +228,12 @@
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#ffffff"
 	},
-	"condition" : { //模式配置，仅开发期间生效
+	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "个人信息", //模式名称
-				"path": "pages/personalInfo/personalInfo", //启动页面，必选
-				"query": "id=14" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
+		"list": [{
+			"name": "个人信息", //模式名称
+			"path": "pages/personalInfo/personalInfo", //启动页面，必选
+			"query": "id=14" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }
