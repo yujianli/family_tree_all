@@ -4,7 +4,7 @@
 			<view class="wrapper" v-for="(basicFunc, i) in basicFuncList">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{basicFunc.name}}</text>
-				<image src="../../static/images/icon_menu_delete.png" class="pic_opt" @tap="removeFunc(i)"></image>
+				<image src="../../static/images/icon_menu_delete.png" class="pic_opt" @tap="removeFunc(basicFunc.id)"></image>
 			</view>
 		</view>
 		<view class="explain" style="">
@@ -14,10 +14,11 @@
 			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList">
 				<image class="pic_menu" :src="otherFunc.icon"></image>
 				<text class="text">{{otherFunc.name}}</text>
-				<image src="../../static/images/icon_menu_add.png" class="pic_opt" @tap="addFunc(i)"></image>
+				<image src="../../static/images/icon_menu_add.png" class="pic_opt" @tap="addFunc(otherFunc.id)"></image>
 			</view>
 		</view>
 		<!-- <navigator url="/pages/login/login" hover-class="navigator-hover">aaa</navigator> -->
+		<button type="primary"  @tap="save">保存</button>
 	</view>
 </template>
 
@@ -33,7 +34,6 @@
 		onLoad: function(option) {
 			this.userId = option.userId;
 			this.loadUserModule(option.userId);
-			this.loadAllModule();
 		},
 		methods: {
 			loadUserModule: function(userId) {
@@ -44,11 +44,7 @@
 				}).then((res) => {
 					if (res.data.code === 200) {
 						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: '更多',
-							icon: '../../static/images/icon_func_0.png'
-						})
+						this.loadAllModule();
 					} else {
 						uni.showToast({
 							title: '用户模块信息加载失败',
@@ -66,8 +62,6 @@
 						let _list = res.data.data.module;
 						for(var i=_list.length-1;i>=0;i--){
 							var idx = this.basicFuncList.findIndex((item)=>{
-								console.log(item.id)
-								console.log(_list[i].id)
 									if(item.id===_list[i].id){
 										return true;
 									}
@@ -92,10 +86,35 @@
 				this.otherFuncList.push(mod);
 			},
 			addFunc:function(moduleId){
+				if(this.basicFuncList.length==9){
+					uni.showToast({
+						title: '首页模块最多只能显示9个',icon:'none'
+					});
+					return false;
+				}
 				var idx = this.otherFuncList.findIndex((item)=>item.id===moduleId);
 				var mod = this.otherFuncList[idx];
 				this.otherFuncList.splice(idx, 1);
 				this.basicFuncList.push(mod);
+			},
+			save:function(){
+				var moduleIds = this.basicFuncList.map((item)=>item.id+'@'+item.sort)
+				this.$api.postByToken('module/edit',{
+					moduleIds:moduleIds.join(','),
+					language: this.$common.language,
+					userId: this.userId,
+					isFamily: 1
+				}).then((res)=>{
+					if(res.data.code===200){
+						uni.showToast({
+							title: '保存成功',icon:'none'
+						});
+					}else{
+						uni.showToast({
+							title: '保存失败', icon:'none'
+						});
+					}
+				})
 			}
 		}
 	}
