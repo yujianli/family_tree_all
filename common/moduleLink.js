@@ -2,5 +2,5 @@
 export default {
 		0: "../funcList/funcList",
 		1: "../personalInfo/personalInfo",
-		7: "../hobby/list/list"
+		7: "../hobby/list"
 	}

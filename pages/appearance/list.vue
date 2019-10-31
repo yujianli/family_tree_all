@@ -100,7 +100,7 @@
 		methods: {
 			jumpToDetail:function(){
 				uni.navigateTo({
-				    url: '/pages/appearance/detail/detail'
+				    url: '/pages/appearance/detail'
 				});
 			},
 			loadData:function(userId,moduleId){

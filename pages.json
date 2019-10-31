@@ -17,13 +17,13 @@
 			}
 		},
 		{
-			"path": "pages/hobby/list/list",
+			"path": "pages/hobby/list",
 			"style": {
 				"navigationBarTitleText": "爱好"
 			}
 		},
 		{
-			"path": "pages/hobby/detail/detail",
+			"path": "pages/hobby/detail",
 			"style": {
 				"navigationBarTitleText": "爱好",
 				"app-plus": {
@@ -38,7 +38,7 @@
 			}
 		},
 		{
-			"path": "pages/hobby/edit/edit",
+			"path": "pages/hobby/edit",
 			"style": {
 				"navigationBarTitleText": "爱好",
 				"app-plus": {
@@ -89,12 +89,12 @@
 			}
 		},
 		{
-			"path": "pages/appearance/list/list",
+			"path": "pages/appearance/list",
 			"style": {
 				"navigationBarTitleText": "体貌特征"
 			}
 		}, {
-			"path": "pages/appearance/detail/detail",
+			"path": "pages/appearance/detail",
 			"style": {
 				"navigationBarTitleText": "新体貌特征",
 				"app-plus": {

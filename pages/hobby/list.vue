@@ -89,7 +89,7 @@
 		methods: {
 			jumpToDetail:function(){
 				uni.navigateTo({
-				    url: '/pages/hobby/detail/detail'
+				    url: '/pages/hobby/detail'
 				});
 			}
 		}

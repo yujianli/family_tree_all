@@ -69,14 +69,49 @@ export default {
 	},
 	onLoad:function(options){
 		this.appearanceId=options.appearanceId;
-		
 	},
 	methods: {
 		loadData:function(){
-			
+			this.$http.get('appearance/detailAppearance',{
+				appearanceId: this.appearanceId,
+				language: this.$common.language
+			}).then((res)=>{
+				if (res.data.code === 200) {
+					util.loadObj(this.appearanceInfo, res.data.data.appearanceList);
+				} else {
+					uni.showToast({
+						title: '体貌特征信息加载失败',
+						icon: 'none'
+					});
+				}
+			})
 		},
 		remove:function(){
-			
+			uni.showModal({
+				title: '删除',
+				content: '确认删除该记录？',
+				confirmText: '确认',
+				success: res => {
+					this.$http.post('appearance/deleteAppearance',{
+						appearanceId: this.appearanceId,
+						language: this.$common.language
+					}).then((res)=>{
+						if(res.data.code===200){
+							uni.showToast({
+								title: '删除成功',icon:'none'
+							});
+							uni.navigateTo({
+								url:'/pages/appearance/list/list'
+							})
+						}else{
+							uni.showToast({
+								title: '用户模块信息加载失败',
+								icon: 'none'
+							});
+						}
+					})
+				}
+			})
 		}
 	}
 };
