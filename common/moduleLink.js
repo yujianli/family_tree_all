@@ -2,5 +2,6 @@
 export default {
 		0: "../funcList/funcList",
 		1: "../personalInfo/personalInfo",
+		2: "../appearance/list",
 		7: "../hobby/list"
 	}
