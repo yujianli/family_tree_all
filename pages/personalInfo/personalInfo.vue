@@ -200,7 +200,7 @@
 		},
 		methods: {
 			loadData: function(id){
-				this.$api.getByToken('base/detailBase', {'baseId':id, 'language':'zn_CH'}).then((res)=>{
+				this.$http.get('base/detailBase', {'baseId':id, 'language':'zn_CH'}).then((res)=>{
 					if(res.data.code === 200){
 						let _info = res.data.data.baseInfo;
 						util.loadObj(this.baseInfo, _info);
@@ -346,7 +346,7 @@
 			save:function(){
 				this.baseInfo['dateOfBirth']= this.baseInfo.birth;
 				delete this.baseInfo['birth'];
-				this.$api.postByToken('base/editBase', this.baseInfo).then((res)=>{
+				this.$http.post('base/editBase', this.baseInfo).then((res)=>{
 					if(res.data.code===200){
 						uni.showToast({
 							title: '保存成功',icon:'none'

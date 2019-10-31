@@ -124,7 +124,7 @@
 				});
 			},
 			loadModule: function(userId) {
-				this.$api.getByToken('module/user/all', {
+				this.$http.get('module/user/all', {
 					'isFamily': 1,
 					'language': this.$common.language,
 					'userId': userId
@@ -145,7 +145,7 @@
 				})
 			},
 			loadUserInfo: function(userId) {
-				this.$api.getByToken('base/selectBase', {
+				this.$http.get('base/selectBase', {
 					'language': this.$common.language,
 					'userId': userId
 				}).then((res) => {

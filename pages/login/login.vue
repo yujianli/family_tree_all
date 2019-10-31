@@ -21,7 +21,7 @@
 <script>
 //来自 graceUI 的表单验证， 使用说明见手册 http://grace.hcoder.net/doc/info/73-3.html
 import graceChecker from '@/common/graceChecker.js'
-import http from '@/common/vmeitime-http/interface.js'
+
 
 export default {
 	data() {
@@ -51,10 +51,10 @@ export default {
 				uni.showToast({ title: graceChecker.error, icon: "none" });
 				return false;
 			}
-			http.post('auth/requestCode', {
+			this.$http.post('auth/requestCode', {
 				mobile, 
 				language: 'zh_CN',
-			}).then((res)=>{
+			},{hasToken:false}).then((res)=>{
 				if(res.data.code===200){
 					this.isShow = res.data.data;
 					let sendInfo = this.sendCodeInfo;
@@ -98,12 +98,12 @@ export default {
 				return false;
 			}
 			
-			http.post('auth/autoLogin', {
+			this.$http.post('auth/autoLogin', {
 				name:nickname,
 				username:mobile, 
 				validateCode: code, 
 				language: 'zn_CH',
-			}).then((res)=>{
+			},{hasToken:false}).then((res)=>{
 				//console.log(res);
 				if(res.data.code===200){
 					//缓存用户信息

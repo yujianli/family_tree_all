@@ -33,12 +33,13 @@ export default {
 	config: {
 		baseUrl: "http://47.99.133.113:8989/api/",
 		header: {
-			'Content-Type':'application/json;charset=UTF-8',
-			'Content-Type':'application/x-www-form-urlencoded'
-		},  
+			// 'Content-Type': 'application/json;charset=UTF-8',
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
 		data: {},
 		method: "GET",
-		dataType: "json",  /* 如设为json，会对返回的数据做一次 JSON.parse */
+		dataType: "json",
+		/* 如设为json，会对返回的数据做一次 JSON.parse */
 		responseType: "text",
 		success() {},
 		fail() {},
@@ -57,18 +58,26 @@ export default {
 		options.url = options.baseUrl + options.url
 		options.data = options.data || {}
 		options.method = options.method || this.config.method
+		if (options.hasToken == undefined || options.hasToken) {
+			options.hasToken = true
+			if(!options.tokenKey){
+				options.tokenKey = 'USER'
+			}
+		}
 		//TODO 加密数据
-		
+		if (options.hasToken) {
+			//let _token = {'token': uni.getStorageInfoSync(options.tokenKey).token}
+			let _token={'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'}
+			options.header = Object.assign({}, options.header, _token)
+		}
 		//TODO 数据签名
-		/* 
-		_token = {'token': getStorage(STOREKEY_LOGIN).token || 'undefined'},
-		_sign = {'sign': sign(JSON.stringify(options.data))}
-		options.header = Object.assign({}, options.header, _token,_sign) 
-		*/
-	   
+		// _sign = {'sign': sign(JSON.stringify(options.data))}
+		// options.header = Object.assign({}, options.header, _token,_sign) 
+
+
 		return new Promise((resolve, reject) => {
 			let _config = null
-			
+
 			options.complete = (response) => {
 				let statusCode = response.statusCode
 				response.config = _config
@@ -98,7 +107,7 @@ export default {
 			if (this.interceptor.request) {
 				this.interceptor.request(_config)
 			}
-			
+
 			// 统一的请求日志记录
 			_reqlog(_config)
 
@@ -118,7 +127,7 @@ export default {
 		}
 		options.url = url
 		options.data = data
-		options.method = 'GET'  
+		options.method = 'GET'
 		return this.request(options)
 	},
 	post(url, data, options) {
@@ -128,6 +137,7 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'POST'
+		options.header=this.config.header
 		return this.request(options)
 	},
 	put(url, data, options) {
@@ -177,7 +187,7 @@ function _reslog(res) {
 		// console.log("【" + res.config.requestId + "】 响应结果：" + JSON.stringify(res))
 	}
 	//TODO 除了接口服务错误外，其他日志调接口异步写入日志数据库
-	switch(_statusCode){
+	switch (_statusCode) {
 		case 200:
 			break;
 		case 401:
@@ -188,4 +198,3 @@ function _reslog(res) {
 			break;
 	}
 }
-

@@ -37,7 +37,7 @@
 		},
 		methods: {
 			loadUserModule: function(userId) {
-				this.$api.getByToken('module/user/all', {
+				this.$http.get('module/user/all', {
 					'isFamily': 1,
 					'language': this.$common.language,
 					'userId': userId
@@ -54,7 +54,7 @@
 				})
 			},
 			loadAllModule: function() {
-				this.$api.getByToken('module/all', {
+				this.$http.get('module/all', {
 					'isFamily': 1,
 					'language': this.$common.language
 				}).then((res) => {
@@ -99,7 +99,7 @@
 			},
 			save:function(){
 				var moduleIds = this.basicFuncList.map((item)=>item.id+'@'+item.sort)
-				this.$api.postByToken('module/edit',{
+				this.$http.post('module/edit',{
 					moduleIds:moduleIds.join(','),
 					language: this.$common.language,
 					userId: this.userId,
