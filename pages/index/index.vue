@@ -117,7 +117,7 @@
 						linkUrl = linkUrl + '?id=' + this.personInfo.id;
 						break;
 					default:
-						linkUrl = linkUrl + '?userId=' + this.userId;
+						linkUrl = linkUrl + '?userId=' + this.userId + '&moduleId=' + moduleId;
 				}
 				uni.navigateTo({
 					url: linkUrl

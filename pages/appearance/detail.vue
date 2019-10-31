@@ -35,7 +35,7 @@
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">裤子尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.trousersSize" placeholder="裤子尺寸"/>
+				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.trousersSize" placeholder="裤子尺寸" />
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">鞋尺寸</text>
@@ -48,10 +48,11 @@
 </template>
 
 <script>
+import util from '@/common/util.js';
+import dataJson from '@/static/appData.json';
 export default {
 	data() {
 		return {
-			appearanceId:-1,
 			appearanceInfo: {
 				age: '',
 				height: '',
@@ -67,51 +68,70 @@ export default {
 			}
 		};
 	},
-	onLoad:function(options){
-		this.appearanceId=options.appearanceId;
+	onLoad: function(options) {
+		this.loadData(options.id);
 	},
 	methods: {
-		loadData:function(){
-			this.$http.get('appearance/detailAppearance',{
-				appearanceId: this.appearanceId,
-				language: this.$common.language
-			}).then((res)=>{
-				if (res.data.code === 200) {
-					util.loadObj(this.appearanceInfo, res.data.data.appearanceList);
-				} else {
-					uni.showToast({
-						title: '体貌特征信息加载失败',
-						icon: 'none'
-					});
-				}
-			})
+		loadData: function(id) {
+			this.$http
+				.get('appearance/detailAppearance', {
+					appearanceId: id,
+					language: this.$common.language
+				})
+				.then(res => {
+					if (res.data.code === 200) {
+						let obj = res.data.data.appearanceInfo;
+						obj.faceShape = this.bindProp('faceShape', obj.faceShape);
+						obj.tshirtSize = this.bindProp('size', obj.tshirtSize);
+						obj.shirtSize = this.bindProp('size', obj.shirtSize);
+						obj.clothSize = this.bindProp('size', obj.clothSize);
+						obj.trousersSize = this.bindProp('size', obj.trousersSize);
+						obj.shoeSize = this.bindProp('size', obj.shoeSize);
+						util.loadObj(this.appearanceInfo, obj);
+					} else {
+						uni.showToast({
+							title: '体貌特征信息加载失败',
+							icon: 'none'
+						});
+					}
+				});
 		},
-		remove:function(){
+		bindProp: function(key, val) {
+			for (var i = 0; i < dataJson[key].length; i++) {
+				if (dataJson[key][i].key === val) {
+					return dataJson[key][i].value;
+				}
+			}
+		},
+		remove: function() {
 			uni.showModal({
 				title: '删除',
 				content: '确认删除该记录？',
 				confirmText: '确认',
 				success: res => {
-					this.$http.post('appearance/deleteAppearance',{
-						appearanceId: this.appearanceId,
-						language: this.$common.language
-					}).then((res)=>{
-						if(res.data.code===200){
-							uni.showToast({
-								title: '删除成功',icon:'none'
-							});
-							uni.navigateTo({
-								url:'/pages/appearance/list/list'
-							})
-						}else{
-							uni.showToast({
-								title: '用户模块信息加载失败',
-								icon: 'none'
-							});
-						}
-					})
+					this.$http
+						.post('appearance/deleteAppearance', {
+							appearanceId: this.appearanceId,
+							language: this.$common.language
+						})
+						.then(res => {
+							if (res.data.code === 200) {
+								uni.showToast({
+									title: '删除成功',
+									icon: 'none'
+								});
+								uni.navigateTo({
+									url: '/pages/appearance/list/list'
+								});
+							} else {
+								uni.showToast({
+									title: '用户模块信息加载失败',
+									icon: 'none'
+								});
+							}
+						});
 				}
-			})
+			});
 		}
 	}
 };

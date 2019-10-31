@@ -20,7 +20,7 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">个性特点</text>
-			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" placeholder="姓名" />
+			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" placeholder="个性特点" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">T恤衫尺寸</text>
@@ -79,7 +79,7 @@ export default {
 			},
 			isEdit: false,
 			appearance: {
-				appearanceId: '',
+				id: '',
 				userId: '',
 				moduleId: '',
 				age: '',
@@ -98,10 +98,13 @@ export default {
 		};
 	},
 	onLoad: function(options) {
-		if (options.appearanceId) {
+		if (options.id) {
 			this.isEdit = true;
-			this.loadData(options.appearanceId)
+			this.appearance.id=options.id
+			this.loadData(options.id)
 		}
+		this.appearance.userId=options.userId
+		this.appearance.moduleId=options.moduleId
 	},
 	onNavigationBarButtonTap(e) {
 		this.save();
@@ -111,35 +114,30 @@ export default {
 			this.selProp('faceShape', e.target.value);
 		},
 		tshirtSizeBindPickerChange: function(e) {
-			this.selProp('tshirtSize', e.target.value);
+			this.selProp('tshirtSize', e.target.value,'size');
 		},
 		shirtSizeBindPickerChange: function(e) {
-			this.selProp('shirtSize', e.target.value);
+			this.selProp('shirtSize', e.target.value,'size');
 		},
 		clothSizeBindPickerChange: function(e) {
-			this.selProp('clothSize', e.target.value);
+			this.selProp('clothSize', e.target.value,'size');
 		},
 		trousersSizeBindPickerChange: function(e) {
-			this.selProp('trousersSize', e.target.value);
+			this.selProp('trousersSize', e.target.value,'size');
 		},
 		shoeSizeBindPickerChange: function(e) {
-			this.selProp('shoeSize', e.target.value);
+			this.selProp('shoeSize', e.target.value,'size');
 		},
-		selProp: function(prop, index) {
+		selProp: function(prop, index, key) {
 			this.idx[prop] = index;
-			this.appearance[prop] = dataJson[prop][index].key;
-		},
-		initProp: function(prop, val) {
-			for (var i = 0; i < dataJson[prop].length; i++) {
-				if (dataJson[prop][i].key === val) {
-					this.idx[prop] = i;
-					break;
-				}
+			if(!key){
+				key=prop;
 			}
+			this.appearance[prop] = dataJson[key][index].key;
 		},
 		loadData:function(appearanceId){
 			this.$http.get('appearance/detailAppearance',{
-				appearanceId: appearanceId,
+				appearanceId: this.appearance.id,
 				language: this.$common.language
 			}).then((res)=>{
 				if (res.data.code === 200) {
@@ -153,14 +151,12 @@ export default {
 			})
 		},
 		save: function() {
-			let url = 'appearance/' + this.isEdit ? 'editAppearance':'createAppearance'
+			let url = 'appearance/' + (this.isEdit ? 'editAppearance':'createAppearance')
 			this.$http.post(url, this.appearance).then((res)=>{
 				if(res.data.code==200){
-					uni.showToast({
-						title: '保存成功',
-						icon:'none'
-					});
-					uni.redirectTo({url:'list'})
+					uni.redirectTo({
+						url:'list?userId=' + this.appearance.userId + '&moduleId=' + this.appearance.moduleId
+					})
 				}else{
 					uni.showToast({
 						title: '保存失败', icon:'none'
@@ -172,4 +168,43 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+	.container{
+		padding-left:15px;
+		padding-right:15px;
+	}
+	.wrapper{
+		height: 55px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.mul_wrapper{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+	.avatar_wrapper{
+		margin-top: 22px;
+		justify-content: center;
+		margin-bottom: 18px;
+	}
+	.inner_title{
+		font-size: 17px;
+		color: #333;
+		margin-right: 20px;
+	}
+	.input{
+		font-size: 17px;
+		color: #303641;
+		flex:1;
+		text-align:right;
+	}
+	.mul_input{
+		font-size: 17px;
+		color: #303641;
+		flex: 1;
+	}
+</style>

@@ -3,7 +3,7 @@
 	<view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
 <!-- 			<uni-swipe-action :options="options">
- -->				<view class="container" @tap="jumpToDetail(appearance.appearanceId)">
+ -->				<view class="container" @tap="jumpToDetail(appearance.id)">
 					<view class="title">{{appearance.title}}</view>
 					<view class="row">
 						<view>身高：{{appearance.height}}cm</view>
@@ -33,28 +33,13 @@
 
 <script>
 	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	
+	import dataJson from '@/static/appData.json';
 	export default {
 		data() {
 			return {
 				userId: null,
 				moduleId: null,
-				appearanceList:[
-					{
-						id:1,
-						title:'20岁',
-						height:'170',
-						shirtSize:'1M',
-						weight:'175',
-						tshirtSize:'1L',
-						faceShape:'1圆脸',
-						clothSize:'1S',
-						characteristics:'1随和',
-						trousersSize:'1XL',
-						time:'12018/10/12',
-						shoeSize:40
-					}
-				],
+				appearanceList:[],
 				options: [{
 					text: '删除',
 					style: {
@@ -80,9 +65,9 @@
 			})
 		},
 		methods: {
-			jumpToDetail:function(){
+			jumpToDetail:function(id){
 				uni.navigateTo({
-				    url: '/pages/appearance/detail'
+				    url: '/pages/appearance/detail?id='+ id
 				});
 			},
 			loadData:function(userId,moduleId){
@@ -94,7 +79,16 @@
 					rows:10
 				}).then((res)=>{
 					if(res.data.code===200){
-						this.appearanceList=res.data.appearanceList;
+						let _list =res.data.data.appearanceList;
+						for(var i=0;i<_list.length;i++){
+							_list[i].faceShape= this.bindProp('faceShape',_list[i].faceShape);
+							_list[i].tshirtSize= this.bindProp('size',_list[i].tshirtSize);
+							_list[i].shirtSize= this.bindProp('size',_list[i].shirtSize);
+							_list[i].clothSize= this.bindProp('size',_list[i].clothSize);
+							_list[i].trousersSize= this.bindProp('size',_list[i].trousersSize);
+							_list[i].shoeSize= this.bindProp('size',_list[i].shoeSize);
+						}
+						this.appearanceList=_list
 					}else{
 						uni.showToast({
 							title: '用户模块信息加载失败',
@@ -102,6 +96,13 @@
 						});
 					}
 				})
+			},
+			bindProp: function(key, val) {
+				for (var i = 0; i < dataJson[key].length; i++) {
+					if (dataJson[key][i].key === val) {
+						return dataJson[key][i].value;
+					}
+				}
 			}
 		}
 	}
