@@ -97,7 +97,7 @@
 </script>
 
 <style>
-	@import '../../../common/card.css';
+	@import '../../common/card.css';
 
 	.category_container {
 		display: flex;

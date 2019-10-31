@@ -59,7 +59,7 @@
 			}
 		},
 		{
-			"path": "pages/hobby/detail/detail",
+			"path": "pages/hobby/detail",
 			"style": {
 				"navigationBarTitleText": "爱好详情"
 			}
@@ -91,9 +91,34 @@
 		{
 			"path": "pages/appearance/list",
 			"style": {
-				"navigationBarTitleText": "体貌特征"
+				"navigationBarTitleText": "体貌特征",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "添加",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
-		}, {
+		},
+		{
+			"path": "pages/appearance/edit",
+			"style": {
+				"navigationBarTitleText": "体貌特征",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/appearance/detail",
 			"style": {
 				"navigationBarTitleText": "新体貌特征",
