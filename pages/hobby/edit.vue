@@ -2,7 +2,10 @@
 	<view class="container">
 		<view class="wrapper">
 			<text class="inner_title">时间：</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="时间"/>
+			<picker class="input" mode="date" :value="baseInfo.passingAway" :start="startDate" :end="endDate" @change="bindPassingAwayDateChange"
+			 :fields="'month'">
+				<view>{{passingAwayDate}}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">地点：</text>
@@ -43,6 +46,23 @@
 <script>
 	//组件文档参考地址 https://github.com/smalltee/robby-image-upload
 	import robbyImageUpload  from '@/components/robby-image-upload.vue'
+	
+	function getDate(type){
+		const date = new Date();
+		let year = date.getFullYear();
+		let month = date.getMonth() + 1;
+		let day = date.getDate();
+			
+		if (type === 'start') {
+			year = year - 60;
+		} else if (type === 'end') {
+			year = year + 2;
+		}
+		month = month > 9 ? month : '0' + month;;
+		day = day > 9 ? day : '0' + day;
+		return `${year}-${month}-${day}`;
+	}
+	
 	export default {
 		data() {
 			return {
@@ -60,7 +80,7 @@
 		components:{robbyImageUpload},
 		methods: {
 			deleteImage: function(e){
-				console.log(e)
+				
 			},
 			addImage: function(e){
 				console.log(e)
