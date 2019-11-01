@@ -253,6 +253,31 @@
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#ffffff"
 	},
+	"tabBar": {
+		"color": "#CCCCCC",
+		"selectedColor": "#4DC578",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/images/person.png",
+				"selectedIconPath": "static/images/person_active.png",
+				"text": "人物"
+			},
+			{
+				"pagePath": "pages/family/family",
+				"iconPath": "static/images/family.png",
+				"selectedIconPath": "static/images/family_active.png",
+				"text": "族谱"
+			},
+			{
+				"pagePath": "pages/setting/setting",
+				"iconPath": "static/images/setting.png",
+				"selectedIconPath": "static/images/setting_active.png",
+				"text": "设置"
+			}
+		]
+	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
