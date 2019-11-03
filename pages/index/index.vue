@@ -170,6 +170,12 @@ export default {
 	methods: {
 		jumpToList: function(moduleId) {
 			let linkUrl = moduleLink[moduleId];
+			if(!linkUrl){
+				uni.showToast({
+					title: '正在开发中...',icon:'none'
+				});
+				return false
+			}
 			switch (moduleId) {
 				case 1:
 					linkUrl = linkUrl + '?id=' + this.personInfo.id;

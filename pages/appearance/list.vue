@@ -67,7 +67,7 @@
 		methods: {
 			jumpToDetail:function(id){
 				uni.navigateTo({
-				    url: '/pages/appearance/detail?id='+ id
+				    url: '/pages/appearance/detail?id='+ id+'&userId='+this.userId+'&moduleId='+this.moduleId
 				});
 			},
 			loadData:function(userId,moduleId){

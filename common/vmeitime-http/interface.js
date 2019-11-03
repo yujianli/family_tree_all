@@ -3,32 +3,6 @@
  * 基于 Promise 对象实现更简单的 request 使用方式，支持请求和响应拦截
  */
 
-/*
-// 开放的接口
-import http from './interface'
-
-http.config.baseUrl = "http://localhost:8080/api/"
-
-http.request(url:'user/list',method:'GET').then((res)=>{
-	console.log(JSON.stringify(res))
-})
-http.get('user/list').then((res)=>{
-	console.log(JSON.stringify(res))
-})
-http.get('user/list', {status: 1}).then((res)=>{
-	console.log(JSON.stringify(res))
-})
-http.post('user', {id:1, status: 1}).then((res)=>{
-	console.log(JSON.stringify(res))
-})
-http.put('user/1', {status: 2}).then((res)=>{
-	console.log(JSON.stringify(res))
-})
-http.delete('user/1').then((res)=>{
-	console.log(JSON.stringify(res))
-}) 
-
-*/
 export default {
 	config: {
 		baseUrl: "http://47.99.133.113:8989/api/",
@@ -128,6 +102,9 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'GET'
+		if(options.interceptor){
+			this.interceptor.response=options.interceptor;
+		}
 		return this.request(options)
 	},
 	post(url, data, options) {

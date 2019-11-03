@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="container">
-			<view class="wrapper" v-for="(basicFunc, i) in basicFuncList">
+			<view class="wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{basicFunc.name}}</text>
 				<image src="../../static/images/icon_menu_delete.png" class="pic_opt" @tap="removeFunc(basicFunc.id)"></image>
@@ -11,7 +11,7 @@
 			<text>以下功能最多展示在首页（9个）</text>
 		</view>
 		<view class="container">
-			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList">
+			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList" v-bind:key="otherFunc.id">
 				<image class="pic_menu" :src="otherFunc.icon"></image>
 				<text class="text">{{otherFunc.name}}</text>
 				<image src="../../static/images/icon_menu_add.png" class="pic_opt" @tap="addFunc(otherFunc.id)"></image>

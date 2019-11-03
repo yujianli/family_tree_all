@@ -53,7 +53,10 @@ import dataJson from '@/static/appData.json';
 export default {
 	data() {
 		return {
+			userId:null,
+			moduleId:null,
 			appearanceInfo: {
+				id:null,
 				age: '',
 				height: '',
 				weight: '',
@@ -69,6 +72,9 @@ export default {
 		};
 	},
 	onLoad: function(options) {
+		this.appearanceInfo.id=options.id;
+		this.userId=options.userId
+		this.moduleId=options.moduleId
 		this.loadData(options.id);
 	},
 	methods: {
@@ -109,23 +115,18 @@ export default {
 				content: '确认删除该记录？',
 				confirmText: '确认',
 				success: res => {
-					this.$http
-						.post('appearance/deleteAppearance', {
-							appearanceId: this.appearanceId,
+					this.$http.post('appearance/deleteAppearance', {
+							appearanceId: this.appearanceInfo.id,
 							language: this.$common.language
 						})
 						.then(res => {
 							if (res.data.code === 200) {
-								uni.showToast({
-									title: '删除成功',
-									icon: 'none'
-								});
 								uni.navigateTo({
-									url: '/pages/appearance/list/list'
+									url: '/pages/appearance/list?userId='+this.userId+'&moduleId='+this.moduleId
 								});
 							} else {
 								uni.showToast({
-									title: '用户模块信息加载失败',
+									title: '删除失败',
 									icon: 'none'
 								});
 							}
