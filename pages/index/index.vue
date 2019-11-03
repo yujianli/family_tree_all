@@ -13,7 +13,7 @@
 		</view>
 		<view class="func_container">
 			<!-- <navigator url="/pages/hobby/list/list" hover-class="navigator-hover"> -->
-			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc.id)">
+			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
@@ -153,8 +153,8 @@
 			this.loadIndexContent()
 		},
 		methods: {
-			jumpToList: function(moduleId) {
-				let linkUrl = moduleLink.linkUrl[moduleId];
+			jumpToList: function(module) {
+				let linkUrl = moduleLink.linkUrl[module.id];
 				if (!linkUrl) {
 					uni.showToast({
 						title: '正在开发中...',
@@ -162,15 +162,16 @@
 					});
 					return false
 				}
-				switch (moduleId) {
+				switch (module.id) {
 					case 1:
 						linkUrl = linkUrl + '?id=' + this.personInfo.id;
 						break;
 					default:
 						linkUrl = linkUrl + util.jsonToQuery({
 							userId: this.userId,
-							moduleId: moduleId,
-							flag: moduleLink.linkFlag(moduleId)
+							moduleId: module.id,
+							flag: moduleLink.linkFlag(module.id),
+							name: module.name
 						});
 				}
 				uni.navigateTo({

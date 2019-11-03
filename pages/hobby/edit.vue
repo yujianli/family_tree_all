@@ -74,6 +74,7 @@
 					moduleId: null,
 					contentId: null,
 					flag: null,
+					name: null,
 					language: null
 				},
 				idx:0,
@@ -128,6 +129,9 @@
 		},
 		components:{robbyImageUpload,robbyTags,uniPopup,wPicker},
 		onLoad:function(options){
+			uni.setNavigationBarTitle({
+				title:options.name
+			})
 			util.loadObj(this.param,options)
 			if(this.param.contentId) {
 				this.removeEnable=true
@@ -233,9 +237,7 @@
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
 					if(res.data.code===200){
-						uni.navigateTo({
-							url:'list?userId='+this.param.userId+'&moduleId='+this.param.moduleId
-						})
+						this.backToList()
 					}else{
 						uni.showToast({
 							title: '保存失败',icon:'none'
@@ -254,9 +256,7 @@
 							language: this.param.language,
 						}).then((res)=>{
 							if(res.data.code===200){
-								uni.navigateTo({
-									url: 'list?userId='+this.param.userId+'&moduleId='+this.param.moduleId
-								});
+								this.backToList()
 							}else{
 								uni.showToast({
 									title: '删除失败',
@@ -266,7 +266,15 @@
 						})
 					},
 				})
-				
+			},
+			backToList:function(){
+				let url = 'list' + util.jsonToQuery({
+					userId:this.param.userId,
+					moduleId:this.param.moduleId,
+					name:this.param.name,
+					flag:this.param.flag
+				})
+				uni.navigateTo({url:url})
 			},
 			deleteImage: function(e){
 				console.log(e)

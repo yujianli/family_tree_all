@@ -5,7 +5,10 @@ export default {
 		0: "../funcList/funcList",
 		1: "../personalInfo/personalInfo",
 		2: "../appearance/list",
-		7: "../hobby/list"
+		6: "../hobby/list",
+		7: "../hobby/list",
+		12: "../hobby/list",
+		18: "../hobby/list"
 	},
 	//模块ID对应模块类型
 	linkFlag:function(moduleId){

@@ -50,6 +50,7 @@
 					rows: 10,
 					flag: null,
 					flagId: 41,
+					name:'',
 					language: this.$common.language
 				},
 				moduleList: [],
@@ -73,6 +74,9 @@
 			myTab
 		},
 		onLoad: function(options) {
+			uni.setNavigationBarTitle({
+				title:options.name
+			})
 			util.loadObj(this.cParam,options)
 			this.loadModule(options.moduleId)
 		},
@@ -82,7 +86,8 @@
 					userId: this.cParam.userId,
 					moduleId: this.cParam.moduleId,
 					flag: this.cParam.flag,
-					contentId: id
+					contentId: id,
+					name: this.cParam.name
 				}
 				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
@@ -168,6 +173,7 @@
 						userId: this.cParam.userId,
 						moduleId:this.cParam.moduleId,
 						flag:this.cParam.flag,
+						name:this.cParam.name,
 						language:this.cParam.language
 					})
 				})
