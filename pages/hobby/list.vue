@@ -1,18 +1,19 @@
 <template>
 	<view>
-		<view class="category_container">
+		<view class="float_btn" @tap="add">+</view>
+		<view style="position:relative">
+			<myTab :tabList="moduleList" @tabSelect="tabSelect" :tabActiveIdx="tabActiveIdx" />
+		</view>
+<!-- 		<view class="category_container">
 			<view v-for="(module,i) in moduleList" v-bind:key="module.id" @tap="selModule(module.id)">
-				<!-- 	<view class="category_hd category_hd_active">
-				足球
-			</view> -->
 				<view class="category_hd">{{module.name}}</view>
 			</view>
-		</view>
+		</view> -->
 		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
 		<!-- <contentList :cParam="cParam"></contentList> -->
 		<view class="card_list">
 
-			<view class="card_item" @tap="jumpToDetail" v-for="(content,i) in contentList" v-bind:key="content.id">
+			<view class="card_item" @tap="jumpToDetail(content.contentId)" v-for="(content,i) in contentList" v-bind:key="content.id">
 				<uni-swipe-action :options="options">
 					<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 					<view class="card_inner">
@@ -36,6 +37,7 @@
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import myTab from '@/components/xyz-tab';
 	// import contentList from '@/components/content-list';
 	import util from '@/common/util.js'
 	export default {
@@ -44,13 +46,14 @@
 				cParam: {
 					userId: null,
 					moduleId: null,
-					page: 0,
+					page: 1,
 					rows: 10,
-					flag: 'category',
+					flag: null,
 					flagId: 41,
 					language: this.$common.language
 				},
 				moduleList: [],
+				tabActiveIdx: 0,
 				contentList: [],
 				options: [{
 					text: '删除',
@@ -67,16 +70,23 @@
 		components: {
 			uniSearchBar,
 			uniSwipeAction,
-			// contentList
+			myTab
 		},
 		onLoad: function(options) {
-			this.cParam = options;
+			util.loadObj(this.cParam,options)
 			this.loadModule(options.moduleId)
 		},
 		methods: {
-			jumpToDetail: function() {
+			jumpToDetail: function(id) {
+				let p = {
+					userId: this.cParam.userId,
+					moduleId: this.cParam.moduleId,
+					flag: this.cParam.flag,
+					contentId: id
+				}
+				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
-					url: '/pages/hobby/detail'
+					url: url
 				});
 			},
 			loadModule: function(moduleId) {
@@ -86,7 +96,8 @@
 					})
 					.then((res) => {
 						if (res.data.code === 200) {
-							this.moduleList = res.data.data.contentCategory;
+							let _list = res.data.data.contentCategory;
+							this.moduleList = util.objectTransfer(_list, ['id','name'],['id','label']);
 							this.loadContent(this.moduleList[0].id);
 						} else {
 							uni.showToast({
@@ -119,14 +130,14 @@
 					}
 				})
 			},
-			search:function(e){
+			search: function(e) {
 				uni.showLoading({
-				    title: '搜索中'
+					title: '搜索中'
 				});
 				let searchParam = this.cParam
-				searchParam['content']=e.value
-				this.$http.get('content/queryLike',searchParam).then((res)=>{
-					if(res.data.code===200){
+				searchParam['content'] = e.value
+				this.$http.get('content/queryLike', searchParam).then((res) => {
+					if (res.data.code === 200) {
 						this.contentList = res.data.data.contentList;
 						for (var i = 0; i < this.contentList.length; i++) {
 							if (this.contentList[i].tags) {
@@ -139,22 +150,35 @@
 							}
 						}
 						uni.hideLoading()
-					}else{
+					} else {
 						uni.showToast({
-							title: '搜索失败',icon:'none'
+							title: '搜索失败',
+							icon: 'none'
 						});
 					}
 				})
 			},
-			selModule: function(id) {
-				this.loadContent(id)
+			tabSelect(idx) {
+				this.tabActiveIdx = idx;
+				this.loadContent(this.moduleList[idx].id)
+			},
+			add:function(){
+				uni.navigateTo({
+					url:'edit' + util.jsonToQuery({
+						userId: this.cParam.userId,
+						moduleId:this.cParam.moduleId,
+						flag:this.cParam.flag,
+						language:this.cParam.language
+					})
+				})
 			}
 		}
 	}
 </script>
 
-<style>
-	@import '../../common/card.css';
+
+<style lang="less" scoped>
+	@import '../../common/card.less';
 
 	.category_container {
 		display: flex;
@@ -182,4 +206,16 @@
 		margin-bottom: 20px;
 		height: 34px;
 	}
+	.float_btn{
+			width: 109upx;height: 109upx;
+			background-color: #4DC578;
+			border-radius: 50%;
+			position: fixed;
+			right: 41upx;
+			bottom:100upx;
+			font-size: 70upx;
+			line-height: 1.5;
+			text-align: center;
+			color: #fff;
+		}
 </style>

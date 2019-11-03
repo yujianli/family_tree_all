@@ -98,8 +98,8 @@
 	}
 </script>
 
-<style>
-	@import '../../../common/card.css';
+<style lang="less" scoped>
+	@import '../../../common/card.less';
 
 	.category_container {
 		display: flex;

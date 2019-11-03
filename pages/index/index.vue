@@ -3,18 +3,17 @@
 		<view class="status_bar"></view>
 		<view class="person_tabs">
 			<view>
-				<text class="person_name person_name_active">万少波（本人）</text>
+				<text class="person_name person_name_active">{{personInfo.name}}（本人）</text>
 				<view class="tab_line"></view>
 			</view>
-			<view>
+<!-- 			<view>
 				<text class="person_name">杨林艳（配偶）</text>
 				<view class="tab_line tab_line_active"></view>
-			</view>
+			</view> -->
 		</view>
 		<view class="func_container">
 			<!-- <navigator url="/pages/hobby/list/list" hover-class="navigator-hover"> -->
-			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id"
-			 @tap="jumpToList(basicFunc.id)">
+			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc.id)">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
@@ -57,42 +56,18 @@
 		</uni-swiper-dot>
 
 		<view class="card_list">
-			<view class="more">更多</view>
-			<view class="card_item">
+			<view class="more" @tap="toMore">更多</view>
+			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
 				<image src="../../static/images/test.png" class="card_pic"></image>
 				<view class="card_inner">
-					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
+					<text class="card_title">{{contentInfo.content}}</text>
 					<view class="card_others">
 						<view class="tags">
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">游记</text>
+							<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+								{{tag}}
+							</text>
 						</view>
-						<text class="time">2018/10/12</text>
-					</view>
-				</view>
-			</view>
-			<view class="card_item">
-				<image src="../../static/images/test.png" class="card_pic"></image>
-				<view class="card_inner">
-					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
-					<view class="card_others">
-						<view class="tags"><text class="tags_text">旅行</text></view>
-						<text class="time">2018/10/12</text>
-					</view>
-				</view>
-			</view>
-			<view class="card_item">
-				<view class="card_inner">
-					<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
-					<view class="card_others">
-						<view class="tags">
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">旅行</text>
-						</view>
-						<text class="time">2018/10/12</text>
+						<text class="time">{{contentInfo.createDate | formatDate}}</text>
 					</view>
 				</view>
 			</view>
@@ -101,246 +76,300 @@
 </template>
 
 <script>
-import util from '@/common/util.js';
-import moduleLink from '@/common/moduleLink.js';
-import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
-export default {
-	data() {
-		return {
-			basicFuncList: [
-				{
+	import util from '@/common/util.js';
+	import moduleLink from '@/common/moduleLink.js';
+	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
+	export default {
+		data() {
+			return {
+				basicFuncList: [{
 					id: -1,
 					name: '更多',
 					icon: '../../static/images/icon_func_0.png'
+				}],
+				userId: -1,
+				personInfo: {
+					id: -1,
+					headUrl: '../../static/images/test.png',
+					name: '',
+					birth: '',
+					birthPlace: '',
+					nationality: '',
+					career: ''
+				},
+				userCardList: [{
+						zodiac: 3,
+						sex: 1,
+						name: '张三',
+						headUrl: '../../static/images/icon_func_0.png',
+						birth: '1993-10-11',
+						familyUserId: '1'
+					},
+					{
+						zodiac: '',
+						sex: 1,
+						name: '李四',
+						headUrl: '../../static/images/icon_func_1.png',
+						birth: '',
+						familyUserId: '2'
+					},
+					{
+						zodiac: '',
+						sex: 2,
+						name: '王五',
+						headUrl: '../../static/images/icon_func_2.png',
+						birth: '',
+						familyUserId: '3'
+					}
+				],
+				current: 0,
+				mode: 'round',
+				dotsStyles: {
+					width: 0,
+					bottom: 0,
+					border: 0,
+					height: 0,
+					selectedBorder: 0
+				},
+				contentList:[]
+			};
+		},
+		components: {
+			uniSwiperDot
+		},
+		computed:{
+
+		},
+		filters:{
+			formatDate:function(value){
+				if(!value) return ''
+				return util.dateFormat(value)
+			}
+		},
+		onLoad: function(option) {
+			this.userId = option.userId;
+			this.loadModule(option.userId);
+			this.loadUserInfo(option.userId);
+			this.loadIndexContent()
+		},
+		methods: {
+			jumpToList: function(moduleId) {
+				let linkUrl = moduleLink.linkUrl[moduleId];
+				if (!linkUrl) {
+					uni.showToast({
+						title: '正在开发中...',
+						icon: 'none'
+					});
+					return false
 				}
-			],
-			userId: -1,
-			personInfo: {
-				id: -1,
-				headUrl: '../../static/images/test.png',
-				name: '',
-				birth: '',
-				birthPlace: '',
-				nationality: '',
-				career: ''
+				switch (moduleId) {
+					case 1:
+						linkUrl = linkUrl + '?id=' + this.personInfo.id;
+						break;
+					default:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId: this.userId,
+							moduleId: moduleId,
+							flag: moduleLink.linkFlag(moduleId)
+						});
+				}
+				uni.navigateTo({
+					url: linkUrl
+				});
 			},
-			userCardList: [
-				{
-					zodiac: 3,
-					sex: 1,
-					name: '张三',
-					headUrl: '../../static/images/icon_func_0.png',
-					birth: 8637120000000,
-					familyUserId: '1'
-				},
-				{
-					zodiac: null,
-					sex: 1,
-					name: '李四',
-					headUrl: '../../static/images/icon_func_1.png',
-					birth: null,
-					familyUserId: '2'
-				},
-				{
-					zodiac: null,
-					sex: 2,
-					name: '王五',
-					headUrl: '../../static/images/icon_func_2.png',
-					birth: null,
-					familyUserId: '3'
+			jumpToDetail:function(content){
+				let p = {
+					userId: this.userId,
+					moduleId: content.moduleId,
+					flag: content.flag,
+					contentId: content.id
 				}
-			],
-			current: 0,
-			mode: 'round',
-			dotsStyles: {
-				width: 0,
-				bottom: 0,
-				border: 0,
-				height: 0,
-				selectedBorder: 0
-			}
-		};
-	},
-	components: { uniSwiperDot },
-	onLoad: function(option) {
-		this.userId = option.userId;
-		this.loadModule(option.userId);
-		this.loadUserInfo(option.userId);
-	},
-	methods: {
-		jumpToList: function(moduleId) {
-			let linkUrl = moduleLink[moduleId];
-			if(!linkUrl){
-				uni.showToast({
-					title: '正在开发中...',icon:'none'
+				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
+				uni.navigateTo({
+					url: url
 				});
-				return false
-			}
-			switch (moduleId) {
-				case 1:
-					linkUrl = linkUrl + '?id=' + this.personInfo.id;
-					break;
-				default:
-					linkUrl = linkUrl + '?userId=' + this.userId + '&moduleId=' + moduleId;
-			}
-			uni.navigateTo({
-				url: linkUrl
-			});
-		},
-		loadModule: function(userId) {
-			this.$http
-				.get('module/user/all', {
-					isFamily: 1,
-					language: this.$common.language,
-					userId: userId
-				})
-				.then(res => {
-					if (res.data.code === 200) {
-						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: '更多',
-							icon: '../../static/images/icon_func_0.png'
-						});
-					} else {
+			},
+			loadModule: function(userId) {
+				this.$http
+					.get('module/user/all', {
+						isFamily: 1,
+						language: this.$common.language,
+						userId: userId
+					})
+					.then(res => {
+						if (res.data.code === 200) {
+							this.basicFuncList = res.data.data.module;
+							this.basicFuncList.push({
+								id: 0,
+								name: '更多',
+								icon: '../../static/images/icon_func_0.png'
+							});
+						} else {
+							uni.showToast({
+								title: '模块信息加载失败',
+								icon: 'none'
+							});
+						}
+					});
+			},
+			loadUserInfo: function(userId) {
+				this.$http
+					.get('base/selectBase', {
+						language: this.$common.language,
+						userId: userId
+					})
+					.then(res => {
+						if (res.data.code === 200) {
+							util.loadObj(this.personInfo, res.data.data.baseInfo);
+						} else {
+							uni.showToast({
+								title: '人物信息加载失败',
+								icon: 'none'
+							});
+						}
+					});
+			},
+			loadIndexContent:function(){
+				this.$http.get('content/userCards',{
+					userId:this.userId,
+					page:1,
+					rows:20,
+					language:this.$common.language
+				}).then((res)=>{
+					if(res.data.code===200){
+						this.contentList = res.data.data.contentList;
+						for(let i=0;i<this.contentList.length;i++){
+							if(this.contentList[i].tags){
+								this.contentList[i].tags=this.contentList[i].tags.split(',')
+							}
+						}
+					}else{
 						uni.showToast({
-							title: '模块信息加载失败',
-							icon: 'none'
+							title: '首页内容加载失败',icon:'none'
 						});
 					}
-				});
-		},
-		loadUserInfo: function(userId) {
-			this.$http
-				.get('base/selectBase', {
-					language: this.$common.language,
-					userId: userId
 				})
-				.then(res => {
-					if (res.data.code === 200) {
-						util.loadObj(this.personInfo, res.data.data.baseInfo);
-					} else {
-						uni.showToast({
-							title: '人物信息加载失败',
-							icon: 'none'
-						});
-					}
-				});
+			},
+			toMore:function(){
+				uni.navigateTo({
+					url:'/pages/all/all?userId='+this.userId
+				})
+			}
 		}
-	}
-};
+	};
 </script>
 
-<style>
-@import '../../common/card.css';
 
-.status_bar {
-	height: var(--status-bar-height);
-	width: 100%;
-}
+<style lang="less" scoped>
+	@import '../../common/card.less';
 
-.person_tabs {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
-	height: 50px;
-}
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+	}
 
-.person_name {
-	font-size: 18px;
-	color: #999;
-}
+	.person_tabs {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		height: 50px;
+	}
 
-.person_name_active {
-	color: #333;
-	font-weight: 600;
-}
+	.person_name {
+		font-size: 18px;
+		color: #999;
+	}
 
-.tab_line {
-	width: 70px;
-	height: 1px;
-	background-color: #4dc578;
-	margin: 0 auto;
-	margin-top: 14px;
-}
+	.person_name_active {
+		color: #333;
+		font-weight: 600;
+	}
 
-.tab_line_active {
-	background-color: #ffffff;
-}
+	.tab_line {
+		width: 70px;
+		height: 1px;
+		background-color: #4dc578;
+		margin: 0 auto;
+		margin-top: 14px;
+	}
 
-.func_container {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: center;
-	margin-top: 20px;
-}
+	.tab_line_active {
+		background-color: #ffffff;
+	}
 
-.func_wrapper {
-	display: flex;
-	flex-direction: column;
-	width: 20%;
-	height: 94px;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-}
+	.func_container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-items: center;
+		margin-top: 20px;
+	}
 
-.pic_menu {
-	width: 44px;
-	height: 44px;
-}
+	.func_wrapper {
+		display: flex;
+		flex-direction: column;
+		width: 20%;
+		height: 94px;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+	}
 
-.pic_opt {
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	top: 4px;
-	right: 3%;
-}
+	.pic_menu {
+		width: 44px;
+		height: 44px;
+	}
 
-.explain {
-	margin-top: 30px;
-	margin-bottom: 34px;
-	font-size: 13px;
-	color: #999;
-	text-align: center;
-}
+	.pic_opt {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: 4px;
+		right: 3%;
+	}
 
-.text {
-	margin-top: 8px;
-	font-size: 13px;
-	color: #333;
-}
+	.explain {
+		margin-top: 30px;
+		margin-bottom: 34px;
+		font-size: 13px;
+		color: #999;
+		text-align: center;
+	}
 
-.person_intro {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	margin-top: 26px;
-}
+	.text {
+		margin-top: 8px;
+		font-size: 13px;
+		color: #333;
+	}
 
-.name {
-	font-size: 21px;
-	color: #333;
-	font-weight: 600;
-	margin-top: 5px;
-}
+	.person_intro {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 26px;
+	}
 
-.other_info_container {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 8px;
-	margin-left: 15px;
-	margin-right: 15px;
-}
+	.name {
+		font-size: 21px;
+		color: #333;
+		font-weight: 600;
+		margin-top: 5px;
+	}
 
-.other_info {
-	margin-top: 18px;
-	font-size: 14px;
-	color: #333;
-}
+	.other_info_container {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 8px;
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+
+	.other_info {
+		margin-top: 18px;
+		font-size: 14px;
+		color: #333;
+	}
 </style>

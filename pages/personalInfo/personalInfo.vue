@@ -34,7 +34,7 @@
 		<view class="wrapper">
 			<text class="inner_title">出生年月</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/> -->
-			<picker mode="date" :value="baseInfo.birth" :start="startDate" :end="endDate" @change="bindDateChange" :fields="'month'">
+			<picker mode="date" :value="baseInfo.birth" :start="startDate" :end="endDate" @change="bindDateChange" :fields="'day'">
 				<view class="uni-input">{{birthDate}}</view>
 			</picker>
 		</view>
@@ -58,7 +58,7 @@
 			<text class="inner_title">过世年月</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.passingAway" placeholder-style="color:#999" placeholder="过世年月"/> -->
 			<picker class="input" mode="date" :value="baseInfo.passingAway" :start="startDate" :end="endDate" @change="bindPassingAwayDateChange"
-			 :fields="'month'">
+			 :fields="'day'">
 				<view>{{passingAwayDate}}</view>
 			</picker>
 		</view>
@@ -126,21 +126,7 @@
 	import dataJson from '@/static/appData.json'
 	import util from '@/common/util.js'
 	import reg from '@/common/bizRule.js'
-	function getDate(type){
-		const date = new Date();
-		let year = date.getFullYear();
-		let month = date.getMonth() + 1;
-		let day = date.getDate();
-			
-		if (type === 'start') {
-			year = year - 60;
-		} else if (type === 'end') {
-			year = year + 2;
-		}
-		month = month > 9 ? month : '0' + month;;
-		day = day > 9 ? day : '0' + day;
-		return `${year}-${month}-${day}`;
-	}
+	
 	export default {
 		data() {
 			return {
@@ -164,8 +150,8 @@
 				},
 				birthDate: '请选择',
 				passingAwayDate: '请选择',
-				startDate:getDate('start'),
-				endDate:getDate('end'),
+				startDate:util.getDate('start'),
+				endDate:util.getDate('end'),
 				isPassedAway: false,
 				baseInfo: {
 							userId:'',

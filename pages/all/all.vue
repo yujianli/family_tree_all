@@ -1,73 +1,33 @@
 <template>
 	<view>
 		<view class="types_wrapper">
-			<view>日记</view>
-			<view>工资理财</view>
-			<view>工资理财</view>
-			<view>工资理财</view>
-			<view>工资理财</view>
-			<view>工资理财</view>
-			<view>工资理财基金投资</view>
+			<view v-for="(module,index) in selectedModules">{{module.name}}</view>
 		</view>
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
-			<!-- <uni-swipe-action :options="options"> -->
-				<view class="card_item" @tap="jumpToDetail">
-					<image src="../../static/images/test.png" class="card_pic"></image>
-					<view class="card_inner">
-						<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
-						<view class="card_others">
-							<view class="tags">
-								<text class="tags_text">旅行</text>
-								<text class="tags_text">游记</text>
-							</view>
-							<text class="time">2018/10/12</text>
+			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
+				<view class="card_inner">
+					<text class="card_title">{{contentInfo.content}}</text>
+					<view class="card_others">
+						<view class="tags">
+							<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+								{{tag}}
+							</text>
 						</view>
+						<text class="time">{{contentInfo.createDate | formatDate}}</text>
 					</view>
 				</view>
-			<!-- </uni-swipe-action> -->
-
-			<!-- <uni-swipe-action :options="options"> -->
-				<view class="card_item" @tap="jumpToDetail">
-					<image src="../../static/images/test.png" class="card_pic"></image>
-					<view class="card_inner">
-						<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
-						<view class="card_others">
-							<view class="tags">
-								<text class="tags_text">旅行</text>
-							</view>
-							<text class="time">2018/10/12</text>
-						</view>
-					</view>
-				</view>
-		<!-- 	</uni-swipe-action> -->
-
-			<!-- <uni-swipe-action :options="options"> -->
-				<view class="card_item" @tap="jumpToDetail">
-					<view class="card_inner">
-						<text class="card_title">明月几时有把酒问青天不知天上宫阙今夕是何年</text>
-						<view class="card_others">
-							<view class="tags">
-								<text class="tags_text">旅行</text>
-								<text class="tags_text">旅行</text>
-								<text class="tags_text">旅行</text>
-								<text class="tags_text">旅行</text>
-								<text class="tags_text">旅行</text>
-							</view>
-							<text class="time">2018/10/12</text>
-						</view>
-					</view>
-				</view>
-		<!-- 	</uni-swipe-action> -->
+			</view>
+			<!-- 	</uni-swipe-action> -->
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
 			<view>
 				<view class="pd18">
-					<view class="text">模块选择</view>	
+					<view class="text">模块选择</view>
 				</view>
 				<view class="all_types_container">
 					<view class="all_types_wrapper" v-for="(module,index) in modules">
-						<view class="active">{{module.name}}</view>
+						<view :class="{active :module.hasActive }" @tap="selectType(module,index)">{{module.name}}</view>
 					</view>
 				</view>
 				<view class="pd18">
@@ -76,26 +36,23 @@
 					<view class="text">结束时间：2013年9月6日</view>
 				</view>
 				<view class="all_opt_btn_container">
-					<button class="all_opt_btn">清空条件</button>
-					<button class="all_opt_btn active">确认</button>
+					<button class="all_opt_btn" @tap="clearCondition">清空条件</button>
+					<button class="all_opt_btn active" @tap='confirmCondition'>确认</button>
 				</view>
 			</view>
-				
-				
-				
-			
 		</uni-drawer>
 	</view>
-
 </template>
 
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	//import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import uniDrawer from '@/components/uni-ui/uni-drawer/uni-drawer.vue'
+	import util from '@/common/util.js'
 	export default {
 		data() {
 			return {
+				userId: null,
 				options: [{
 					text: '删除',
 					style: {
@@ -104,53 +61,29 @@
 					}
 				}],
 				showDrawer: false,
+				selectedModules: [],
 				modules: [{
-					name: '日记'
+					id: 1,
+					name: '日记',
+					hasActive: false
 				}, {
-					name: '工资理财'
+					id: 2,
+					name: '工资理财',
+					hasActive: false
 				}, {
-					name: '体貌特征'
+					id: 3,
+					name: '体貌特征',
+					hasActive: false
 				}, {
-					name: '爱好'
+					id: 4,
+					name: '爱好',
+					hasActive: false
 				}, {
-					name: '健康状况'
-				}, {
-					name: '生活习惯'
-				},{
-					name:'文摘'
-				},{
-					name:'喜好'
-				},{
-					name:'同事朋友'
-				},{
-					name:'获奖成就'
-				},{
-					name:'艺术创作'
-				},{
-					name:'通讯记录'
-				},{
-					name:'婚礼'
-				},{
-					name:'车辆'
-				},{
-					name:'照片视频'
-				},{
-					name:'自媒体关注'
-				},{
-					name:'节日纪事'
-				},{
-					name:'收藏品'
-				},{
-					name:'校园经历'
-				},{
-					name:'恋爱经历'
-				},{
-					name:'工作经历'
-				},{
-					name:'住宅居室'
-				},{
-					name:'工资理财'
-				}]
+					id: 5,
+					name: '健康状况',
+					hasActive: false
+				}],
+				contentList: []
 			}
 		},
 		components: {
@@ -158,42 +91,123 @@
 			// uniSwipeAction,
 			uniDrawer
 		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return ''
+				return util.dateFormat(value)
+			}
+		},
+		onLoad: function(options) {
+			this.userId = options.userId
+			this.loadIndexContent()
+			this.loadAllModule()
+		},
 		methods: {
-			jumpToDetail: function() {
+			jumpToDetail: function(content) {
+				let p = {
+					userId: this.userId,
+					moduleId: content.moduleId,
+					flag: content.flag,
+					contentId: content.id
+				}
+				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
-					url: '/pages/hobby/detail/detail'
+					url: url
 				});
 			},
-			show() {
+			loadIndexContent: function() {
+				this.$http.get('content/userCards', {
+					userId: this.userId,
+					page: 1,
+					rows: 20,
+					language: this.$common.language
+				}).then((res) => {
+					if (res.data.code === 200) {
+						this.contentList = res.data.data.contentList;
+						for (let i = 0; i < this.contentList.length; i++) {
+							if (this.contentList[i].tags) {
+								this.contentList[i].tags = this.contentList[i].tags.split(',')
+							}
+						}
+					} else {
+						uni.showToast({
+							title: '首页内容加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			},
+			loadAllModule: function() {
+				this.$http.get('module/all', {
+					'isFamily': 1,
+					'language': this.$common.language
+				}).then((res) => {
+					if (res.data.code === 200) {
+						this.modules = res.data.data.module;
+						for(let i =0;i<this.modules.length;i++){
+							this.modules['hasActive'] = false
+						}
+					} else {
+						uni.showToast({
+							title: '模块信息加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			},
+			show: function() {
 				this.showDrawer = true
 			},
-			hide() {
+			closeDrawer: function() {
 				this.showDrawer = false
 			},
-			closeDrawer() {
-				this.showDrawer = false
+			selectType: function(module, index) {
+				//this.selectedModules.push(module);
+				if (module.hasActive) {
+					this.modules[index].hasActive = false;
+				} else {
+					this.modules[index].hasActive = true;
+				}
+				console.log(module);
+				console.log(index);
 			},
+			clearCondition: function() {
+				this.selectedModules = [];
+				this.activeModuleIndex = null;
+				this.modules.forEach(module => module.hasActive = false)
+				this.closeDrawer();
+			},
+			confirmCondition: function() {
+				let activeArr = this.modules.filter((module) => {
+					return module.hasActive == true
+				});
+				this.selectedModules = activeArr;
+				this.closeDrawer();
+			}
 		},
 		onNavigationBarButtonTap(event) {
 			const buttonIndex = event.index;
 			if (buttonIndex === 0) {
-				this.showDrawer = !this.showDrawer
+				this.showDrawer = !this.showDrawer;
+
 			}
 		},
 		onBackPress() {
 			if (this.showDrawer) {
-				this.hide()
-				return true
+				this.closeDrawer();
+				return true;
 			}
 		}
 	}
 </script>
 
-<style lang="less">
-	@import '../../common/card.css';
-	.pd18{
+<style lang="less" scoped>
+	@import '../../common/card.less';
+
+	.pd18 {
 		padding: 18upx;
 	}
+
 	.category_container {
 		display: flex;
 		flex-direction: row;
@@ -230,6 +244,7 @@
 		padding-left: 40upx;
 		padding-right: 40upx;
 		padding-top: 36upx;
+
 		view {
 			border: 1px solid #FF9797;
 			border-radius: 8upx;
@@ -245,18 +260,21 @@
 			padding-right: 2upx;
 		}
 	}
-	.all_types_container{
+
+	.all_types_container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		.all_types_wrapper{
+
+		.all_types_wrapper {
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
 			flex-wrap: wrap;
+
 			view {
 				border: 1px solid #999;
 				border-radius: 8upx;
@@ -270,19 +288,23 @@
 				margin-bottom: 10upx;
 				padding-left: 2upx;
 				padding-right: 2upx;
-				&.active{
+
+				&.active {
 					color: #4DC578;
 					border-color: #4DC578;
 				}
 			}
 		}
-		
+
 	}
-	.text{
-		font-size: 31upx;color: #666;
+
+	.text {
+		font-size: 31upx;
+		color: #666;
 		margin-bottom: 18upx;
 	}
-	.all_opt_btn_container{
+
+	.all_opt_btn_container {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -292,22 +314,23 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 85upx;
-		.all_opt_btn{
-			flex:1;
-			font-size:31upx;
+
+		.all_opt_btn {
+			flex: 1;
+			font-size: 31upx;
 			color: #4DC578;
 			background-color: #f9f9f9;
 			border-radius: 0;
-			&:after{
-				border:0px;
+
+			&:after {
+				border: 0px;
 			}
-			&.active{
+
+			&.active {
 				background-color: #4DC578;
 				color: #ffffff;
 			}
-			
-		}	
+
+		}
 	}
-	
-	
 </style>
