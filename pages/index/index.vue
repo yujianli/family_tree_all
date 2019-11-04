@@ -35,7 +35,7 @@
 		</view> -->
 
 		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
-			<swiper style="height: 460upx;" @change="change">
+			<swiper style="height: 460upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index">
 					<view class="person_intro">
 						<image :src="item.headUrl" style="width: 88upx;height: 88upx;"></image>
@@ -147,10 +147,28 @@
 			}
 		},
 		onLoad: function(option) {
+			console.log('option');
+			console.log(option);
 			this.userId = option.userId;
 			this.loadModule(option.userId);
 			this.loadUserInfo(option.userId);
-			this.loadIndexContent()
+			this.loadIndexContent();
+			// 提醒试用到期
+			uni.showModal({
+				title: '温馨提示',
+				content: '试用期已到期，请支付年费后继续使用？',
+				cancelText:'以后再说',
+				confirmColor:'#4DC578',
+				success: function (res) {
+					if (res.confirm) { 
+					  uni.navigateTo({
+						url: '/pages/fee/fee'
+					  });
+					} else if (res.cancel) {
+						console.log('用户点击取消');
+					}
+				}
+			});
 		},
 		methods: {
 			jumpToList: function(module) {
@@ -274,11 +292,11 @@
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-		height: 50px;
+		height: 100upx;
 	}
 
 	.person_name {
-		font-size: 18px;
+		font-size: 36upx;
 		color: #999;
 	}
 
@@ -288,11 +306,11 @@
 	}
 
 	.tab_line {
-		width: 70px;
+		width: 140upx;
 		height: 1px;
-		background-color: #4dc578;
+		background-color: #4DC578;
 		margin: 0 auto;
-		margin-top: 14px;
+		margin-top: 28upx;
 	}
 
 	.tab_line_active {
@@ -305,43 +323,43 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		margin-top: 20px;
+		margin-top: 40upx;
 	}
 
 	.func_wrapper {
 		display: flex;
 		flex-direction: column;
 		width: 20%;
-		height: 94px;
+		height: 188upx;
 		justify-content: center;
 		align-items: center;
 		position: relative;
 	}
 
 	.pic_menu {
-		width: 44px;
-		height: 44px;
+		width: 88upx;
+		height: 88upx;
 	}
 
 	.pic_opt {
-		width: 20px;
-		height: 20px;
+		width: 40upx;
+		height: 40upx;
 		position: absolute;
-		top: 4px;
+		top: 8upx;
 		right: 3%;
 	}
 
 	.explain {
-		margin-top: 30px;
-		margin-bottom: 34px;
-		font-size: 13px;
+		margin-top: 60upx;
+		margin-bottom: 68upx;
+		font-size: 26upx;
 		color: #999;
 		text-align: center;
 	}
 
 	.text {
-		margin-top: 8px;
-		font-size: 13px;
+		margin-top: 16upx;
+		font-size: 26upx;
 		color: #333;
 	}
 
@@ -350,27 +368,36 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: center;
-		margin-top: 26px;
+		margin-top: 52upx;
 	}
 
 	.name {
-		font-size: 21px;
+		font-size: 42upx;
 		color: #333;
 		font-weight: 600;
-		margin-top: 5px;
+		margin-top: 10upx;
 	}
 
 	.other_info_container {
 		display: flex;
 		justify-content: space-between;
-		margin-top: 8px;
-		margin-left: 15px;
-		margin-right: 15px;
+		margin-top: 16upx;
+		margin-left: 30upx;
+		margin-right: 30upx;
+
 	}
 
 	.other_info {
-		margin-top: 18px;
-		font-size: 14px;
+		margin-top: 36upx;
+		font-size: 28upx;
 		color: #333;
+	}
+
+	uni-button:after {
+		border: 0px;
+	}
+
+	uni-button.button-hover {
+		background-color: #fff;
 	}
 </style>

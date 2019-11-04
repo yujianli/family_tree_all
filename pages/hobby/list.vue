@@ -183,7 +183,7 @@
 </script>
 
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 	@import '../../common/card.less';
 
 	.category_container {
@@ -194,9 +194,9 @@
 	}
 
 	.category_hd {
-		font-size: 16px;
+		font-size: 32upx;
 		color: #000;
-		padding-bottom: 17px;
+		padding-bottom: 34upx;
 		border-bottom-style: solid;
 		border-bottom-width: 1px;
 		border-color: #ffffff;
@@ -208,20 +208,21 @@
 	}
 
 	.search_info {
-		margin-top: 20px;
-		margin-bottom: 20px;
-		height: 34px;
+		margin-top: 40upx;
+		margin-bottom: 40upx;
+		height: 68upx;
 	}
 	.float_btn{
-			width: 109upx;height: 109upx;
-			background-color: #4DC578;
-			border-radius: 50%;
-			position: fixed;
-			right: 41upx;
-			bottom:100upx;
-			font-size: 70upx;
-			line-height: 1.5;
-			text-align: center;
-			color: #fff;
-		}
+		width: 109upx;height: 109upx;
+		background-color: #4DC578;
+		border-radius: 50%;
+		position: fixed;
+		right: 41upx;
+		bottom:100upx;
+		font-size: 70upx;
+		line-height: 1.5;
+		text-align: center;
+		color: #fff;
+	}
 </style>
+

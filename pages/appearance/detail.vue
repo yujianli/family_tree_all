@@ -138,74 +138,75 @@ export default {
 };
 </script>
 
-<style>
-.container {
-	padding-left: 30upx;
-	padding-right: 30upx;
-	padding-bottom: 120upx;
-}
+<style lang="less" scoped>
+	.container {
+		padding-left: 30upx;
+		padding-right: 30upx;
+		padding-bottom: 120upx;
+	}
 
-.wrapper {
-	height: 110upx;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-}
+	.wrapper {
+		height: 110upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-.mul_wrapper {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-start;
-}
+	.mul_wrapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
 
-.avatar_wrapper {
-	margin-top: 44upx;
-	justify-content: center;
-	margin-bottom: 36upx;
-}
+	.avatar_wrapper {
+		margin-top: 44upx;
+		justify-content: center;
+		margin-bottom: 36upx;
+	}
 
-.inner_title {
-	font-size: 34upx;
-	color: #333;
-	margin-right: 40upx;
-}
+	.inner_title {
+		font-size: 34upx;
+		color: #333;
+		margin-right: 40upx;
+	}
 
-.input {
-	font-size: 34upx;
-	color: #303641;
-	flex: 1;
-	text-align: right;
-}
+	.input {
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		text-align: right;
+	}
 
-.mul_input {
-	font-size: 34upx;
-	color: #303641;
-	flex: 1;
-}
+	.mul_input {
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+	}
 
-.opt_container {
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	height: 104upx;
-}
+	.opt_container {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 104upx;
 
-.btn_delete {
-	flex: 1;
-	font-size: 38upx;
-	color: #ffffff;
-	background-color: #fb4f4f;
-	border-radius: 0;
-}
+	}
 
-.btn_delete:after {
-	border: 0px;
-}
+	.btn_delete {
+		flex: 1;
+		font-size: 38upx;
+		color: #ffffff;
+		background-color: #FB4F4F;
+		border-radius: 0;
+	}
+
+	.btn_delete:after {
+		border: 0px;
+	}
 </style>

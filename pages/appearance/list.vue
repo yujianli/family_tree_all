@@ -108,7 +108,7 @@
 	}
 </script>
 
-<style>
+<style lang="less" scoped>
 	.container{
 		padding: 48upx;
 	}
@@ -125,3 +125,4 @@
 		font-size: 36upx;color: #333;font-weight: 600;
 	}
 </style>
+

@@ -170,11 +170,11 @@ export default {
 
 <style>
 	.container{
-		padding-left:15px;
-		padding-right:15px;
+		padding-left:30upx;
+		padding-right:30upx;
 	}
 	.wrapper{
-		height: 55px;
+		height: 110upx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -187,23 +187,23 @@ export default {
 		align-items: flex-start;
 	}
 	.avatar_wrapper{
-		margin-top: 22px;
+		margin-top: 44upx;
 		justify-content: center;
-		margin-bottom: 18px;
+		margin-bottom: 36upx;
 	}
 	.inner_title{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #333;
-		margin-right: 20px;
+		margin-right: 40upx;
 	}
 	.input{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #303641;
 		flex:1;
 		text-align:right;
 	}
 	.mul_input{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #303641;
 		flex: 1;
 	}

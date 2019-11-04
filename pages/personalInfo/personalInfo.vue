@@ -298,36 +298,36 @@
 				}
 			},
 			openAlbum:function(){
-				uni.chooseImage({
-					count:1,
-					sizeType:['original', 'compressed'],
-					sourceType:['album'],
-					success: function(res){
-						console.log(JSON.stringify(res.tempFilePaths));
-						const tempFilePaths = res.tempFilePaths;
-						uni.uploadFile({
-						    url: 'http://47.99.133.113:8989/api/upload',
-							header: {
-								"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ",
-								'Content-Type':'application/x-www-form-urlencoded'
-							},
-						    filePath: tempFilePaths[0],
-						    name: 'file',
-						    formData: {
-						        'file': null
-						    },
-						    success: (uploadFileRes) => {
-						        console.log(uploadFileRes.data);
-						    }
-						});        
-					},
-					fail:function(res){
-						console.log(JSON.stringify(res))
-					},
-					complete:function(res){
-						console.log(JSON.stringify(res))
-					}
-				})
+				// uni.chooseImage({
+				// 	count:1,
+				// 	sizeType:['original', 'compressed'],
+				// 	sourceType:['album'],
+				// 	success: function(res){
+				// 		console.log(JSON.stringify(res.tempFilePaths));
+				// 		const tempFilePaths = res.tempFilePaths;
+				// 		uni.uploadFile({
+				// 		    url: 'http://47.99.133.113:8989/api/upload',
+				// 			header: {
+				// 				"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ",
+				// 				'Content-Type':'application/x-www-form-urlencoded'
+				// 			},
+				// 		    filePath: tempFilePaths[0],
+				// 		    name: 'file',
+				// 		    formData: {
+				// 		        'file': null
+				// 		    },
+				// 		    success: (uploadFileRes) => {
+				// 		        console.log(uploadFileRes.data);
+				// 		    }
+				// 		});        
+				// 	},
+				// 	fail:function(res){
+				// 		console.log(JSON.stringify(res))
+				// 	},
+				// 	complete:function(res){
+				// 		console.log(JSON.stringify(res))
+				// 	}
+				// })
 			},
 			save:function(){
 				this.baseInfo['dateOfBirth']= this.baseInfo.birth;
@@ -348,13 +348,13 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.container{
-		padding-left:15px;
-		padding-right:15px;
+		padding-left:30upx;
+		padding-right:30upx;
 	}
 	.wrapper{
-		height: 55px;
+		height: 110upx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -367,26 +367,27 @@
 		align-items: flex-start;
 	}
 	.avatar_wrapper{
-		margin-top: 22px;
+		margin-top: 44upx;
 		justify-content: center;
-		margin-bottom: 18px;
+		margin-bottom: 36upx;
 	}
 	.inner_title{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #333;
-		margin-right: 20px;
+		margin-right: 40upx;
 	}
 	.input{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #303641;
 		flex:1;
 		text-align:right;
 	}
 	.mul_input{
-		font-size: 17px;
+		font-size: 34upx;
 		color: #303641;
 		flex: 1;
 		
 		
 	}
 </style>
+

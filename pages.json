@@ -9,6 +9,15 @@
 			}
 		},
 		{
+			"path": "pages/guide/guide",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"app-plus": {
@@ -241,9 +250,6 @@
 			"style": {
 				"navigationBarTitleText": "文摘"
 			}
-		}, {
-			"path": "pages/family/family",
-			"style": {}
 		}
 	],
 	"globalStyle": {
@@ -277,17 +283,18 @@
 				"text": "设置"
 			}
 		]
-	},
-	"condition": { //模式配置，仅开发期间生效
-		"current": 1, //当前激活的模式(list 的索引项)
-		"list": [{
-			"name": "个人信息", //模式名称
-			"path": "pages/personalInfo/personalInfo", //启动页面，必选
-			"query": "id=14" //启动参数，在页面的onLoad函数里面得到
-		}, {
-			"name": "爱好编辑", //模式名称
-			"path": "pages/hobby/edit", //启动页面，必选
-			"query": "userId=61&moduleId=7&contentId=20191102000137&flag=category&language=zh_CN" //启动参数，在页面的onLoad函数里面得到
-		}]
 	}
+	// ,
+	// "condition": { //模式配置，仅开发期间生效
+	// 	"current": 1, //当前激活的模式(list 的索引项)
+	// 	"list": [{
+	// 		"name": "个人信息", //模式名称
+	// 		"path": "pages/personalInfo/personalInfo", //启动页面，必选
+	// 		"query": "id=14" //启动参数，在页面的onLoad函数里面得到
+	// 	}, {
+	// 		"name": "爱好编辑", //模式名称
+	// 		"path": "pages/hobby/edit", //启动页面，必选
+	// 		"query": "userId=61&moduleId=7&contentId=20191102000137&flag=category&language=zh_CN" //启动参数，在页面的onLoad函数里面得到
+	// 	}]
+	// }
 }

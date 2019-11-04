@@ -6,7 +6,7 @@
 		<view class="more_tips fee_pd">直接购买更多年限有更多优惠</view>
 		<view class="fee_wrapper">
 			<view v-for="(fee,index) in feeList">
-				<view @tap="setActive(fee.title)" :class="['fee_item',{active : active == fee.title}]">
+				<view @tap="setActive(fee.title,fee.price)" :class="['fee_item',{active : activeTitle == fee.title}]">
 					<text class="fee_title">{{fee.title}}</text>
 					<view class="fee_inner">
 						<text class="fee_unit">￥</text>
@@ -16,8 +16,8 @@
 				</view>
 			</view>
 		</view>
-		<view class="fee_pd">
-			<button type="primary" @click="openPopup" class="btn_open fee_pd">立即开通</button>
+		<view  style="margin-left: 15upx;margin-right: 15upx;margin-bottom: 80upx;">
+			<button type="primary" @click="openPopup" class="btn_open">立即开通</button>
 		</view>
 		<uni-popup ref="fee_popup" type="bottom">
 			<view class="pay_wrapper">
@@ -25,7 +25,7 @@
 					<text class="f18">支付年费</text>
 					<text class="f15" @click="closePopup">取消</text>
 				</view>
-				<view class="fee_type">类型：支付1年VIP360元</view>
+				<view class="fee_type">类型：{{activeTitle}}{{activePrice}}</view>
 				<view v-for="(pay,index) in payList" class="pay_item">
 					<view>
 						<image :src="pay.pic"></image>
@@ -55,7 +55,8 @@
 						price: '1280',
 					},
 				],
-				active: "1年VIP年费",
+				activeTitle: "1年VIP年费",
+				activePrice:'360',
 				payList: [{
 					id: 1,
 					name: '支付宝',
@@ -77,8 +78,9 @@
 			uniPopup
 		},
 		methods: {
-			setActive: function(name) {
-				this.active = name;
+			setActive: function(name,price) {
+				this.activeTitle = name;
+				this.activePrice = price;
 			},
 			openPopup: function() {
 				this.$refs.fee_popup.open()
@@ -90,33 +92,33 @@
 	}
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 	.fee_pd {
-		padding-left: 15px;
-		padding-bottom: 15px;
+		padding-left: 30upx;
+		padding-bottom: 30upx;
 	}
 
 	.fee_info {
-		margin-top: 18px;
+		margin-top: 36upx;
 		color: #333;
-		font-size: 16px;
+		font-size: 32upx;
 	}
 
 	.fee_tips {
-		font-size: 14px;
+		font-size: 28upx;
 		color: #999;
 		text-align: center;
-		margin-top: 18px;
+		margin-top: 36upx;
 	}
 
 	.more_tips {
-		font-size: 14px;
+		font-size: 28upx;
 		color: #333;
-		margin-top: 44px;
+		margin-top: 88upx;
 	}
 
 	.fee_wrapper {
-		margin-top: 16px;
+		margin-top: 32upx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
@@ -126,66 +128,58 @@
 
 	.fee_item {
 		border: 1px solid #ccc;
-		border-radius: 5px;
+		border-radius: 10upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		padding: 26px 14px;
-
+		padding: 52upx 28upx;
 		&.active {
 			border-color: #FCB65F;
 			background-color: #F4D9B7;
 		}
-	}
-
-	.fee_title {
-		font-size: 16px;
-		color: #333;
-	}
-
-	.fee_inner {
-		margin-top: 13.5px;
-		display: flex;
-		align-items:center;
-
-		.fee_unit {
-			font-size: 16px;
-			color: #ED9D3A;
-		
-			font-weight: 600;
+		.fee_title {
+			font-size: 32upx;
+			color: #333;
 		}
-
-		.fee_price {
-			font-size: 30px;
-			color: #ED9D3A;
-			font-weight: 600;
+		.fee_inner {
+			margin-top: 26upx;
+			display: flex;
+			align-items:center;
+			.fee_unit {
+				font-size: 32upx;
+				color: #ED9D3A;
+				font-weight: 600;
+			}
+			.fee_price {
+				font-size: 60upx;
+				color: #ED9D3A;
+				font-weight: 600;
+			}
 		}
-
 		.fee_year {
-			font-size: 15px;
+			font-size: 30upx;
 			color: #999;
-			margin-top: 8.5px;
+			margin-top: 16upx;
 		}
 	}
-
 	.btn_open {
-		margin-top: 80px;
-		font-size: 16px;
+		margin-top: 160upx;
+		font-size: 32upx;
 		color: #e5e5e5;
 		background-color: #4DC578;
-		height: 46px;
-		line-height: 46px;
+		height: 92upx;
+		line-height: 92upx;
 	}
 
 	.pay_wrapper {
-		padding: 17px;
+		padding: 34upx;
 		background-color: #fff;
-		padding-bottom: 45px;
+		padding-bottom: 90upx;
 
 		.pay_hd {
 			color: #333;
-			padding-bottom: 15px;
+			padding-bottom: 30upx;
 			border-bottom-width: 1px;
 			border-bottom-color: #E5E5E5;
 			border-bottom-style: solid;
@@ -194,37 +188,32 @@
 			justify-content: space-between;
 
 			.f18 {
-				font-size: 18px;
+				font-size: 36upx;
 			}
-
 			.f15 {
-				font-size: 15px;
+				font-size: 30upx;
 			}
 		}
-
 		.fee_type {
-			margin-top: 10px;
-			font-size: 15px;
+			margin-top: 20upx;
+			font-size: 30upx;
 			color: #333;
-			margin-bottom: 35px;
+			margin-bottom: 70upx;
 		}
-
 		.pay_item {
-			margin-top: 20px;
-
+			margin-top: 40upx;
 			view {
 				display: flex;
 				flex-direction: row;
+				align-items: center;
 			}
-
 			image {
-				width: 30px;
-				height: 30px;
-				margin-right: 10px;
+				width: 60upx;
+				height: 60upx;
+				margin-right: 20upx;
 			}
-
 			text {
-				font-size: 15px;
+				font-size: 30upx;
 				color: #333;
 			}
 		}

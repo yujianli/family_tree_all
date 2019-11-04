@@ -137,8 +137,8 @@
 				this.removeEnable=true
 			}
 			this.loadModule(options.moduleId)
-			// let token=uni.getStorageInfoSync('USER').token;
-			let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
+			let token=uni.getStorageInfoSync('USER').token;
+			//let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
 			this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
 		},
 		onNavigationBarButtonTap(e) {

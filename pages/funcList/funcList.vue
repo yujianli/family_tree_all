@@ -120,49 +120,38 @@
 	}
 </script>
 
-<style>
-	.container {
+<style lang="less" scoped>
+	.container{
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
 	}
-
-	.wrapper {
+		
+	.wrapper{
 		display: flex;
 		flex-direction: column;
 		width: 20%;
-		height: 94px;
+		height: 180upx;
 		justify-content: center;
 		align-items: center;
 		position: relative;
 	}
-
-	.pic_menu {
-		width: 44px;
-		height: 44px;
+		
+	.pic_menu{
+		width: 88upx; height: 88upx;
 	}
-
-	.pic_opt {
-		width: 20px;
-		height: 20px;
-		position: absolute;
-		top: 4px;
-		right: 3%;
+	.pic_opt{
+		width: 40upx;height: 40upx;position: absolute;top: 7upx;right: 3%;
 	}
-
-	.explain {
-		margin-top: 30px;
-		margin-bottom: 34px;
-		font-size: 13px;
-		color: #999;
-		text-align: center;
+		
+	.explain{
+		margin-top: 60upx;margin-bottom: 68upx;font-size: 26upx;color: #999;text-align: center;
 	}
-
-	.text {
-		margin-top: 8px;
-		font-size: 13px;
-		color: #333;
+		
+	.text{
+		margin-top: 16upx;
+		font-size: 26upx;color: #333;
 	}
 </style>

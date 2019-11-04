@@ -39,6 +39,10 @@ export default {
 			}
 		};
 	},
+	onLoad(){
+		//uni.removeStorageSync('launchFlag');
+		this.loadExecution();
+	},
 	methods: {
 		//发送验证码
 		sendCode: function() {
@@ -90,7 +94,7 @@ export default {
 				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" }
 			];
 			if(this.isShow && !nickname){
-				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_-]{4,16}$", errorMsg: "请填写姓名"})
+				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_\u4e00-\u9fa5]+$", errorMsg: "请填写姓名"})
 			}
 			let checkLogin = graceChecker.check(e.detail.value, rule);
 			if(!checkLogin){
@@ -107,9 +111,12 @@ export default {
 				//console.log(res);
 				if(res.data.code===200){
 					//缓存用户信息
+					uni.setStorageSync("USER", res.data.data.user);
 					uni.setStorageSync("USER", res.data.user);
+					console.log(res.data);
 					//跳转到主页
-					uni.navigateTo({
+					//this.login(res.data.data.user);
+					uni.switchTab({
 						url: '/pages/index/index'
 					});
 				}else {
@@ -120,75 +127,140 @@ export default {
 					});
 				}
 			})
+		},
+		loadExecution: function(){
+			/**
+			 * 获取本地存储中launchFlag的值
+			 * 若存在，说明不是首次启动，直接进入首页；
+			 * 若不存在，说明是首次启动，进入引导页；
+			 */
+			try {
+				const value = uni.getStorageSync('launchFlag');
+				console.log("has launch");
+				console.log(value);
+				if (value) {
+					if (value == true) {
+						//判断是否已经成功登录
+						//成功登录 switchTab进入index页面
+						this.loginThenToIndex();
+						
+					} else {
+						uni.redirectTo({
+							url: '/pages/guide/guide'
+						});
+					}
+				} else {
+					uni.setStorage({
+						key: 'launchFlag',
+						data: true,
+						success: function() {
+							console.log('存储launchFlag');
+						}
+					});
+					uni.redirectTo({
+						url: '/pages/guide/guide'
+					});
+				}
+			} catch(e) { 
+				// error 
+				uni.setStorage({ 
+					key: 'launchFlag', 
+					data: true, 
+					success: function () {
+						console.log('error时存储launchFlag');
+					} 
+				}); 
+				uni.redirectTo({ url: '/pages/guide/guide' }); 
+			}
+			return;
+			loginThenToIndex();
+		},
+		loginThenToIndex:function(){
+			const user = uni.getStorageSync('USER');
+			console.log('已经登录');
+			console.log(user);
+			if(user){
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+			}
 		}
 	}
 };
 </script>
-<style>
-.status_bar {
-	height: var(--status-bar-height);
-	width: 100%;
-}
-view {
-	display: flex;
-}
+<style lang="less" scoped>
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+	}
 
-.common {
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-}
+	view {
+		display: flex;
+	}
 
-.loginView {
-	margin-left: 18px;
-	margin-right: 18px;
-	/* width: 750upx;
+	.common {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	.loginView {
+		margin-left: 36upx;
+		margin-right: 36upx;
+		/* width: 750upx;
         padding-top: 30upx; */
-}
+	}
 
-.input-view {
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: #e3e3e3;
-	background-color: #fff;
-	flex-direction: row;
-	box-sizing: border-box;
-}
-.input {
-	font-size: 17px;
-	color: #333;
-	height: 60px;
-	flex: 1;
-}
-.other_opt {
-	font-size: 14px;
-	color: #333;
-}
-.login {
-	margin-top: 50px;
-	font-size: 16px;
-	color: #e5e5e5;
-	background-color: #4dc578;
-	height: 46px;
-	line-height: 46px;
-}
-.sendCode{
-	width: 89px;height: 26px;line-height: 26px;
-	position: absolute;
-	top:18px;
-	right: 0;
-	border-radius: 2px;
-	border-style:solid;
-	border-width: 1px;
-	border-color: #999;
-	font-size: 16px;
-	padding-left: 0;
-	padding-right: 0;
-	color: #999;
-	z-index: 999999;
-}
-button:after{
-	border:0;
-	border-radius: 0;
-}
+	.input-view {
+		border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-bottom-color: #e3e3e3;
+		background-color: #fff;
+		flex-direction: row;
+		box-sizing: border-box;
+	}
+
+	.input {
+		font-size: 34upx;
+		color: #333;
+		height: 120upx;
+		flex: 1;
+	}
+
+	.other_opt {
+		font-size: 28upx;
+		color: #333;
+	}
+
+	.login {
+		margin-top: 100upx;
+		font-size: 32upx;
+		color: #e5e5e5;
+		background-color: #4dc578;
+		height: 92upx;
+		line-height: 92upx;
+	}
+
+	.sendCode {
+		width: 178upx;
+		height: 52upx;
+		line-height: 52upx;
+		position: absolute;
+		top: 36upx;
+		right: 0;
+		border-radius: 2px;
+		border-style: solid;
+		border-width: 1px;
+		border-color: #999;
+		font-size: 32upx;
+		padding-left: 0;
+		padding-right: 0;
+		color: #999;
+		z-index: 999999;
+	}
+
+	button:after {
+		border: 0;
+		border-radius: 0;
+	}
 </style>

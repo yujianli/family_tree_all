@@ -203,11 +203,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.less';
-
-	.pd18 {
+	.pd18{
 		padding: 18upx;
 	}
-
 	.category_container {
 		display: flex;
 		flex-direction: row;
@@ -244,7 +242,6 @@
 		padding-left: 40upx;
 		padding-right: 40upx;
 		padding-top: 36upx;
-
 		view {
 			border: 1px solid #FF9797;
 			border-radius: 8upx;
@@ -260,21 +257,18 @@
 			padding-right: 2upx;
 		}
 	}
-
-	.all_types_container {
+	.all_types_container{
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-
-		.all_types_wrapper {
+		.all_types_wrapper{
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
 			flex-wrap: wrap;
-
 			view {
 				border: 1px solid #999;
 				border-radius: 8upx;
@@ -288,23 +282,19 @@
 				margin-bottom: 10upx;
 				padding-left: 2upx;
 				padding-right: 2upx;
-
-				&.active {
+				&.active{
 					color: #4DC578;
 					border-color: #4DC578;
 				}
 			}
 		}
-
+		
 	}
-
-	.text {
-		font-size: 31upx;
-		color: #666;
+	.text{
+		font-size: 31upx;color: #666;
 		margin-bottom: 18upx;
 	}
-
-	.all_opt_btn_container {
+	.all_opt_btn_container{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -314,23 +304,22 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 85upx;
-
-		.all_opt_btn {
-			flex: 1;
-			font-size: 31upx;
+		.all_opt_btn{
+			flex:1;
+			font-size:31upx;
 			color: #4DC578;
 			background-color: #f9f9f9;
 			border-radius: 0;
-
-			&:after {
-				border: 0px;
+			&:after{
+				border:0px;
 			}
-
-			&.active {
+			&.active{
 				background-color: #4DC578;
 				color: #ffffff;
 			}
-
-		}
+			
+		}	
 	}
+	
+	
 </style>

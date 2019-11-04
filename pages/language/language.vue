@@ -4,7 +4,7 @@
 				<label class="inner_title" v-for="(item, index) in items" :key="item.value">
 					<view>{{item.name}}</view>
 					<view>
-						<radio :value="item.value" :checked="index === current" />
+						<radio :value="item.value" :checked="index === current" color='#4DC578'/>
 					</view>
 				</label> 
 		</radio-group>
@@ -41,7 +41,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
