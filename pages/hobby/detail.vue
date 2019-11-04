@@ -2,7 +2,7 @@
 	<view>
 		<view class="detail_container">
 			<view class="detail_hd">
-				<view>{{cdate}}</view>
+				<view>{{content.createDate | formatDate}}</view>
 				<view>{{content.position}}</view>
 				<view>{{content.categoryName}}</view>
 			</view>
@@ -39,6 +39,7 @@
 					moduleId: null,
 					contentId: null,
 					flag: null,
+					name: null,
 					language: this.$common.language
 				},
 				content: {
@@ -67,17 +68,24 @@
 
 		},
 		computed: {
-			cdate: function() {
-				if(!this.content.createDate) return '';
-				return util.dateFormat(this.content.createDate);
-			},
 			images: function(){
 				if(!this.content.imageUrls) return [];
 				return this.content.imageUrls.split(',');
 			}
 		},
+		filters:{
+			formatDate:function(value){
+				if(!value) return ''
+				return util.dateFormat(value)
+			}
+		},
 		onLoad: function(options) {
+			uni.setNavigationBarTitle({
+				title:options.name
+			})
 			util.loadObj(this.param, options)
+		},
+		onShow:function(){
 			this.loadDetail()
 		},
 		onNavigationBarButtonTap(e) {

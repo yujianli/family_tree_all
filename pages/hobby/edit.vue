@@ -237,7 +237,10 @@
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
 					if(res.data.code===200){
-						this.backToList()
+						// this.backToList()
+						uni.navigateBack({
+							delta:1
+						})
 					}else{
 						uni.showToast({
 							title: '保存失败',icon:'none'
@@ -256,7 +259,10 @@
 							language: this.param.language,
 						}).then((res)=>{
 							if(res.data.code===200){
-								this.backToList()
+								// this.backToList()
+								uni.navigateBack({
+									delta:2
+								})
 							}else{
 								uni.showToast({
 									title: '删除失败',

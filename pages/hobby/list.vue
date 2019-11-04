@@ -78,6 +78,8 @@
 				title:options.name
 			})
 			util.loadObj(this.cParam,options)
+		},
+		onShow:function(){
 			this.loadModule(options.moduleId)
 		},
 		methods: {

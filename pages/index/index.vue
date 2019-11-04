@@ -146,12 +146,7 @@
 				return util.dateFormat(value)
 			}
 		},
-		onLoad: function() {
-			let user = uni.getStorageSync("USER");
-			this.userId = user.id;
-			this.loadModule(user.id);
-			this.loadUserInfo(user.id);
-			this.loadIndexContent();
+		onLoad:function(){
 			// 提醒试用到期
 			uni.showModal({
 				title: '温馨提示',
@@ -168,6 +163,15 @@
 					}
 				}
 			});
+		},
+		onShow: function() {
+			// let user = uni.getStorageSync("USER");
+			// this.userId = user.id;
+			this.userId=61
+			this.loadModule(this.userId);
+			this.loadUserInfo(this.userId);
+			this.loadIndexContent();
+			
 		},
 		methods: {
 			jumpToList: function(module) {
@@ -200,7 +204,8 @@
 					userId: this.userId,
 					moduleId: content.moduleId,
 					flag: content.flag,
-					contentId: content.id
+					contentId: content.id,
+					name: content.moduleName
 				}
 				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
