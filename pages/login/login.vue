@@ -112,8 +112,8 @@ export default {
 				if(res.data.code===200){
 					//缓存用户信息
 					uni.setStorageSync("USER", res.data.data.user);
-					uni.setStorageSync("USER", res.data.user);
-					console.log(res.data);
+					//uni.setStorageSync("USER", res.data.user);
+					console.log(res.data.data);
 					//跳转到主页
 					//this.login(res.data.data.user);
 					uni.switchTab({

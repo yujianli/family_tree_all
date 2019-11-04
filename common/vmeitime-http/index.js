@@ -41,7 +41,7 @@ import http from './interface'
 
 export const getByToken = (url, data) => {
 	http.interceptor.request = (config) => {
-		let info = uni.getStorageInfoSync('USER');
+		let info = uni.getStorageSync('USER');
 		config.header = {
 			"token": info.token
 			//"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ"
@@ -63,7 +63,7 @@ export const getByToken = (url, data) => {
 
 export const postByToken = (url, data) => {
 	http.interceptor.request = (config) => {
-		let info = uni.getStorageInfoSync('USER');
+		let info = uni.getStorageSync('USER');
 		config.header = {
 			"token": info.token,
 			//"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ",

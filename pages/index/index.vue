@@ -146,12 +146,11 @@
 				return util.dateFormat(value)
 			}
 		},
-		onLoad: function(option) {
-			console.log('option');
-			console.log(option);
-			this.userId = option.userId;
-			this.loadModule(option.userId);
-			this.loadUserInfo(option.userId);
+		onLoad: function() {
+			let user = uni.getStorageSync("USER");
+			this.userId = user.id;
+			this.loadModule(user.id);
+			this.loadUserInfo(user.id);
 			this.loadIndexContent();
 			// 提醒试用到期
 			uni.showModal({
