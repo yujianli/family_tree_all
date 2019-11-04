@@ -250,6 +250,18 @@
 			"style": {
 				"navigationBarTitleText": "文摘"
 			}
+		},
+		{
+			"path": "pages/schedule/edit/edit",
+			"style": {
+				"navigationBarTitleText": "计划安排"
+			}
+		},
+		{
+			"path": "pages/schedule/list/list",
+			"style": {
+				"navigationBarTitleText": "计划安排"
+			}
 		}
 	],
 	"globalStyle": {

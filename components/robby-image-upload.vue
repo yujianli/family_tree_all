@@ -153,7 +153,8 @@
 													});
 												}
 												console.log('success to upload image: ' + res.data)
-												resolve(res.data)
+												// resolve(res.data)
+												resolve("http://47.99.133.113:8989/api/download?url="+JSON.parse(res.data).name)
 											}else{
 												console.log('fail to upload image:'+res.data)
 												reject('fail to upload image:' + remoteUrlIndex)
