@@ -11,15 +11,19 @@
 			<text class="inner_title">地点：</text>
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
-		<view class="wrapper">
+		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
 				<view class="uni-input">{{ typeList[idx].name }}</view>
 			</picker>
 		</view>
+		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
+			<text class="inner_title">天气：</text>
+			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.weather" placeholder="天气" />
+		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
-		</view>
+			</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
 		@delete="deleteImage" @add="addImage" 
@@ -66,6 +70,7 @@
 	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue';
 	import wPicker from "@/components/w-picker/w-picker.vue";
 	import util from '@/common/util.js'
+	import config from '@/common/componetConfig.js'
 	export default {
 		data() {
 			return {
@@ -76,6 +81,10 @@
 					flag: null,
 					name: null,
 					language: null
+				},
+				ctrlEnable:{
+					typeCtrl: true,
+					weatherCtrl: false
 				},
 				idx:0,
 				typeList:[{id:-1,name:'请选择'}],
@@ -92,7 +101,7 @@
 					tags: '',
 					associatedPerson: null,
 					imageUrls: null,
-					weather: null,
+					weather: '',
 					id: null,
 					position: '',
 					moduleId: null,
@@ -133,6 +142,7 @@
 				title:options.name
 			})
 			util.loadObj(this.param,options)
+			this.initControl(this.param.moduleId)
 			if(this.param.contentId) {
 				this.removeEnable=true
 			}
@@ -145,6 +155,12 @@
 			this.save()
 		},
 		methods: {
+			initControl:function(moduleId){
+				let id=parseInt(moduleId)
+				let editConfig=config.edit;
+				this.ctrlEnable.typeCtrl=editConfig.typeCtrl.indexOf(id)>=0;
+				this.ctrlEnable.weatherCtrl=editConfig.weatherCtrl.indexOf(id)>=0;
+			},
 			loadContent:function(){
 				this.$http.get('content/detail', this.param).then((res)=>{
 					if (res.data.code === 200) {

@@ -165,9 +165,9 @@
 			});
 		},
 		onShow: function() {
-			// let user = uni.getStorageSync("USER");
-			// this.userId = user.id;
-			this.userId=61
+			let user = uni.getStorageSync("USER");
+			this.userId = user.id;
+			// this.userId=61
 			this.loadModule(this.userId);
 			this.loadUserInfo(this.userId);
 			this.loadIndexContent();

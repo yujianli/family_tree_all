@@ -4,7 +4,8 @@
 			<view class="detail_hd">
 				<view>{{content.createDate | formatDate}}</view>
 				<view>{{content.position}}</view>
-				<view>{{content.categoryName}}</view>
+				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
+				<view v-if="ctrlEnable.weatherCtrl">{{content.weather}}</view>
 			</view>
 			<view class="detail_content">
 				<view>
@@ -31,6 +32,7 @@
 
 <script>
 	import util from '@/common/util.js'
+	import config from '@/common/componetConfig.js'
 	export default {
 		data() {
 			return {
@@ -41,6 +43,10 @@
 					flag: null,
 					name: null,
 					language: this.$common.language
+				},
+				ctrlEnable: {
+					typeCtrl: true,
+					weatherCtrl: false
 				},
 				content: {
 					periodId: null,
@@ -84,6 +90,7 @@
 				title:options.name
 			})
 			util.loadObj(this.param, options)
+			this.initControl(this.param.moduleId)
 		},
 		onShow:function(){
 			this.loadDetail()
@@ -93,6 +100,12 @@
 			uni.navigateTo({url: url})
 		},
 		methods: {
+			initControl: function(moduleId) {
+				let id=parseInt(moduleId)
+				let detailConfig=config.detail;
+				this.ctrlEnable.typeCtrl=detailConfig.typeCtrl.indexOf(id)>=0;
+				this.ctrlEnable.weatherCtrl=detailConfig.weatherCtrl.indexOf(id)>=0;
+			},
 			loadDetail: function() {
 				this.$http.get('content/detail', this.param).then((res) => {
 					if (res.data.code === 200) {

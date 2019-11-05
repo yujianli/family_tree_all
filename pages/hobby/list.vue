@@ -1,16 +1,16 @@
 <template>
 	<view>
 		<view class="float_btn" @tap="add">+</view>
-		<view style="position:relative">
+		<view style="position:relative" v-if="ctrlEnable.tabCtrl">
 			<myTab :tabList="moduleList" @tabSelect="tabSelect" :tabActiveIdx="tabActiveIdx" />
 		</view>
-<!-- 		<view class="category_container">
+		<!-- 		<view class="category_container">
 			<view v-for="(module,i) in moduleList" v-bind:key="module.id" @tap="selModule(module.id)">
 				<view class="category_hd">{{module.name}}</view>
 			</view>
 		</view> -->
 		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
-		<!-- <contentList :cParam="cParam"></contentList> -->
+		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 
 			<view class="card_item" @tap="jumpToDetail(content.contentId)" v-for="(content,i) in contentList" v-bind:key="content.id">
@@ -40,18 +40,23 @@
 	import myTab from '@/components/xyz-tab';
 	// import contentList from '@/components/content-list';
 	import util from '@/common/util.js'
+	import config from '@/common/componetConfig.js'
+	import module from '@/common/moduleLink.js'
 	export default {
 		data() {
 			return {
-				cParam: {
+				param: {
 					userId: null,
 					moduleId: null,
 					page: 1,
 					rows: 10,
 					flag: null,
 					flagId: 41,
-					name:'',
+					name: '',
 					language: this.$common.language
+				},
+				ctrlEnable: {
+					tabCtrl: true
 				},
 				moduleList: [],
 				tabActiveIdx: 0,
@@ -75,21 +80,27 @@
 		},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
-				title:options.name
+				title: options.name
 			})
-			util.loadObj(this.cParam,options)
+			util.loadObj(this.param, options)
+			this.initControl(this.param.moduleId)
 		},
-		onShow:function(){
-			this.loadModule(options.moduleId)
+		onShow: function() {
+			this.loadModule(this.param.moduleId)
 		},
 		methods: {
+			initControl: function(moduleId) {
+				let id=parseInt(moduleId)
+				let listConfig = config.list;
+				this.ctrlEnable.tabCtrl = listConfig.tabCtrl.indexOf(id) >= 0;
+			},
 			jumpToDetail: function(id) {
 				let p = {
-					userId: this.cParam.userId,
-					moduleId: this.cParam.moduleId,
-					flag: this.cParam.flag,
+					userId: this.param.userId,
+					moduleId: this.param.moduleId,
+					flag: this.param.flag,
 					contentId: id,
-					name: this.cParam.name
+					name: this.param.name
 				}
 				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
@@ -104,7 +115,7 @@
 					.then((res) => {
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentCategory;
-							this.moduleList = util.objectTransfer(_list, ['id','name'],['id','label']);
+							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
 							this.loadContent(this.moduleList[0].id);
 						} else {
 							uni.showToast({
@@ -115,8 +126,31 @@
 					})
 			},
 			loadContent: function(flagId) {
-				this.cParam['categoryId'] = flagId
-				this.$http.get('content/query', this.cParam).then((res) => {
+				let reqParam = {
+					userId: null,
+					moduleId: null,
+					page: null,
+					rows: null,
+					language: null
+				}
+				util.loadObj(reqParam,this.param)
+				if (module.requestParam.notFlag.indexOf(this.param.moduleId) == -1) {
+					reqParam['flag']=this.param.flag
+				}
+				if (module.requestParam.notTypeId.indexOf(this.param.moduleId) == -1) {
+					switch (this.param.flag) {
+						case 'category':
+							reqParam['categoryId'] = flagId
+							break;
+						case 'period':
+							reqParam['periodId'] = flagId
+							break;
+						case 'place':
+							reqParam['placeId'] = flagId
+							break;
+					}
+				}
+				this.$http.get('content/query', reqParam).then((res) => {
 					if (res.data.code === 200) {
 						this.contentList = res.data.data.contentList;
 						for (var i = 0; i < this.contentList.length; i++) {
@@ -141,7 +175,7 @@
 				uni.showLoading({
 					title: '搜索中'
 				});
-				let searchParam = this.cParam
+				let searchParam = this.param
 				searchParam['content'] = e.value
 				this.$http.get('content/queryLike', searchParam).then((res) => {
 					if (res.data.code === 200) {
@@ -169,14 +203,14 @@
 				this.tabActiveIdx = idx;
 				this.loadContent(this.moduleList[idx].id)
 			},
-			add:function(){
+			add: function() {
 				uni.navigateTo({
-					url:'edit' + util.jsonToQuery({
-						userId: this.cParam.userId,
-						moduleId:this.cParam.moduleId,
-						flag:this.cParam.flag,
-						name:this.cParam.name,
-						language:this.cParam.language
+					url: 'edit' + util.jsonToQuery({
+						userId: this.param.userId,
+						moduleId: this.param.moduleId,
+						flag: this.param.flag,
+						name: this.param.name,
+						language: this.param.language
 					})
 				})
 			}
@@ -214,17 +248,18 @@
 		margin-bottom: 40upx;
 		height: 68upx;
 	}
-	.float_btn{
-		width: 109upx;height: 109upx;
+
+	.float_btn {
+		width: 109upx;
+		height: 109upx;
 		background-color: #4DC578;
 		border-radius: 50%;
 		position: fixed;
 		right: 41upx;
-		bottom:100upx;
+		bottom: 100upx;
 		font-size: 70upx;
 		line-height: 1.5;
 		text-align: center;
 		color: #fff;
 	}
 </style>
-
