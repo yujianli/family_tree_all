@@ -7,15 +7,27 @@ export default {
 			}
 		}
 	},
-	//时间格式化 yyyy-MM-dd
-	dateFormat(timestamp) {
+	//时间格式化 默认yyyy-MM-dd
+	dateFormat(timestamp, format) {
 		let date = new Date(timestamp);
 		let year = date.getFullYear();
 		let month = date.getMonth() + 1;
 		let day = date.getDate();
 		month = month > 9 ? month : '0' + month;;
 		day = day > 9 ? day : '0' + day;
-		return `${year}-${month}-${day}`;
+		if(!format){
+			return `${year}-${month}-${day}`;
+		}
+		let _date = null;
+		switch(format){
+			case 'yyyy/MM/dd':
+				_date = `${year}/${month}/${day}`;
+				break;
+			case 'yyyy.MM.dd':
+				_date = `${year}.${month}.${day}`;
+				break;
+		}
+		return _date
 	},
 	//获取时间
 	getDate(type){

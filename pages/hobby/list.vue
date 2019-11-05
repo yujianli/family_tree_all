@@ -4,11 +4,15 @@
 		<view style="position:relative" v-if="ctrlEnable.tabCtrl">
 			<myTab :tabList="moduleList" @tabSelect="tabSelect" :tabActiveIdx="tabActiveIdx" />
 		</view>
-		<!-- 		<view class="category_container">
-			<view v-for="(module,i) in moduleList" v-bind:key="module.id" @tap="selModule(module.id)">
-				<view class="category_hd">{{module.name}}</view>
+		<view class="container_pd" v-if="ctrlEnable.selfDescCtrl">
+			<view class="self_intro_container">
+				<text>{{param.name}}自述</text>
+				<image src="../../static/images/edit.png" @tap="editDesc"></image>
 			</view>
-		</view> -->
+			<view class="intro_detail">
+				{{selfDesc}}
+			</view>
+		</view>
 		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
@@ -56,8 +60,10 @@
 					language: this.$common.language
 				},
 				ctrlEnable: {
-					tabCtrl: true
+					tabCtrl: true,
+					selfDescCtrl: false
 				},
+				selfDesc: '',
 				moduleList: [],
 				tabActiveIdx: 0,
 				contentList: [],
@@ -86,13 +92,15 @@
 			this.initControl(this.param.moduleId)
 		},
 		onShow: function() {
+			this.loadSelfDesc()
 			this.loadModule(this.param.moduleId)
 		},
 		methods: {
 			initControl: function(moduleId) {
-				let id=parseInt(moduleId)
+				let id = parseInt(moduleId)
 				let listConfig = config.list;
 				this.ctrlEnable.tabCtrl = listConfig.tabCtrl.indexOf(id) >= 0;
+				this.ctrlEnable.selfDescCtrl = listConfig.selfDescCtrl.indexOf(id) >= 0;
 			},
 			jumpToDetail: function(id) {
 				let p = {
@@ -106,6 +114,25 @@
 				uni.navigateTo({
 					url: url
 				});
+			},
+			loadSelfDesc: function() {
+				this.$http.get('selfDesc/detailSelfDesc', {
+					userId: this.param.userId,
+					moduleId: this.param.moduleId,
+					language: this.param.language
+				}).then((res) => {
+					if (res.data.code === 200) {
+						let _data = res.data.data.selfDescriptionInfo;
+						if (_data) {
+							this.selfDesc = _data.selfDesc
+						}
+					} else {
+						uni.showToast({
+							title: '自述信息加载失败',
+							icon: 'none'
+						});
+					}
+				})
 			},
 			loadModule: function(moduleId) {
 				this.$http.get('category/query', {
@@ -133,9 +160,9 @@
 					rows: null,
 					language: null
 				}
-				util.loadObj(reqParam,this.param)
+				util.loadObj(reqParam, this.param)
 				if (module.requestParam.notFlag.indexOf(this.param.moduleId) == -1) {
-					reqParam['flag']=this.param.flag
+					reqParam['flag'] = this.param.flag
 				}
 				if (module.requestParam.notTypeId.indexOf(this.param.moduleId) == -1) {
 					switch (this.param.flag) {
@@ -211,6 +238,16 @@
 						flag: this.param.flag,
 						name: this.param.name,
 						language: this.param.language
+					})
+				})
+			},
+			editDesc: function() {
+				uni.navigateTo({
+					url:'selfDesc'+util.jsonToQuery({
+						userId:this.param.userId,
+						moduleId:this.param.moduleId,
+						language:this.param.language,
+						name:this.param.name
 					})
 				})
 			}

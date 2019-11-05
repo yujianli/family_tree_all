@@ -28,13 +28,13 @@
 		{
 			"path": "pages/hobby/list",
 			"style": {
-				"navigationBarTitleText": "爱好"
+				"navigationBarTitleText": ""
 			}
 		},
 		{
 			"path": "pages/hobby/detail",
 			"style": {
-				"navigationBarTitleText": "爱好",
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -47,9 +47,69 @@
 			}
 		},
 		{
+			"path": "pages/hobby/stageList",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/hobby/stageDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/hobby/stageEdit",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/hobby/edit",
 			"style": {
-				"navigationBarTitleText": "爱好",
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/hobby/selfDesc",
+			"style": {
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{

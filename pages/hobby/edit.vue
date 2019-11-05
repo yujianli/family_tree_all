@@ -23,7 +23,7 @@
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
-			</view>
+		</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
 		@delete="deleteImage" @add="addImage" 
@@ -43,7 +43,7 @@
 				:enable-add="tagEnableAdd">
 			</robby-tags>
 		</view>
-		<view>
+		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
 				<image src="../../../static/images/icon_tag.png" class="icon_tags"></image>
 				<text class="edit_other_opts">添加关联</text>
@@ -84,7 +84,8 @@
 				},
 				ctrlEnable:{
 					typeCtrl: true,
-					weatherCtrl: false
+					weatherCtrl: false,
+					relationCtrl: true
 				},
 				idx:0,
 				typeList:[{id:-1,name:'请选择'}],
@@ -160,6 +161,7 @@
 				let editConfig=config.edit;
 				this.ctrlEnable.typeCtrl=editConfig.typeCtrl.indexOf(id)>=0;
 				this.ctrlEnable.weatherCtrl=editConfig.weatherCtrl.indexOf(id)>=0;
+				this.ctrlEnable.relationCtrl=editConfig.relationCtrl.indexOf(id)>=0;
 			},
 			loadContent:function(){
 				this.$http.get('content/detail', this.param).then((res)=>{
