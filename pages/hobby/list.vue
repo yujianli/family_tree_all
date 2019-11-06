@@ -85,8 +85,14 @@
 			myTab
 		},
 		onLoad: function(options) {
+			let title = null;
+			if(module.isStage.indexOf(options.moduleId)>=0){
+				title=options.stageName
+			}else{
+				title=options.name
+			}
 			uni.setNavigationBarTitle({
-				title: options.name
+				title: title
 			})
 			util.loadObj(this.param, options)
 			this.initControl(this.param.moduleId)

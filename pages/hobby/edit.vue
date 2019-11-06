@@ -12,7 +12,7 @@
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
-			<text class="inner_title">类型：</text>
+			<text class="inner_title">{{类型}}：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
 				<view class="uni-input">{{ typeList[idx].name }}</view>
 			</picker>
@@ -135,6 +135,9 @@
 		computed:{
 			createDate:function(){
 				return util.dateFormat(this.contentInfo.createDate)
+			},
+			getTypeName:function(){
+				
 			}
 		},
 		components:{robbyImageUpload,robbyTags,uniPopup,wPicker},

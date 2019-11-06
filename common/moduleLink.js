@@ -52,5 +52,6 @@ export default {
 		notFlag:[9,11,13,19],
 		//不需要类型ID（日记）
 		notTypeId:[9,11,19]
-	}
+	},
+	isStage:[4]
 }
