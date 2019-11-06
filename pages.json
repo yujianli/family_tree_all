@@ -170,12 +170,6 @@
 			}
 		},
 		{
-			"path": "pages/family/family",
-			"style": {
-				"navigationBarTitleText": "族谱"
-			}
-		},
-		{
 			"path": "pages/appearance/list",
 			"style": {
 				"navigationBarTitleText": "体貌特征",
@@ -340,8 +334,45 @@
 			"style": {
 				"navigationBarTitleText": "计划安排"
 			}
-		}
-	],
+		},{
+            "path" : "pages/family/index/index",
+            "style": {
+            	"app-plus": {
+            		"titleNView": false //禁用原生导航栏
+            	}
+            }
+        },{
+            "path" : "pages/family/search/search",
+            "style": {
+            	"navigationBarTitleText": "族人搜索"
+            }
+        },{
+            "path" : "pages/family/result/result",
+            "style": {
+            	"navigationBarTitleText": "族人搜索"
+            }
+        },{
+            "path" : "pages/family/info/info",
+            "style": {
+            	"navigationBarTitleText": "查看详情"
+            }
+        }
+        ,{
+            "path" : "pages/family/setting/setting",
+            "style": {
+            	"navigationBarTitleText": "家族设置",
+            	"app-plus": {
+            		"titleNView": {
+            			"buttons": [{
+            				"text": "编辑",
+            				"fontSize": "32upx",
+            				"color": "#333333"
+            			}]
+            		}
+            	}
+            }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
@@ -361,7 +392,7 @@
 				"text": "人物"
 			},
 			{
-				"pagePath": "pages/family/family",
+				"pagePath": "pages/family/index/index",
 				"iconPath": "static/images/family.png",
 				"selectedIconPath": "static/images/family_active.png",
 				"text": "族谱"
