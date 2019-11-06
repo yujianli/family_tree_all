@@ -18,7 +18,7 @@
 			</view>
 		</view>
 		<!-- <navigator url="/pages/login/login" hover-class="navigator-hover">aaa</navigator> -->
-		<button type="primary"  @tap="save">保存</button>
+		<!-- <button type="primary"  @tap="save">保存</button> -->
 	</view>
 </template>
 
@@ -115,7 +115,9 @@
 						});
 					}
 				})
-			}
+			},onNavigationBarButtonTap(e) {
+				this.save();
+			},
 		}
 	}
 </script>

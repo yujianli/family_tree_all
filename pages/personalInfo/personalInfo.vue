@@ -14,35 +14,35 @@
 		<view class="wrapper">
 			<text class="inner_title">性别</text>
 			<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
-				<view class="uni-input">{{ arr.sex[idx.sex].value }}</view>
+				<view class="input">{{ arr.sex[idx.sex].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">民族</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.nationality" placeholder-style="color:#999" placeholder="民族" /> -->
 			<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
-				<view class="uni-input">{{ arr.nationality[idx.nationality].value }}</view>
+				<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">生肖</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.zodiac" placeholder-style="color:#999" placeholder="生肖" value="猴"/> -->
 			<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
-				<view class="uni-input">{{ arr.zodiac[idx.zodiac].value }}</view>
+				<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生年月</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/> -->
-			<picker mode="date" :value="baseInfo.birth" :start="startDate" :end="endDate" @change="bindDateChange" :fields="'day'">
-				<view class="uni-input">{{birthDate}}</view>
+			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : '请选择'" :start="startDate" :end="endDate" @change="bindDateChange" :fields="'day'">
+				<view class="input">{{baseInfo.birth | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.birthTime" placeholder-style="color:#999" placeholder="出生时辰"/> -->
 			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
-				<view class="uni-input">{{ arr.birthTime[idx.birthTime].value }}</view>
+				<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -52,51 +52,47 @@
 		<view class="wrapper">
 			<text class="inner_title">是否过世</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.isPassedAway" placeholder-style="color:#999" placeholder="是否在世"/> -->
-			<switch checked="isPassedAway" @change="switchChange" />
+			<switch :checked="isPassedAway" @change="switchChange" class="input" />
 		</view>
-		<view class="wrapper">
+		<view class="wrapper" :style="{display: isPassedAway ? 'flex' : 'none'}">
 			<text class="inner_title">过世年月</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.passingAway" placeholder-style="color:#999" placeholder="过世年月"/> -->
-			<picker class="input" mode="date" :value="baseInfo.passingAway" :start="startDate" :end="endDate" @change="bindPassingAwayDateChange"
-			 :fields="'day'">
-				<view>{{passingAwayDate}}</view>
+			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : '请选择'" :start="startDate" :end="endDate" @change="bindPassingAwayDateChange" :fields="'day'">
+				<view class="input">{{baseInfo.passingAway | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">居住地</text>
-			<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地"
-			 value="浙江杭州" />
+			<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">固定电话</text>
-			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话"
-			 value="0908777" />
+			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">手机号码</text>
-			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码" value="1993883833" />
+			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">邮箱地址</text>
-			<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" placeholder="邮箱地址"
-			 value="abdd@qq.com" />
+			<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" placeholder="邮箱地址"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业" value="工程师" />
+			<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业"/>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">体质</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.corporeity" placeholder-style="color:#999" placeholder="体质" value="湿热质"/> -->
 			<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
-				<view class="uni-input">{{ arr.corporeity[idx.corporeity].value }}</view>
+				<view class="input">{{ arr.corporeity[idx.corporeity].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">血型</text>
 			<!-- <input class="input" type="text" v-model="baseInfo.bloodType" placeholder-style="color:#999" placeholder="血型" value="O型"/> -->
 			<picker @change="bloodTypeBindPickerChange" :value="idx.bloodType" :range=" arr.bloodType" range-key="value">
-				<view class="uni-input">{{ arr.bloodType[idx.bloodType].value }}</view>
+				<view class="input">{{ arr.bloodType[idx.bloodType].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -110,14 +106,14 @@
 		<view class="wrapper">
 			<text class="inner_title">星座</text>
 			<picker @change="constellationBindPickerChange" :value="idx.constellation" :range=" arr.constellation" range-key="value">
-				<view class="uni-input">{{ arr.constellation[idx.constellation].value }}</view>
+				<view class="input">{{ arr.constellation[idx.constellation].value }}</view>
 			</picker>
 		</view>
 		<view class="mul_wrapper">
 			<text class="inner_title">个人简介</text>
-			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" value="我是一个XX的人 我是一个XX的人 我是一个XX的人" />
+			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" />
 			</view>
-		<button type="primary"  class="login" @tap="save">保存</button>
+		<!-- <button type="primary"  class="login" @tap="save">保存</button> -->
 	</view>
 
 </template>
@@ -181,6 +177,12 @@
 				        }
 			}
 		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return '请选择'
+				return util.dateFormat(value)
+			}
+		},
 		onLoad: function (option) {
 			this.loadData(option.id)
 		},
@@ -224,12 +226,12 @@
 			bindDateChange: function(e) {
 				let _date = e.target.value
 				console.log(e.target.value);
-				if(_date.length<5){
-					uni.showToast({
-						title: '请选择日期', icon:'none'
-					});
-					return false;
-				}
+				// if(_date.length<5){
+				// 	uni.showToast({
+				// 		title: '请选择日期', icon:'none'
+				// 	});
+				// 	return false;
+				// }
 				this.baseInfo.birth = _date;
 				console.log(_date);
 
@@ -242,16 +244,17 @@
 				console.log('是否在世，携带值为', this.baseInfo.isPassedAway)
 			},
 			bindPassingAwayDateChange: function(e) {
+				console.log(e.target.value);
 				let _date = e.target.value
-				// if(_date.length<5){
-				// 	uni.showToast({
-				// 		title: '请选择日期', icon:'none'
-				// 	});
-				// 	return false;
-				// }
-				this.baseInfo.passingAway=_date;
-				// this.passingAwayDate = _date.replace('-','年')+ '月'
-				this.passingAwayDate=_date;
+				if(this.isPassedAway) {
+					this.baseInfo.passingAway=_date;
+					// this.passingAwayDate = _date.replace('-','年')+ '月'
+					this.passingAwayDate=_date;
+				} else {
+					this.baseInfo.passingAway='';
+					this.passingAwayDate='请选择';
+				}
+				
 			},
 			corporeityBindPickerChange: function(e) {
 				this.selProp('corporeity', e.target.value)
@@ -332,6 +335,10 @@
 			save:function(){
 				this.baseInfo['dateOfBirth']= this.baseInfo.birth;
 				delete this.baseInfo['birth'];
+				if(!this.isPassedAway){
+					this.baseInfo.passingAway='';
+					this.passingAwayDate='请选择';
+				}
 				this.$http.post('base/editBase', this.baseInfo).then((res)=>{
 					if(res.data.code===200){
 						uni.showToast({
@@ -343,8 +350,11 @@
 						});
 					}
 				});
-			}
-		}
+			},
+			onNavigationBarButtonTap(e) {
+				this.save();
+			},
+		},
 	}
 </script>
 

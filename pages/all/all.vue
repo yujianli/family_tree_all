@@ -27,7 +27,7 @@
 				</view>
 				<view class="all_types_container">
 					<view class="all_types_wrapper" v-for="(module,index) in modules">
-						<view :class="{active :module.hasActive }" @tap="selectType(module,index)">{{module.name}}</view>
+						<view :class="{'active' : module.hasActive == true }" @tap="selectType(module,index)">{{module.name}}</view>
 					</view>
 				</view>
 				<view class="pd18">
@@ -145,7 +145,7 @@
 					if (res.data.code === 200) {
 						this.modules = res.data.data.module;
 						for(let i =0;i<this.modules.length;i++){
-							this.modules['hasActive'] = false
+							this.modules[i]['hasActive'] = false
 						}
 					} else {
 						uni.showToast({
@@ -164,12 +164,15 @@
 			selectType: function(module, index) {
 				//this.selectedModules.push(module);
 				if (module.hasActive) {
-					this.modules[index].hasActive = false;
+					this.$forceUpdate();
+					this.$set(module,'hasActive',false);
+					
 				} else {
-					this.modules[index].hasActive = true;
+					this.$forceUpdate();
+					this.$set(module,'hasActive',true);
 				}
-				console.log(module);
-				console.log(index);
+				console.log(this.modules);
+				// console.log(index);
 			},
 			clearCondition: function() {
 				this.selectedModules = [];

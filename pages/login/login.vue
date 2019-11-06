@@ -136,8 +136,6 @@ export default {
 			 */
 			try {
 				const value = uni.getStorageSync('launchFlag');
-				console.log("has launch");
-				console.log(value);
 				if (value) {
 					if (value == true) {
 						//判断是否已经成功登录

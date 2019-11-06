@@ -124,7 +124,16 @@
 		{
 			"path": "pages/funcList/funcList",
 			"style": {
-				"navigationBarTitleText": "功能模块"
+				"navigationBarTitleText": "功能模块",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
 		},
 		{
@@ -136,7 +145,16 @@
 		{
 			"path": "pages/personalInfo/personalInfo",
 			"style": {
-				"navigationBarTitleText": "个人信息"
+				"navigationBarTitleText": "个人信息",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
 		},
 		{

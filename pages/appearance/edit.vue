@@ -15,7 +15,7 @@
 		<view class="wrapper">
 			<text class="inner_title">脸型</text>
 			<picker @change="faceShapeBindPickerChange" :value="idx.faceShape" :range="arr.faceShape" range-key="value">
-				<view class="uni-input">{{ arr.faceShape[idx.faceShape].value }}</view>
+				<view class="input">{{ arr.faceShape[idx.faceShape].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -25,31 +25,31 @@
 		<view class="wrapper">
 			<text class="inner_title">T恤衫尺寸</text>
 			<picker @change="tshirtSizeBindPickerChange" :value="idx.tshirtSize" :range="arr.tshirtSize" range-key="value">
-				<view class="uni-input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
+				<view class="input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">衬衫尺寸</text>
 			<picker @change="shirtSizeBindPickerChange" :value="idx.shirtSize" :range="arr.shirtSize" range-key="value">
-				<view class="uni-input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
+				<view class="input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">衣服尺寸</text>
 			<picker @change="clothSizeBindPickerChange" :value="idx.clothSize" :range="arr.clothSize" range-key="value">
-				<view class="uni-input">{{ arr.clothSize[idx.clothSize].value }}</view>
+				<view class="input">{{ arr.clothSize[idx.clothSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">裤子尺寸</text>
 			<picker @change="trousersSizeBindPickerChange" :value="idx.trousersSize" :range="arr.trousersSize" range-key="value">
-				<view class="uni-input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
+				<view class="input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">鞋子尺寸</text>
 			<picker @change="shoeSizeBindPickerChange" :value="idx.shoeSize" :range="arr.shoeSize" range-key="value">
-				<view class="uni-input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
+				<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
 			</picker>
 		</view>
 	</view>
