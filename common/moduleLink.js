@@ -5,7 +5,7 @@ export default {
 		0: "../funcList/funcList",
 		1: "../personalInfo/personalInfo",
 		2: "../appearance/list",
-		4: "../hobby/scheduleList",
+		4: "../hobby/stageList",
 		6: "../hobby/list",
 		7: "../hobby/list",
 		8: "../hobby/list",
