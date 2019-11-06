@@ -167,10 +167,11 @@
 					language: null
 				}
 				util.loadObj(reqParam, this.param)
-				if (module.requestParam.notFlag.indexOf(this.param.moduleId) == -1) {
+				let _id=parseInt(this.param.moduleId)
+				if (module.requestParam.notFlag.indexOf(_id) == -1) {
 					reqParam['flag'] = this.param.flag
 				}
-				if (module.requestParam.notTypeId.indexOf(this.param.moduleId) == -1) {
+				if (module.requestParam.notTypeId.indexOf(_id) == -1) {
 					switch (this.param.flag) {
 						case 'category':
 							reqParam['categoryId'] = flagId

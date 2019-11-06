@@ -13,6 +13,9 @@ export default {
 		10: "../hobby/list",
 		11: "../hobby/list",
 		12: "../hobby/list",
+		14: "../hobby/stageList",
+		15: "../hobby/stageList",
+		16: "../hobby/stageList",
 		18: "../hobby/list",
 		19: "../hobby/list"
 	},
@@ -49,9 +52,9 @@ export default {
 	//根据内容请求类型分为flag值传与不传，类型ID（categoryId、periodId、placeId）值传与不传
 	requestParam:{
 		//不需要flag值（日记，心得感想，格言）
-		notFlag:[9,11,13,19],
+		notFlag:[4,9,11,13,14,15,16,19],
 		//不需要类型ID（日记）
-		notTypeId:[9,11,19]
+		notTypeId:[4,9,11,14,15,16,19]
 	},
 	isStage:[4]
 }

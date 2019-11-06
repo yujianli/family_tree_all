@@ -4,7 +4,7 @@
 			<view class="detail_hd">
 				<view>{{content.createDate | formatDate}}</view>
 				<view>{{content.position}}</view>
-				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
+				<view v-if="ctrlEnable.typeCtrl">{{typeName}}</view>
 				<view v-if="ctrlEnable.weatherCtrl">{{content.weather}}</view>
 			</view>
 			<view class="detail_content">
@@ -77,6 +77,14 @@
 			images: function(){
 				if(!this.content.imageUrls) return [];
 				return this.content.imageUrls.split(',');
+			},
+			typeName:function(){
+				let _name = null;
+				switch(this.param.flag){
+					case 'category': _name=this.content.categoryName;break;
+					case 'period': _name=this.content.periodName;break;
+				}
+				return _name
 			}
 		},
 		filters:{

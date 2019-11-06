@@ -12,7 +12,7 @@
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
-			<text class="inner_title">{{类型}}：</text>
+			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
 				<view class="uni-input">{{ typeList[idx].name }}</view>
 			</picker>
@@ -87,6 +87,7 @@
 					weatherCtrl: false,
 					relationCtrl: true
 				},
+				typeCtrlName: '',
 				idx:0,
 				typeList:[{id:-1,name:'请选择'}],
 				typeEnable: false,
@@ -150,7 +151,13 @@
 			if(this.param.contentId) {
 				this.removeEnable=true
 			}
-			this.loadModule(options.moduleId)
+			switch(options.flag){
+				case 'category':this.loadCategory(options.moduleId);
+				break;
+				case 'period':this.loadPeriod(options.moduleId);
+				break;
+			}
+			
 			let token=uni.getStorageSync('USER').token;
 			//let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
 			this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
@@ -197,13 +204,32 @@
 					}
 				})
 			},
-			loadModule: function(moduleId) {
+			loadCategory: function(moduleId) {
 				this.$http.get('category/query', {
 						moduleId: moduleId,
 						language: this.$common.language
 					}).then((res) => {
 						if (res.data.code === 200) {
 							this.typeList = this.typeList.concat(res.data.data.contentCategory);
+							if(this.param.contentId){
+								this.loadContent()
+							}
+						} else {
+							uni.showToast({
+								title: '模块信息加载失败',
+								icon: 'none'
+							});
+						}
+					})
+			},
+			loadPeriod:function(moduleId){
+				this.$http.get('contentPeriod/query', {
+						userId:this.param.userId,
+						moduleId: moduleId,
+						language: this.$common.language
+					}).then((res) => {
+						if (res.data.code === 200) {
+							this.typeList = this.typeList.concat(res.data.data.contentPeriodList);
 							if(this.param.contentId){
 								this.loadContent()
 							}

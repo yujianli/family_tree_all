@@ -3,13 +3,13 @@
 		<view class="wrapper">
 			<text class="inner_title">起始年月</text>
 			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="stageInfo.begintime">
-				<view>{{stageInfo.begintime}}</view>
+				<view>{{stageInfo.begintime | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">结束年月</text>
 			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="stageInfo.endtime">
-				<view>{{stageInfo.endtime}}</view>
+				<view>{{stageInfo.endtime | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -53,12 +53,20 @@
 				return util.getDate('end');
 			}
 		},
+		filters:{
+			formatDate: function(value) {
+				if (!value) return '';
+				return util.dateFormat(value);
+			}
+		},
 		onLoad: function (options) {
 			uni.setNavigationBarTitle({
 				title: options.name
 			})
 			util.loadObj(this.param,options)
-			this.loadData(options.id)
+			if(options.id){
+				this.loadData(options.id)
+			}
 		},
 		onNavigationBarButtonTap(e) {
 			this.saveSchedule()
@@ -72,6 +80,8 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPeriodInfo
 						util.loadObj(this.stageInfo,_data)
+						this.stageInfo.begintime=util.dateFormat(_data.startTime)
+						this.stageInfo.endtime=util.dateFormat(_data.endTime)
 					}else{
 						uni.showToast({
 							title:'加载失败',icon:'none'
