@@ -12,7 +12,7 @@
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
-			<text class="inner_title">{{类型}}：</text>
+			<text class="inner_title">{{typeCtrlName}}：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
 				<view class="uni-input">{{ typeList[idx].name }}</view>
 			</picker>
@@ -71,6 +71,7 @@
 	import wPicker from "@/components/w-picker/w-picker.vue";
 	import util from '@/common/util.js'
 	import config from '@/common/componetConfig.js'
+	import module from '@/common/moduleLink.js'
 	export default {
 		data() {
 			return {
@@ -136,8 +137,13 @@
 			createDate:function(){
 				return util.dateFormat(this.contentInfo.createDate)
 			},
-			getTypeName:function(){
-				
+			typeCtrlName:function(){
+				let _name = module.viewCtrlName[this.param.moduleId]
+				if(_name){
+					return _name;
+				}else{
+					return '类型';
+				}
 			}
 		},
 		components:{robbyImageUpload,robbyTags,uniPopup,wPicker},
@@ -150,7 +156,12 @@
 			if(this.param.contentId) {
 				this.removeEnable=true
 			}
-			this.loadModule(options.moduleId)
+			if(options.flag=='category'){
+				this.loadCategory()
+			}else if(options.flag=='period'){
+				this.loadPeriod()
+			}
+			
 			let token=uni.getStorageSync('USER').token;
 			//let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
 			this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
@@ -197,13 +208,32 @@
 					}
 				})
 			},
-			loadModule: function(moduleId) {
+			loadCategory: function() {
 				this.$http.get('category/query', {
-						moduleId: moduleId,
-						language: this.$common.language
+						moduleId: this.param.moduleId,
+						language: this.param.language
 					}).then((res) => {
 						if (res.data.code === 200) {
 							this.typeList = this.typeList.concat(res.data.data.contentCategory);
+							if(this.param.contentId){
+								this.loadContent()
+							}
+						} else {
+							uni.showToast({
+								title: '模块信息加载失败',
+								icon: 'none'
+							});
+						}
+					})
+			},
+			loadPeriod: function() {
+				this.$http.get('contentPeriod/query', {
+						userId:this.param.userId,
+						moduleId: this.param.moduleId,
+						language: this.param.language
+					}).then((res) => {
+						if (res.data.code === 200) {
+							this.typeList = this.typeList.concat(res.data.data.contentPeriodList);
 							if(this.param.contentId){
 								this.loadContent()
 							}

@@ -13,8 +13,8 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">计划名称</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="计划名称" v-model="stageInfo.name" />
+			<text class="inner_title">{{typeCtrlName}}</text>
+			<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" placeholder="内容" />
@@ -25,6 +25,7 @@
 
 <script>
 	import util from '@/common/util.js'
+	import module from '@/common/moduleLink.js'
 	export default {
 		data() {
 			 const currentDate = util.getDate({
@@ -51,6 +52,14 @@
 			},
 			endDate() {
 				return util.getDate('end');
+			},
+			typeCtrlName:function(){
+				let _name = module.viewCtrlName[this.param.moduleId]
+				if(_name){
+					return _name;
+				}else{
+					return '类型';
+				}
 			}
 		},
 		onLoad: function (options) {
@@ -58,7 +67,9 @@
 				title: options.name
 			})
 			util.loadObj(this.param,options)
-			this.loadData(options.id)
+			if(options.id){
+				this.loadData(options.id)
+			}
 		},
 		onNavigationBarButtonTap(e) {
 			this.saveSchedule()

@@ -31,6 +31,7 @@ export default {
 				userId: null,
 				moduleId: null,
 				name: null,
+				flag:null,
 				language: this.$common.language
 			},
 			stageList: []
@@ -65,7 +66,7 @@ export default {
 		jumpToList:function(item){
 			let _param = this.param;
 			_param['stageId'] = item.id;
-			_param['stageName']=item.name
+			_param['stageName']=item.name;
 			uni.navigateTo({
 				url: 'list' + util.jsonToQuery(_param)
 			});
@@ -80,6 +81,16 @@ export default {
 						icon: 'none'
 					});
 				}
+			});
+		},
+		add:function(){
+			uni.navigateTo({
+				url: 'stageEdit' + util.jsonToQuery({
+					userId: this.param.userId,
+					moduleId: this.param.moduleId,
+					name: this.param.name,
+					language: this.param.language
+				})
 			});
 		}
 	}

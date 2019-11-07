@@ -9,18 +9,20 @@
 			<view>{{stageInfo.endtime}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">计划名称</text>
+			<text class="inner_title">{{typeCtrlName}}</text>
 			<view>{{stageInfo.name}}</view>
 		</view>
 		<view class="mul_wrapper">
 			<text class="inner_title">内容</text>
 			<view>{{stageInfo.description}}</view>
 		</view>
+		<button type="danger" @tap="remove">删除</button>
 	</view>
 </template>
 
 <script>
 	import util from '@/common/util.js'
+	import module from '@/common/moduleLink.js'
 	export default {
 		data() {
 			return {
@@ -37,6 +39,16 @@
 					description: '',
 					name: '',
 					id: null
+				}
+			}
+		},
+		computed:{
+			typeCtrlName:function(){
+				let _name = module.viewCtrlName[this.param.moduleId]
+				if(_name){
+					return _name;
+				}else{
+					return '类型';
 				}
 			}
 		},
@@ -70,6 +82,22 @@
 							title: '加载失败',
 							icon: 'none'
 						})
+					}
+				})
+			},
+			remove:function(){
+				this.$http.post('contentPeriod/deletePeriod',{
+					contentPeriodId:this.param.id,
+					language:this.param.language
+				}).then((res)=>{
+					if(res.data.code===200){
+						uni.navigateBack({
+							delta:1
+						})
+					}else{
+						uni.showToast({
+							title: '删除失败',icon:'none'
+						});
 					}
 				})
 			}
