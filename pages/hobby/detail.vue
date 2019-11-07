@@ -4,7 +4,8 @@
 			<view class="detail_hd">
 				<view>{{content.createDate | formatDate}}</view>
 				<view>{{content.position}}</view>
-				<view v-if="ctrlEnable.typeCtrl">{{typeName}}</view>
+				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
+				<view v-if="ctrlEnable.stageCtrl">{{content.periodName}}</view>
 				<view v-if="ctrlEnable.weatherCtrl">{{content.weather}}</view>
 			</view>
 			<view class="detail_content">
@@ -14,9 +15,6 @@
 				<view v-for="(pic,i) in images" v-bind:key="pic">
 					<image :src="pic" class="detail_pic"></image>
 				</view>
-<!-- 				
-				<image src="../../../static/images/test.png" class="detail_pic"></image>
-				<image src="../../../static/images/test.png" class="detail_pic"></image> -->
 			</view>
 			<view class="detail_tag">{{content.tags}}</view>
 			<view class="detail_tag">{{content.associatedPerson}}</view>
@@ -42,10 +40,11 @@
 					contentId: null,
 					flag: null,
 					name: null,
-					language: this.$common.language
+					language: null
 				},
 				ctrlEnable: {
 					typeCtrl: true,
+					stageCtrl: false,
 					weatherCtrl: false
 				},
 				content: {
@@ -66,53 +65,48 @@
 					moduleId: null,
 					is_my_motto: null,
 					categoryId: null,
+					periodStartTime: '',
+					periodEndTime: '',
+					periodName: null,
 					createDate: null
 				}
 			}
 		},
-		components: {
-
-		},
 		computed: {
-			images: function(){
-				if(!this.content.imageUrls) return [];
+			images: function() {
+				if (!this.content.imageUrls) return [];
 				return this.content.imageUrls.split(',');
-			},
-			typeName:function(){
-				let _name = null;
-				switch(this.param.flag){
-					case 'category': _name=this.content.categoryName;break;
-					case 'period': _name=this.content.periodName;break;
-				}
-				return _name
 			}
 		},
-		filters:{
-			formatDate:function(value){
-				if(!value) return ''
+		filters: {
+			formatDate: function(value) {
+				if (!value) return ''
 				return util.dateFormat(value)
 			}
 		},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
-				title:options.name
+				title: options.name
 			})
 			util.loadObj(this.param, options)
 			this.initControl(this.param.moduleId)
 		},
-		onShow:function(){
+		onShow: function() {
 			this.loadDetail()
 		},
 		onNavigationBarButtonTap(e) {
 			let url = 'edit' + util.jsonToQuery(this.param)
-			uni.navigateTo({url: url})
+			uni.navigateTo({
+				url: url
+			})
 		},
 		methods: {
 			initControl: function(moduleId) {
-				let id=parseInt(moduleId)
-				let detailConfig=config.detail;
-				this.ctrlEnable.typeCtrl=detailConfig.typeCtrl.indexOf(id)>=0;
-				this.ctrlEnable.weatherCtrl=detailConfig.weatherCtrl.indexOf(id)>=0;
+				let id = parseInt(moduleId)
+				let detailConfig = config.detail;
+				this.ctrlEnable.typeCtrl = detailConfig.typeCtrl.indexOf(id) >= 0;
+				this.ctrlEnable.stageCtrl = detailConfig.stageCtrl.indexOf(id) >= 0;
+				this.ctrlEnable.weatherCtrl = detailConfig.weatherCtrl.indexOf(id) >= 0;
 			},
 			loadDetail: function() {
 				this.$http.get('content/detail', this.param).then((res) => {
@@ -126,12 +120,12 @@
 					}
 				})
 			},
-			queryNext:function(condition){
+			queryNext: function(condition) {
 				let reqParam = this.param;
-				reqParam['condition']=condition;
-				this.$http.get('content/nextDetail',reqParam).then((res)=>{
+				reqParam['condition'] = condition;
+				this.$http.get('content/nextDetail', reqParam).then((res) => {
 					if (res.data.code === 200) {
-						if(!res.data.data){
+						if (!res.data.data) {
 							uni.showToast({
 								title: '当前记录已经是第一条'
 							});
@@ -146,10 +140,10 @@
 					}
 				})
 			},
-			nextClick:function(){
+			nextClick: function() {
 				this.queryNext('next');
 			},
-			previousClick:function(){
+			previousClick: function() {
 				this.queryNext('previous');
 			}
 		}
@@ -157,12 +151,13 @@
 </script>
 
 <style lang="less" scoped>
-	.detail_container{
+	.detail_container {
 		padding-left: 22upx;
 		padding-right: 22upx;
 		padding-bottom: 120upx;
 	}
-	.detail_hd{
+
+	.detail_hd {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -171,16 +166,19 @@
 		font-size: 28upx;
 		color: #999;
 	}
-	.detail_content{
+
+	.detail_content {
 		font-size: 32upx;
 		color: #333;
 		margin-top: 28upx;
 	}
-	.detail_pic{
-		width:100%;
+
+	.detail_pic {
+		width: 100%;
 		margin-top: 20upx;
 	}
-	.detail_opt_container{
+
+	.detail_opt_container {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -191,21 +189,25 @@
 		align-items: center;
 		height: 98upx;
 	}
-	.detail_opt_btn{
-		flex:1;
-		font-size:34upx;
+
+	.detail_opt_btn {
+		flex: 1;
+		font-size: 34upx;
 		color: #4DC578;
 		background-color: #ffffff;
 		border-radius: 0;
-	}	
-	.detail_opt_btn:after{
-		border:0px;
 	}
-	.detail_opt_btn.active{
+
+	.detail_opt_btn:after {
+		border: 0px;
+	}
+
+	.detail_opt_btn.active {
 		background-color: #4DC578;
 		color: #ffffff;
 	}
-	.detail_tag{
+
+	.detail_tag {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -213,12 +215,15 @@
 		margin-top: 24upx;
 		font-size: 28upx;
 		color: #56D282;
-		text{
+
+		text {
 			margin-right: 12upx;
 		}
 	}
-	.icon_tags{
-		width: 38upx;height: 38upx;margin-right: 21upx;
-	}
 
+	.icon_tags {
+		width: 38upx;
+		height: 38upx;
+		margin-right: 21upx;
+	}
 </style>

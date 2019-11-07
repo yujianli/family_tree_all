@@ -2,15 +2,15 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
-			<view class="card_item" v-for="(stage, index) in stageList" :key="index" @tap="jumpToDetail(stage.id)">
-				<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
+			<view class="card_item" v-for="(place, index) in placeList" :key="index" @tap="jumpToDetail(place.id)">
+				<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
 				<view class="card_inner">
-					<view class="card_title">{{ stage.name }}</view>
-					<view class="time mt20">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
+					<view class="card_title">{{ place.address }}</view>
+					<view class="time mt20">{{place.begintime | buyDesc}}</view>
 					<view class="card_others card_others_1">
 						<view class="inner_flex">
-							<text class="time">{{ stage.description }}</text>
-							<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+							<text class="time">{{ place.endtime| saleDesc }}</text>
+							<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
 						</view>
 					</view>
 				</view>
@@ -29,15 +29,20 @@
 					moduleId: null,
 					name: null,
 					flag: null,
-					language: this.$common.language
+					language: null
 				},
-				stageList: []
-			};
+				placeList: [],
+			}
 		},
 		filters: {
-			formatDate: function(value) {
+			buyDesc: function(value) {
 				if (!value) return '';
-				return util.dateFormat(value, 'yyyy.MM.dd');
+				return '购买于' + util.dateFormat(value, 'yyyy年MM月dd日')
+			},
+			saleDesc: function(value) {
+				if (!value) return '';
+				let curDt = new Date().getDate();
+				if (curDt >= value) return '已售出'
 			}
 		},
 		onLoad: function(options) {
@@ -47,14 +52,14 @@
 			util.loadObj(this.param, options);
 		},
 		onShow: function() {
-			this.loadData();
+			this.loadData()
 		},
 		methods: {
 			jumpToDetail: function(id) {
 				let _param = this.param;
 				_param['id'] = id;
 				uni.navigateTo({
-					url: 'stageDetail' + util.jsonToQuery(_param)
+					url: 'placeDetail' + util.jsonToQuery(_param)
 				});
 			},
 			jumpToList: function(item) {
@@ -66,12 +71,12 @@
 				});
 			},
 			loadData: function() {
-				this.$http.get('contentPeriod/query', this.param).then(res => {
+				this.$http.get('contentPlace/query', this.param).then(res => {
 					if (res.data.code === 200) {
-						this.stageList = res.data.data.contentPeriodList;
+						this.placeList = res.data.data.contentPlaceList;
 					} else {
 						uni.showToast({
-							title: '阶段信息加载失败',
+							title: '地点信息加载失败',
 							icon: 'none'
 						});
 					}
@@ -79,7 +84,7 @@
 			},
 			add: function() {
 				uni.navigateTo({
-					url: 'stageEdit' + util.jsonToQuery({
+					url: 'placeEdit' + util.jsonToQuery({
 						userId: this.param.userId,
 						moduleId: this.param.moduleId,
 						name: this.param.name,
@@ -88,7 +93,7 @@
 				});
 			}
 		}
-	};
+	}
 </script>
 
 <style lang="less" scoped>

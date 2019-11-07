@@ -14,7 +14,19 @@
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
-				<view class="uni-input">{{ typeList[idx].name }}</view>
+				<view class="input">{{ typeList[idx].name }}</view>
+			</picker>
+		</view>
+		<view class="wrapper" v-if="ctrlEnable.stageCtrl">
+			<text class="inner_title">{{stageCtrlName}}：</text>
+			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stageList" range-key="name">
+				<view class="input">{{stageList[stageIdx].startTime| formatDate}}-{{stageList[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
+			</picker>
+		</view>
+		<view class="wrapper" v-if="ctrlEnable.addressCtrl">
+			<text class="inner_title">居室：</text>
+			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address">
+				<view class="input">{{ placeList[placeIdx].address }}</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
@@ -71,6 +83,7 @@
 	import wPicker from "@/components/w-picker/w-picker.vue";
 	import util from '@/common/util.js'
 	import config from '@/common/componetConfig.js'
+	import module from '@/common/moduleLink.js'
 	export default {
 		data() {
 			return {
@@ -85,11 +98,16 @@
 				ctrlEnable:{
 					typeCtrl: true,
 					weatherCtrl: false,
-					relationCtrl: true
+					stageCtrl: false,
+					placeCtrl: false,
+					relationCtrl: true,
 				},
-				typeCtrlName: '',
 				idx:0,
 				typeList:[{id:-1,name:'请选择'}],
+				stageIdx:0,
+				stageList:[{id:-1,name:'请选择'}],
+				placeIdx:0,
+				placeList:[{id:-1,name:'请选择'}],
 				typeEnable: false,
 				contentInfo:{
 					periodId: null,
@@ -109,6 +127,8 @@
 					moduleId: null,
 					is_my_motto: null,
 					categoryId: null,
+					periodStartTime: null,
+					periodEndTime:null,
 					createDate: util.getDate()
 				},
 				startDate:util.getDate('start'),
@@ -137,8 +157,24 @@
 			createDate:function(){
 				return util.dateFormat(this.contentInfo.createDate)
 			},
-			getTypeName:function(){
+			stageCtrlName:function(){
+				let _name = module.viewCtrlName[this.param.moduleId]
+				if(_name){
+					return _name;
+				}else{
+					return '类型';
+				}
+			},
+			stageCtrlValue:function(){
+				return util.dateFormat(this.contentInfo.periodStartTime)+'-'
+				+util.dateFormat(this.contentInfo.periodEndTime)+ ' '
 				
+			}
+		},
+		filters:{
+			formatDate:function(value){
+				if(!value) return ''
+				return util.dateFormat(value, 'yyyy.MM.dd')
 			}
 		},
 		components:{robbyImageUpload,robbyTags,uniPopup,wPicker},
@@ -151,11 +187,14 @@
 			if(this.param.contentId) {
 				this.removeEnable=true
 			}
-			switch(options.flag){
-				case 'category':this.loadCategory(options.moduleId);
-				break;
-				case 'period':this.loadPeriod(options.moduleId);
-				break;
+			if(options.flag=='category'){
+				this.loadCategory()
+			}else if(options.flag=='period'){
+				this.loadPeriod()
+			}else if(options.flag=='place'){
+				this.loadPlace()
+			}else {
+				this.loadContent()
 			}
 			
 			let token=uni.getStorageSync('USER').token;
@@ -170,6 +209,7 @@
 				let id=parseInt(moduleId)
 				let editConfig=config.edit;
 				this.ctrlEnable.typeCtrl=editConfig.typeCtrl.indexOf(id)>=0;
+				this.ctrlEnable.stageCtrl=editConfig.stageCtrl.indexOf(id)>=0;
 				this.ctrlEnable.weatherCtrl=editConfig.weatherCtrl.indexOf(id)>=0;
 				this.ctrlEnable.relationCtrl=editConfig.relationCtrl.indexOf(id)>=0;
 			},
@@ -187,15 +227,17 @@
 						switch(this.param.flag){
 							case 'category':
 								id=this.contentInfo.categoryId
+								this.idx = this.typeList.findIndex((item)=>item.id==id);
 								break;
 							case 'period':
 								id=this.contentInfo.periodId;
+								this.stageIdx = this.stageList.findIndex((item)=>item.id==id);
 								break;
 							case 'place':
 								id=this.contentInfo.placeId;
 								break;
 						}
-						this.idx = this.typeList.findIndex((item)=>item.id==id);
+						
 					} else {
 						uni.showToast({
 							title: '加载失败',
@@ -204,10 +246,10 @@
 					}
 				})
 			},
-			loadCategory: function(moduleId) {
+			loadCategory: function() {
 				this.$http.get('category/query', {
-						moduleId: moduleId,
-						language: this.$common.language
+						moduleId: this.param.moduleId,
+						language: this.param.language
 					}).then((res) => {
 						if (res.data.code === 200) {
 							this.typeList = this.typeList.concat(res.data.data.contentCategory);
@@ -216,26 +258,45 @@
 							}
 						} else {
 							uni.showToast({
-								title: '模块信息加载失败',
+								title: '类型信息加载失败',
 								icon: 'none'
 							});
 						}
 					})
 			},
-			loadPeriod:function(moduleId){
+			loadPeriod: function() {
 				this.$http.get('contentPeriod/query', {
 						userId:this.param.userId,
-						moduleId: moduleId,
-						language: this.$common.language
+						moduleId: this.param.moduleId,
+						language: this.param.language
 					}).then((res) => {
 						if (res.data.code === 200) {
-							this.typeList = this.typeList.concat(res.data.data.contentPeriodList);
+							this.stageList = this.stageList.concat(res.data.data.contentPeriodList);
 							if(this.param.contentId){
 								this.loadContent()
 							}
 						} else {
 							uni.showToast({
-								title: '模块信息加载失败',
+								title: '阶段信息加载失败',
+								icon: 'none'
+							});
+						}
+					})
+			},
+			loadPlace: function() {
+				this.$http.get('contentPlace/query', {
+						userId:this.param.userId,
+						moduleId: this.param.moduleId,
+						language: this.param.language
+					}).then((res) => {
+						if (res.data.code === 200) {
+							this.placeList = this.placeList.concat(res.data.data.contentPlaceList);
+							if(this.param.contentId){
+								this.loadContent()
+							}
+						} else {
+							uni.showToast({
+								title: '地点信息加载失败',
 								icon: 'none'
 							});
 						}
@@ -245,20 +306,16 @@
 				this.contentInfo.createDate=e.target.value
 			},
 			typeBindPickerChange:function(e){
-				console.log(e.target.value)
+				// console.log(e.target.value)
 				let id = this.typeList[e.target.value].id
-				switch(this.param.flag){
-					case 'category':
-						this.contentInfo.categoryId=id;
-						break;
-					case 'period':
-						this.contentInfo.periodId=id;
-						break;
-					case 'place':
-						this.contentInfo.placeId=id;
-						break;
-				}
+				this.contentInfo.categoryId=id;
 				this.idx=e.target.value
+			},
+			stageBindPickerChange:function(e){
+				// console.log(e.target.value)
+				let id = this.stageList[e.target.value].id
+				this.contentInfo.periodId=id;
+				this.stageIdx=e.target.value
 			},
 			save:function(){
 				let postParam={
@@ -284,7 +341,6 @@
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
 					if(res.data.code===200){
-						// this.backToList()
 						uni.navigateBack({
 							delta:1
 						})
@@ -306,7 +362,6 @@
 							language: this.param.language,
 						}).then((res)=>{
 							if(res.data.code===200){
-								// this.backToList()
 								uni.navigateBack({
 									delta:2
 								})
@@ -319,15 +374,6 @@
 						})
 					},
 				})
-			},
-			backToList:function(){
-				let url = 'list' + util.jsonToQuery({
-					userId:this.param.userId,
-					moduleId:this.param.moduleId,
-					name:this.param.name,
-					flag:this.param.flag
-				})
-				uni.navigateTo({url:url})
 			},
 			deleteImage: function(e){
 				console.log(e)

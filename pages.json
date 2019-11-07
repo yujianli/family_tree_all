@@ -49,16 +49,7 @@
 		{
 			"path": "pages/hobby/stageList",
 			"style": {
-				"navigationBarTitleText": "",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "编辑",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
+				"navigationBarTitleText": ""
 			}
 		},
 		{
@@ -78,6 +69,42 @@
 		},
 		{
 			"path": "pages/hobby/stageEdit",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/hobby/placeList",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/hobby/placeDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/hobby/placeEdit",
 			"style": {
 				"navigationBarTitleText": "",
 				"app-plus": {

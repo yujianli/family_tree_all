@@ -40,8 +40,8 @@ export default {
 		}
 		//TODO 加密数据
 		if (options.hasToken) {
-			let _token = {'token': uni.getStorageSync(options.tokenKey).token};
-			//let _token={'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'}
+			// let _token = {'token': uni.getStorageSync(options.tokenKey).token};
+			let _token={'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'}
 			options.header = Object.assign({}, options.header, _token)
 		}
 		//TODO 数据签名

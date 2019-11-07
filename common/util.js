@@ -26,6 +26,9 @@ export default {
 			case 'yyyy.MM.dd':
 				_date = `${year}.${month}.${day}`;
 				break;
+			case 'yyyy年MM月dd日':
+				_date = `${year}年${month}月${day}日`;
+				break;
 		}
 		return _date
 	},

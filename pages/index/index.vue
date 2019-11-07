@@ -165,9 +165,9 @@
 			});
 		},
 		onShow: function() {
-			let user = uni.getStorageSync("USER");
-			this.userId = user.id;
-			// this.userId=61
+			// let user = uni.getStorageSync("USER");
+			// this.userId = user.id;
+			this.userId=61
 			this.loadModule(this.userId);
 			this.loadUserInfo(this.userId);
 			this.loadIndexContent();
@@ -192,7 +192,8 @@
 							userId: this.userId,
 							moduleId: module.id,
 							flag: moduleLink.linkFlag(module.id),
-							name: module.name
+							name: module.name,
+							language: this.$common.language
 						});
 				}
 				uni.navigateTo({

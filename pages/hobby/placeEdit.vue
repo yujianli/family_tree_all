@@ -1,23 +1,23 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">起始年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="stageInfo.begintime">
-				<view>{{stageInfo.begintime}}</view>
+			<text class="inner_title">购买年月</text>
+			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="placeInfo.begintime">
+				<view>{{placeInfo.begintime}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">结束年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="stageInfo.endtime">
-				<view>{{stageInfo.endtime}}</view>
+			<text class="inner_title">出售年月</text>
+			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="placeInfo.endtime">
+				<view>{{placeInfo.endtime}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{typeCtrlName}}</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
+			<text class="inner_title">居室地址</text>
+			<input class="input" type="text" placeholder-style="color:#999" placeholder="居室地址" v-model="placeInfo.address" />
 		</view>
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" placeholder="内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" placeholder="内容" />
 			</view>
 	</view>
 
@@ -37,9 +37,9 @@
 					moduleId: null,
 					language: null
 				},
-				stageInfo:{
+				placeInfo:{
 					begintime:currentDate,
-					endtime:currentDate,
+					endtime:'',
 					description:'',
 					name:'',
 					id:null
@@ -52,14 +52,6 @@
 			},
 			endDate() {
 				return util.getDate('end');
-			},
-			typeCtrlName:function(){
-				let _name = module.viewCtrlName[this.param.moduleId]
-				if(_name){
-					return _name;
-				}else{
-					return '类型';
-				}
 			}
 		},
 		onLoad: function (options) {
@@ -72,17 +64,19 @@
 			}
 		},
 		onNavigationBarButtonTap(e) {
-			this.saveSchedule()
+			this.save()
 		},
 		methods: {
 			loadData:function(id){
-				this.$http.get('contentPeriod/detailPeriod',{
-					contentPeriodId:id,
+				this.$http.get('contentPlace/detailPlace',{
+					contentPlaceId:id,
 					language:this.param.language
 				}).then((res)=>{
 					if(res.data.code===200){
-						let _data=res.data.data.contentPeriodInfo
-						util.loadObj(this.stageInfo,_data)
+						let _data=res.data.data.contentPlaceInfo
+						util.loadObj(this.placeInfo,_data)
+						this.placeInfo.begintime=util.dateFormat(this.placeInfo.begintime)
+						this.placeInfo.endtime=util.dateFormat(this.placeInfo.endtime)
 					}else{
 						uni.showToast({
 							title:'加载失败',icon:'none'
@@ -91,21 +85,21 @@
 				})
 			},
 			bindSDateChange: function(e) {
-				this.stageInfo.begintime = e.target.value
+				this.placeInfo.begintime = e.target.value
 			},
 			bindEDateChange: function(e) {
-				this.stageInfo.endtime = e.target.value
+				this.placeInfo.endtime = e.target.value
 			},
-			saveSchedule:function(){
+			save:function(){
 				let postParam= {name:null,description:null,begintime:null,endtime:null}
-				util.loadObj(postParam,this.stageInfo);
+				util.loadObj(postParam,this.placeInfo);
 				postParam.language=this.param.language
 				let url = null;
-				if(this.stageInfo.id){
-					url='contentPeriod/editPeriod';
-					postParam.contentPeriodId=this.stageInfo.id
+				if(this.placeInfo.id){
+					url='contentPlace/editPlace';
+					postParam.contentPlaceId=this.placeInfo.id
 				}else{
-					url='contentPeriod/createPeriod';
+					url='contentPlace/createPlace';
 					postParam.userId=this.param.userId
 					postParam.moduleId=this.param.moduleId
 				}

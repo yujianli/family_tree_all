@@ -1,20 +1,20 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">起始年月</text>
-			<view>{{stageInfo.begintime}}</view>
+			<text class="inner_title">购买年月</text>
+			<view>{{placeInfo.begintime | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">结束年月</text>
-			<view>{{stageInfo.endtime}}</view>
+			<text class="inner_title">出售年月</text>
+			<view>{{placeInfo.endtime | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{typeCtrlName}}</text>
-			<view>{{stageInfo.name}}</view>
+			<text class="inner_title">地址</text>
+			<view>{{placeInfo.address}}</view>
 		</view>
 		<view class="mul_wrapper">
-			<text class="inner_title">内容</text>
-			<view>{{stageInfo.description}}</view>
+			<text class="inner_title">描述</text>
+			<view>{{placeInfo.description}}</view>
 		</view>
 		<view class="opt_container">
 			<button class="btn_delete" @tap="remove">删除记录</button>
@@ -35,23 +35,19 @@
 					name: null,
 					id: null
 				},
-				stageInfo: {
-					begintime: util.getDate(),
-					endtime: util.getDate(),
+				placeInfo: {
+					begintime: '',
+					endtime: '',
 					description: '',
-					name: '',
+					address: '',
 					id: null
 				}
 			};
 		},
-		computed: {
-			typeCtrlName: function() {
-				let _name = module.viewCtrlName[this.param.moduleId]
-				if (_name) {
-					return _name;
-				} else {
-					return '类型';
-				}
+		filters:{
+			formatDate:function(value){
+				if(!value) return ''
+				return util.dateFormat(value, 'yyyy.MM.dd')
 			}
 		},
 		onLoad: function(options) {
@@ -64,20 +60,20 @@
 			this.loadData(this.param.id)
 		},
 		onNavigationBarButtonTap(e) {
-			let url = 'stageEdit' + util.jsonToQuery(this.param)
+			let url = 'placeEdit' + util.jsonToQuery(this.param)
 			uni.navigateTo({
 				url: url
 			})
 		},
 		methods: {
 			loadData: function(id) {
-				this.$http.get('contentPeriod/detailPeriod', {
-					contentPeriodId: id,
+				this.$http.get('contentPlace/detailPlace', {
+					contentPlaceId: id,
 					language: this.param.language
 				}).then((res) => {
 					if (res.data.code === 200) {
-						let _data = res.data.data.contentPeriodInfo
-						util.loadObj(this.stageInfo, _data)
+						let _data = res.data.data.contentPlaceInfo
+						util.loadObj(this.placeInfo, _data)
 					} else {
 						uni.showToast({
 							title: '加载失败',
@@ -87,8 +83,8 @@
 				})
 			},
 			remove: function() {
-				this.$http.post('contentPeriod/deletePeriod', {
-					contentPeriodId: this.param.id,
+				this.$http.post('contentPlace/deletePlace', {
+					contentPlaceId: this.param.id,
 					language: this.param.language
 				}).then((res) => {
 					if (res.data.code === 200) {
