@@ -191,12 +191,6 @@
 			}
 		},
 		{
-			"path": "pages/funcList/funcList",
-			"style": {
-				"navigationBarTitleText": "功能列表"
-			}
-		},
-		{
 			"path": "pages/appearance/list",
 			"style": {
 				"navigationBarTitleText": "体貌特征",

@@ -45,7 +45,7 @@
 		</robby-image-upload>
 		<view>
 			<view class="tags_wrapper">
-				<image src="../../../static/images/icon_tag.png" class="icon_tags"></image>
+				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
 				<text class="edit_other_opts">添加标签</text>
 			</view>
 			
@@ -57,7 +57,7 @@
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
-				<image src="../../../static/images/icon_tag.png" class="icon_tags"></image>
+				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
 				<text class="edit_other_opts">添加关联</text>
 			</view>
 			
