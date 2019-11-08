@@ -188,17 +188,18 @@ export default {
 				language: null
 			};
 			util.loadObj(reqParam, this.param);
-			if (module.requestParam.notFlag.indexOf(this.param.moduleId) == -1) {
+			let modId = parseInt(this.param.moduleId)
+			if (module.requestParam.notFlag.indexOf(modId) == -1) {
 				reqParam['flag'] = this.param.flag;
 			}
-			if (module.requestParam.notTypeId.indexOf(this.param.moduleId) == -1) {
+			if (module.requestParam.notTypeId.indexOf(modId) == -1) {
 				switch (this.param.flag) {
 					case 'category':
 						reqParam['categoryId'] = flagId;
 						break;
-					// case 'period':
-					// 	reqParam['periodId'] = flagId;
-					// 	break;
+					case 'period':
+						reqParam['periodId'] = flagId;
+						break;
 					case 'place':
 						reqParam['placeId'] = flagId;
 						break;

@@ -147,6 +147,9 @@
 			}
 		},
 		onLoad:function(){
+			let user = uni.getStorageSync("USER");
+			this.userId = user.id;
+			// this.userId=61
 			// 提醒试用到期
 			uni.showModal({
 				title: '温馨提示',
@@ -165,9 +168,6 @@
 			});
 		},
 		onShow: function() {
-			// let user = uni.getStorageSync("USER");
-			// this.userId = user.id;
-			this.userId=61
 			this.loadModule(this.userId);
 			this.loadUserInfo(this.userId);
 			this.loadIndexContent();

@@ -41,7 +41,7 @@
 					begintime:currentDate,
 					endtime:'',
 					description:'',
-					name:'',
+					address:'',
 					id:null
 				}				
 			}
