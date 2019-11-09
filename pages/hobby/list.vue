@@ -15,7 +15,7 @@
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<uni-swipe-action :options="options">
-			<view class="card_item" v-for="(content, i) in contentList" v-bind:key="content.contentId" @tap="jumpToDetail(content)">
+				<view class="card_item" v-for="(content, i) in contentList" v-bind:key="content.contentId" @tap="jumpToDetail(content)">
 					<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 					<view class="card_inner">
 						<text class="card_title">{{ content.content }}</text>
@@ -26,8 +26,8 @@
 							<text class="time">{{ content.createDate }}</text>
 						</view>
 					</view>
-				
-			</view>
+
+				</view>
 			</uni-swipe-action>
 		</view>
 	</view>

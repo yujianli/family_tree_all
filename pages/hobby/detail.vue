@@ -6,6 +6,7 @@
 				<view>{{content.position}}</view>
 				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
 				<view v-if="ctrlEnable.stageCtrl">{{content.periodName}}</view>
+				<view v-if="ctrlEnable.placeCtrl">{{content.address}}</view>
 				<view v-if="ctrlEnable.weatherCtrl">{{content.weather}}</view>
 			</view>
 			<view class="detail_content">
@@ -45,6 +46,7 @@
 				ctrlEnable: {
 					typeCtrl: true,
 					stageCtrl: false,
+					placeCtrl: false,
 					weatherCtrl: false
 				},
 				content: {
@@ -68,6 +70,7 @@
 					periodStartTime: '',
 					periodEndTime: '',
 					periodName: null,
+					address:null,
 					createDate: null
 				}
 			}
@@ -110,6 +113,7 @@
 				let detailConfig = config.detail;
 				this.ctrlEnable.typeCtrl = detailConfig.typeCtrl.indexOf(id) >= 0;
 				this.ctrlEnable.stageCtrl = detailConfig.stageCtrl.indexOf(id) >= 0;
+				this.ctrlEnable.placeCtrl = detailConfig.placeCtrl.indexOf(id) >= 0;
 				this.ctrlEnable.weatherCtrl = detailConfig.weatherCtrl.indexOf(id) >= 0;
 			},
 			loadDetail: function() {

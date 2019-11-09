@@ -23,7 +23,7 @@
 				<view class="input">{{stageList[stageIdx].startTime| formatDate}}-{{stageList[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
 			</picker>
 		</view>
-		<view class="wrapper" v-if="ctrlEnable.addressCtrl">
+		<view class="wrapper" v-if="ctrlEnable.placeCtrl">
 			<text class="inner_title">居室：</text>
 			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address">
 				<view class="input">{{ placeList[placeIdx].address }}</view>
@@ -106,7 +106,7 @@
 				stageIdx:0,
 				stageList:[{id:-1,name:'请选择'}],
 				placeIdx:0,
-				placeList:[{id:-1,name:'请选择'}],
+				placeList:[{id:-1,address:'请选择'}],
 				typeEnable: false,
 				contentInfo:{
 					periodId: null,
@@ -213,6 +213,7 @@
 				let editConfig=config.edit;
 				this.ctrlEnable.typeCtrl=editConfig.typeCtrl.indexOf(id)>=0;
 				this.ctrlEnable.stageCtrl=editConfig.stageCtrl.indexOf(id)>=0;
+				this.ctrlEnable.placeCtrl=editConfig.placeCtrl.indexOf(id)>=0;
 				this.ctrlEnable.weatherCtrl=editConfig.weatherCtrl.indexOf(id)>=0;
 				this.ctrlEnable.relationCtrl=editConfig.relationCtrl.indexOf(id)>=0;
 			},
@@ -238,6 +239,7 @@
 								break;
 							case 'place':
 								id=this.contentInfo.placeId;
+								this.placeIdx = this.placeList.findIndex((item)=>item.id==id);
 								break;
 						}
 						let imgs=this.contentInfo.imageUrls.split(',')
@@ -312,16 +314,19 @@
 				this.contentInfo.createDate=e.target.value
 			},
 			typeBindPickerChange:function(e){
-				// console.log(e.target.value)
 				let id = this.typeList[e.target.value].id
 				this.contentInfo.categoryId=id;
 				this.idx=e.target.value
 			},
 			stageBindPickerChange:function(e){
-				// console.log(e.target.value)
 				let id = this.stageList[e.target.value].id
 				this.contentInfo.periodId=id;
 				this.stageIdx=e.target.value
+			},
+			placeBindPickerChange:function(e){
+				let id = this.placeList[e.target.value].id
+				this.contentInfo.placeId=id;
+				this.placeIdx=e.target.value
 			},
 			save:function(){
 				let postParam={

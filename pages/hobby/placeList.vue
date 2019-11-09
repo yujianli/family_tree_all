@@ -65,7 +65,7 @@
 			jumpToList: function(item) {
 				let _param = this.param;
 				_param['stageId'] = item.id;
-				_param['stageName'] = item.name;
+				_param['stageName'] = item.address;
 				uni.navigateTo({
 					url: 'list' + util.jsonToQuery(_param)
 				});

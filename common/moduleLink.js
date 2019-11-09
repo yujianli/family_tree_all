@@ -63,7 +63,7 @@ export default {
 		//不需要flag值（日记，心得感想，格言）
 		notFlag: [9, 11, 13, 19],
 		//不需要类型ID（日记）
-		notTypeId: [9, 11, 13, 19]
+		notTypeId: [9, 11, 13, 17, 19]
 	},
 	isStage: [4, 14, 15, 16, 17],
 	viewCtrlName: {
