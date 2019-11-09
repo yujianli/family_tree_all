@@ -58,7 +58,7 @@
 		<view class="card_list">
 			<view class="more" @tap="toMore">更多</view>
 			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
-				<image src="../../static/images/test.png" class="card_pic"></image>
+				<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
 				<view class="card_inner">
 					<text class="card_title">{{contentInfo.content}}</text>
 					<view class="card_others">
@@ -147,6 +147,9 @@
 			}
 		},
 		onLoad:function(){
+			let user = uni.getStorageSync("USER");
+			this.userId = user.id;
+			// this.userId=61
 			// 提醒试用到期
 			uni.showModal({
 				title: '温馨提示',
@@ -165,9 +168,6 @@
 			});
 		},
 		onShow: function() {
-			// let user = uni.getStorageSync("USER");
-			// this.userId = user.id;
-			this.userId=61
 			this.loadModule(this.userId);
 			this.loadUserInfo(this.userId);
 			this.loadIndexContent();
@@ -265,6 +265,9 @@
 						for(let i=0;i<this.contentList.length;i++){
 							if(this.contentList[i].tags){
 								this.contentList[i].tags=this.contentList[i].tags.split(',')
+							}
+							if(this.contentList[i].imageUrl){
+								this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
 							}
 						}
 					}else{

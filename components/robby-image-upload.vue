@@ -50,7 +50,11 @@
 		computed:{
 			imageListData: function(){
 				if(this.value){
-					return this.value
+					let imgs=[];
+					for(let i=0;i<this.value.length;i++){
+						imgs.push(this.$common.picPrefix()+this.value[i])
+					}
+					return imgs;
 				}
 			},
 			posMoveImageLeft: function(){ 
@@ -123,7 +127,7 @@
 							
 							var remoteIndexStart = _self.imageList.length - imagePathArr.length
 							var promiseWorkList = []
-							var keyname = (_self.fileKeyName ? _self.fileKeyName : 'upload-images')
+							var keyname = (_self.fileKeyName ? _self.fileKeyName : 'file')
 							var completeImages = 0
 							
 							for(let i=0; i<imagePathArr.length;i++){
@@ -141,9 +145,7 @@
 												if(_self.isDestroyed){
 													return
 												}
-												
 												completeImages ++
-												
 												if(_self.showUploadProgress){
 													uni.showToast({
 														title: '上传进度：' + completeImages + '/' + imagePathArr.length,
@@ -153,8 +155,7 @@
 													});
 												}
 												console.log('success to upload image: ' + res.data)
-												// resolve(res.data)
-												resolve("http://47.99.133.113:8989/api/download?url="+JSON.parse(res.data).name)
+												resolve(JSON.parse(res.data).name)
 											}else{
 												console.log('fail to upload image:'+res.data)
 												reject('fail to upload image:' + remoteUrlIndex)

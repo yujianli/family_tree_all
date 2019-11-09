@@ -2,7 +2,7 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
-			<view class="card_item" v-for="(stage, index) in stageList" :key="index" @tap="jumpToDetail(stage.id)">
+			<view class="card_item" v-for="(stage, index) in stageList" :key="index" @tap="jumpToPage(stage)">
 				<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
 				<view class="card_inner">
 					<view class="card_title">{{ stage.name }}</view>
@@ -29,9 +29,10 @@
 					moduleId: null,
 					name: null,
 					flag: null,
-					language: this.$common.language
+					language: null
 				},
-				stageList: []
+				stageList: [],
+				isEdit:false
 			};
 		},
 		filters: {
@@ -49,13 +50,75 @@
 		onShow: function() {
 			this.loadData();
 		},
-		methods: {
-			jumpToDetail: function(id) {
-				let _param = this.param;
-				_param['id'] = id;
-				uni.navigateTo({
-					url: 'stageDetail' + util.jsonToQuery(_param)
+		onNavigationBarButtonTap(e) {
+			// let pages = getCurrentPages();
+			// let page = pages[pages.length - 1];
+			// let currentWebview = page.$getAppWebview();
+			// let titleObj = currentWebview.getStyle().titleNView;
+			// console.log(titleObj)
+			// console.log(currentWebview)
+			// var tn = currentWebview.getStyle().titleNView;
+			// tn.buttons[0].text = buttons;
+			// currentWebview.setStyle({
+			// 	titleNView: tn
+			// });
+			
+			const buttonIndex = e.index;
+			if (buttonIndex === 0) {
+				console.log(e.text);
+				this.edit = !this.edit;
+							
+				let pages = getCurrentPages();
+				let page = pages[pages.length - 1];
+				// #ifdef APP-PLUS
+				let currentWebview = page.$getAppWebview();
+				let titleObj = currentWebview.getStyle().titleNView;
+				console.log(JSON.stringify(titleObj.buttons[0]));
+				if (!titleObj.buttons) return;
+				if(titleObj.buttons[0].text == '编辑'){
+					this.isEdit=true
+					titleObj.buttons[0].text = "完成";
+				}else{
+					this.isEdit=false
+					titleObj.buttons[0].text = "编辑";
+				}
+				currentWebview.setStyle({
+					titleNView: titleObj
 				});
+				// #endif
+			}
+			
+			// let url = 'placeEdit' + util.jsonToQuery(this.param)
+			// uni.navigateTo({
+			// 	url: url
+			// })
+		},
+		methods: {
+			jumpToPage: function(item) {
+				if(this.isEdit){
+					let url = 'stageEdit' + util.jsonToQuery({
+						userId:this.param.userId,
+						moduleId:this.param.moduleId,
+						language:this.param.language,
+						id:item.id,
+						name: this.param.name
+					})
+					uni.navigateTo({
+						url: url
+					})
+				}else{
+					let _param = this.param;
+					_param['stageId'] = item.id;
+					_param['stageName'] = item.name;
+					uni.navigateTo({
+						url: 'list' + util.jsonToQuery(_param)
+					});
+				}
+				// let _param = this.param;
+				// _param['id'] = item.id;
+				// uni.navigateTo({
+				// 	url: 'stageDetail' + util.jsonToQuery(_param)
+				// });
 			},
 			jumpToList: function(item) {
 				let _param = this.param;

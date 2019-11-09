@@ -3,43 +3,43 @@
 		<view class="container">
 			<view class="wrapper">
 				<text class="inner_title">年龄</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.age" placeholder="年龄" />
+				<view>{{appearanceInfo.age}}岁</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">身高</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.height" placeholder="身高" />
+				<view>{{appearanceInfo.height}}cm</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">体重</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.weight" placeholder="体重" />
+				<view>{{appearanceInfo.weight}}kg</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">脸型</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.faceShape" placeholder="脸型" />
+				<view>{{appearanceInfo.faceShape}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">个性特点</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.characteristics" placeholder="个性特点" />
+				<view>{{appearanceInfo.characteristics}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">T恤尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.tshirtSize" placeholder="T恤尺寸" />
+				<view>{{appearanceInfo.tshirtSize}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">衬衫尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.shirtSize" placeholder="衬衫尺寸" />
+				<view>{{appearanceInfo.shirtSize}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">衣服尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.clothSize" placeholder="衣服尺寸" />
+				<view>{{appearanceInfo.clothSize}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">裤子尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.trousersSize" placeholder="裤子尺寸" />
+				<view>{{appearanceInfo.trousersSize}}</view>
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">鞋尺寸</text>
-				<input class="input" type="text" placeholder-style="color:#999" v-model="appearanceInfo.shoeSize" placeholder="鞋尺寸" />
+				<view>{{appearanceInfo.shoeSize}}</view>
 			</view>
 
 			<view class="opt_container"><button class="btn_delete" @tap="remove">删除</button></view>
@@ -53,8 +53,12 @@ import dataJson from '@/static/appData.json';
 export default {
 	data() {
 		return {
-			userId:null,
-			moduleId:null,
+			param:{
+				userId:null,
+				moduleId:null,
+				id:null,
+				language:null
+			},
 			appearanceInfo: {
 				id:null,
 				age: '',
@@ -72,17 +76,22 @@ export default {
 		};
 	},
 	onLoad: function(options) {
-		this.appearanceInfo.id=options.id;
-		this.userId=options.userId
-		this.moduleId=options.moduleId
-		this.loadData(options.id);
+		util.loadObj(this.param,options)
+	},
+	onShow:function(){
+		this.loadData(this.param.id);
+	},
+	onNavigationBarButtonTap(e) {
+		uni.navigateTo({
+			url: 'edit' + util.jsonToQuery(this.param)
+		})
 	},
 	methods: {
 		loadData: function(id) {
 			this.$http
 				.get('appearance/detailAppearance', {
-					appearanceId: id,
-					language: this.$common.language
+					appearanceId: this.param.id,
+					language: this.param.language
 				})
 				.then(res => {
 					if (res.data.code === 200) {
@@ -116,14 +125,14 @@ export default {
 				confirmText: '确认',
 				success: res => {
 					this.$http.post('appearance/deleteAppearance', {
-							appearanceId: this.appearanceInfo.id,
-							language: this.$common.language
+							appearanceId: this.param.id,
+							language: this.param.language
 						})
 						.then(res => {
 							if (res.data.code === 200) {
-								uni.navigateTo({
-									url: '/pages/appearance/list?userId='+this.userId+'&moduleId='+this.moduleId
-								});
+								uni.navigateBack({
+									delta:1
+								})
 							} else {
 								uni.showToast({
 									title: '删除失败',

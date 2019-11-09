@@ -49,7 +49,16 @@
 		{
 			"path": "pages/hobby/stageList",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
 		},
 		{
@@ -163,12 +172,7 @@
 				}
 			}
 		},
-		{
-			"path": "pages/hobby/detail",
-			"style": {
-				"navigationBarTitleText": "爱好详情"
-			}
-		},
+		
 		{
 			"path": "pages/personalInfo/personalInfo",
 			"style": {
@@ -191,24 +195,9 @@
 			}
 		},
 		{
-			"path": "pages/funcList/funcList",
-			"style": {
-				"navigationBarTitleText": "功能列表"
-			}
-		},
-		{
 			"path": "pages/appearance/list",
 			"style": {
-				"navigationBarTitleText": "体貌特征",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "添加",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
+				"navigationBarTitleText": "体貌特征"
 			}
 		},
 		{

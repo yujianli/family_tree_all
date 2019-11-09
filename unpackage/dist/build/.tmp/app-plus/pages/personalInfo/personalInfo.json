@@ -1,4 +1,13 @@
 {
   "navigationBarTitleText": "个人信息",
+  "titleNView": {
+    "buttons": [
+      {
+        "text": "保存",
+        "fontSize": "32upx",
+        "color": "#333333"
+      }
+    ]
+  },
   "usingComponents": {}
 }

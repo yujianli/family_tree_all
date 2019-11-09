@@ -1,16 +1,16 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">年龄</text>
-			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" placeholder="年龄" />
+			<text class="inner_title">年龄(岁)</text>
+			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" placeholder="年龄(岁)" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">身高</text>
-			<input class="input" type="text" v-model="appearance.height" placeholder-style="color:#999" placeholder="身高" />
+			<text class="inner_title">身高(cm)</text>
+			<input class="input" type="text" v-model="appearance.height" placeholder-style="color:#999" placeholder="身高(cm)" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">体重</text>
-			<input class="input" type="text" v-model="appearance.weight" placeholder-style="color:#999" placeholder="体重" />
+			<text class="inner_title">体重(kg)</text>
+			<input class="input" type="text" v-model="appearance.weight" placeholder-style="color:#999" placeholder="体重(kg)" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">脸型</text>
@@ -57,10 +57,16 @@
 
 <script>
 import dataJson from '@/static/appData.json';
-
+import util from '@/common/util.js'
 export default {
 	data() {
 		return {
+			param:{
+				userId:null,
+				moduleId:null,
+				id:null,
+				language:null
+			},
 			arr: {
 				faceShape: dataJson['faceShape'],
 				tshirtSize: dataJson['size'],
@@ -98,13 +104,12 @@ export default {
 		};
 	},
 	onLoad: function(options) {
+		util.loadObj(this.param, options)
 		if (options.id) {
 			this.isEdit = true;
 			this.appearance.id=options.id
 			this.loadData(options.id)
 		}
-		this.appearance.userId=options.userId
-		this.appearance.moduleId=options.moduleId
 	},
 	onNavigationBarButtonTap(e) {
 		this.save();
@@ -137,11 +142,17 @@ export default {
 		},
 		loadData:function(appearanceId){
 			this.$http.get('appearance/detailAppearance',{
-				appearanceId: this.appearance.id,
-				language: this.$common.language
+				appearanceId: this.param.id,
+				language: this.param.language
 			}).then((res)=>{
 				if (res.data.code === 200) {
-					util.loadObj(this.appearance, res.data.data.appearance);
+					util.loadObj(this.appearance, res.data.data.appearanceInfo);
+					this.idx.faceShape=this.appearance.faceShape;
+					this.idx.tshirtSize=this.appearance.tshirtSize;
+					this.idx.shirtSize=this.appearance.shirtSize;
+					this.idx.clothSize=this.appearance.clothSize;
+					this.idx.trousersSize=this.appearance.trousersSize;
+					this.idx.shoeSize=this.appearance.shoeSize;
 				} else {
 					uni.showToast({
 						title: '体貌特征信息加载失败',
@@ -154,8 +165,8 @@ export default {
 			let url = 'appearance/' + (this.isEdit ? 'editAppearance':'createAppearance')
 			this.$http.post(url, this.appearance).then((res)=>{
 				if(res.data.code==200){
-					uni.redirectTo({
-						url:'list?userId=' + this.appearance.userId + '&moduleId=' + this.appearance.moduleId
+					uni.navigateBack({
+						delta:1
 					})
 				}else{
 					uni.showToast({

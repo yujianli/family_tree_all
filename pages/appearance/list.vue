@@ -1,9 +1,11 @@
 <!-- 体貌特征 -->
 <template>
 	<view>
+		<view class="float_btn" @tap="add">+</view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
 <!-- 			<uni-swipe-action :options="options">
  -->				<view class="container" @tap="jumpToDetail(appearance.id)">
+					<view>{{appearance.age}}岁</view>
 					<view class="title">{{appearance.title}}</view>
 					<view class="row">
 						<view>身高：{{appearance.height}}cm</view>
@@ -58,12 +60,7 @@
 			this.moduleId=options.moduleId;
 			this.loadData(options.userId,options.moduleId);
 		},
-		onNavigationBarButtonTap(e) {
-			// console.log(e);
-			uni.navigateTo({
-				url:'edit?userId=' + this.userId + '&moduleId='+this.moduleId
-			})
-		},
+		
 		methods: {
 			jumpToDetail:function(id){
 				uni.navigateTo({
@@ -103,6 +100,14 @@
 						return dataJson[key][i].value;
 					}
 				}
+			},
+			add:function(){
+				uni.navigateTo({
+					url:'edit'+ util.jsonToQuery({
+						userId:this.param.userId,
+						moduleId:this.param.moduleId
+					})
+				})
 			}
 		}
 	}
@@ -123,6 +128,19 @@
 	}
 	.title{
 		font-size: 36upx;color: #333;font-weight: 600;
+	}
+	.float_btn {
+		width: 109upx;
+		height: 109upx;
+		background-color: #4dc578;
+		border-radius: 50%;
+		position: fixed;
+		right: 41upx;
+		bottom: 100upx;
+		font-size: 70upx;
+		line-height: 1.5;
+		text-align: center;
+		color: #fff;
 	}
 </style>
 

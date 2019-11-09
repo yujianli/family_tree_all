@@ -1,4 +1,13 @@
 {
-  "navigationBarTitleText": "功能列表",
+  "navigationBarTitleText": "功能模块",
+  "titleNView": {
+    "buttons": [
+      {
+        "text": "保存",
+        "fontSize": "32upx",
+        "color": "#333333"
+      }
+    ]
+  },
   "usingComponents": {}
 }

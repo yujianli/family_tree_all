@@ -35,7 +35,7 @@
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
-		</view>
+			</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
 		@delete="deleteImage" @add="addImage" 
@@ -45,7 +45,7 @@
 		</robby-image-upload>
 		<view>
 			<view class="tags_wrapper">
-				<image src="../../../static/images/icon_tag.png" class="icon_tags"></image>
+				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
 				<text class="edit_other_opts">添加标签</text>
 			</view>
 			
@@ -57,7 +57,7 @@
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
-				<image src="../../../static/images/icon_tag.png" class="icon_tags"></image>
+				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
 				<text class="edit_other_opts">添加关联</text>
 			</view>
 			
@@ -67,7 +67,6 @@
 				:enable-add="relationEnableAdd">
 			</robby-tags>
 		</view>	
-
 		<view class="opt_container" v-if="removeEnable">
 			<button class="btn_delete" @tap="remove">删除记录</button>
 		</view>
@@ -149,7 +148,8 @@
 				relationEnableDel: true,
 				relationEnableAdd: true,
 				relationList:[],
-				typeVal:''
+				typeVal:'',
+				imageList:[]
 				
 			}
 		},
@@ -194,12 +194,15 @@
 			}else if(options.flag=='place'){
 				this.loadPlace()
 			}else {
-				this.loadContent()
+				if(this.param.contentId){
+					this.loadContent()
+				}
 			}
 			
 			let token=uni.getStorageSync('USER').token;
 			//let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
-			this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
+			this.uploadConfig.header={'token':token};
+			// this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
 		},
 		onNavigationBarButtonTap(e) {
 			this.save()
@@ -237,7 +240,10 @@
 								id=this.contentInfo.placeId;
 								break;
 						}
-						
+						let imgs=this.contentInfo.imageUrls.split(',')
+						for(let i=0;i<imgs.length;i++){
+							this.uploadConfig.imageData.push(imgs[i])
+						}
 					} else {
 						uni.showToast({
 							title: '加载失败',
@@ -327,6 +333,9 @@
 				postParam.tags=this.tagList.join(',')
 				postParam.associatedPerson=this.relationList.join(',')
 				postParam.language=this.param.language
+				if(this.uploadConfig.imageData.length){
+					postParam['imageUrls']=this.uploadConfig.imageData.join(',')
+				}
 				let url = null;
 				if(this.contentInfo.id){
 					url='content/edit';

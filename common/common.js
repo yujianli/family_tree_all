@@ -5,5 +5,12 @@ export default {
 	},
 	setEnUs(){
 		this.language='en_US';
+	},
+	apiPrefix: 'http://47.99.133.113:8989/api/',
+	picPrefix(){
+		return this.apiPrefix + 'download?url=';
+	},
+	uploadUrl(){
+		return this.apiPrefix + 'upload';
 	}
 }

@@ -2,7 +2,7 @@ export default {
 	//不同对象同属性非空值赋值
 	loadObj(obj, newObj) {
 		for (var p in newObj) {
-			if (newObj[p] && obj[p] !== undefined) {
+			if (newObj[p]!=null && newObj[p]!=undefined && obj[p] !== undefined) {
 				obj[p] = newObj[p]
 			}
 		}

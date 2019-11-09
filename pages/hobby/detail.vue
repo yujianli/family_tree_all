@@ -75,7 +75,11 @@
 		computed: {
 			images: function() {
 				if (!this.content.imageUrls) return [];
-				return this.content.imageUrls.split(',');
+				let imgs = this.content.imageUrls.split(',')
+				for (let i = 0; i < imgs.length; i++) {
+					imgs[i]=this.$common.picPrefix()+imgs[i]
+				}
+				return imgs;
 			}
 		},
 		filters: {

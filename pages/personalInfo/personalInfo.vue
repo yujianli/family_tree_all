@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="wrapper avatar_wrapper">
-			<image :src="baseInfo.headUrl" style="width: 80px;height: 80px;" @tap="openAlbum()"></image>
+			<image :src="imageUrl" style="width: 80px;height: 80px;" @tap="openAlbum()"></image>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">姓名</text>
@@ -171,10 +171,17 @@
 							career: '',
 							emailAddress: '',
 							isPassedAway: 0,
-							passingAway: '',
+							// passingAway: '',
 				            temperament: '',
 				            idCard: ''
 				        }
+			}
+		},
+		computed:{
+			imageUrl:function(){
+				if(this.baseInfo.headUrl){
+					return this.$common.picPrefix()+this.baseInfo.headUrl
+				}
 			}
 		},
 		filters: {
@@ -301,45 +308,58 @@
 				}
 			},
 			openAlbum:function(){
-				// uni.chooseImage({
-				// 	count:1,
-				// 	sizeType:['original', 'compressed'],
-				// 	sourceType:['album'],
-				// 	success: function(res){
-				// 		console.log(JSON.stringify(res.tempFilePaths));
-				// 		const tempFilePaths = res.tempFilePaths;
-				// 		uni.uploadFile({
-				// 		    url: 'http://47.99.133.113:8989/api/upload',
-				// 			header: {
-				// 				"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ",
-				// 				'Content-Type':'application/x-www-form-urlencoded'
-				// 			},
-				// 		    filePath: tempFilePaths[0],
-				// 		    name: 'file',
-				// 		    formData: {
-				// 		        'file': null
-				// 		    },
-				// 		    success: (uploadFileRes) => {
-				// 		        console.log(uploadFileRes.data);
-				// 		    }
-				// 		});        
-				// 	},
-				// 	fail:function(res){
-				// 		console.log(JSON.stringify(res))
-				// 	},
-				// 	complete:function(res){
-				// 		console.log(JSON.stringify(res))
-				// 	}
-				// })
+				let url = this.$common.uploadUrl(); 
+				let self = this;
+				uni.chooseImage({
+					count:1,
+					sizeType:['original', 'compressed'],
+					sourceType:['album'],
+					success: function(res){
+						console.log(JSON.stringify(res.tempFilePaths));
+						const tempFilePaths = res.tempFilePaths;
+						let token=uni.getStorageSync('USER').token;
+						new Promise((resolve, reject)=>{
+							uni.uploadFile({
+							    url: url,
+								header: {'token':token},
+							    filePath: tempFilePaths[0],
+							    name: 'file',
+							    formData: null,
+							    success: (res) => {
+							        console.log(res.data);
+									resolve(JSON.parse(res.data).name)
+							    },
+								fail:(res)=>{
+									console.log('fail upload log'+ JSON.stringify(res))
+									reject(res)
+								}
+							})
+						}).then((res)=>{
+							self.baseInfo.headUrl=res
+							console.log(res)
+						})
+						        
+					},
+					fail:function(res){
+						console.log(JSON.stringify(res))
+					},
+					complete:function(res){
+						console.log(JSON.stringify(res))
+					}
+				})
 			},
 			save:function(){
-				this.baseInfo['dateOfBirth']= this.baseInfo.birth;
-				delete this.baseInfo['birth'];
+				let requestParam = this.baseInfo;
+				requestParam['dateOfBirth']=util.dateFormat(this.baseInfo.birth);
+				delete requestParam['birth'];
+				// this.baseInfo['dateOfBirth']= this.baseInfo.birth;
+				// delete this.baseInfo['birth'];
 				if(!this.isPassedAway){
 					this.baseInfo.passingAway='';
 					this.passingAwayDate='请选择';
+					delete requestParam['passingAway'];
 				}
-				this.$http.post('base/editBase', this.baseInfo).then((res)=>{
+				this.$http.post('base/editBase', requestParam).then((res)=>{
 					if(res.data.code===200){
 						uni.showToast({
 							title: '保存成功',icon:'none'
