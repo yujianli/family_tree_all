@@ -171,7 +171,7 @@
 							career: '',
 							emailAddress: '',
 							isPassedAway: 0,
-							// passingAway: '',
+							passingAway: '',
 				            temperament: '',
 				            idCard: ''
 				        }
@@ -207,7 +207,7 @@
 						this.initProp('bloodType',_info.bloodType);
 						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
-						this.isPassedAway=_info.birth==1;
+						this.isPassedAway=_info.isPassedAway==1;
 						
 					}else{
 						uni.showToast({

@@ -2,14 +2,14 @@
 	<view class="container">
 		<view class="wrapper">
 			<text class="inner_title">购买年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="placeInfo.begintime">
-				<view>{{placeInfo.begintime}}</view>
+			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="startTime">
+				<view>{{startTime}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出售年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="placeInfo.endtime">
-				<view>{{placeInfo.endtime}}</view>
+			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="endTime">
+				<view>{{endTime}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -19,6 +19,12 @@
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" placeholder="内容" />
 			</view>
+		<robby-image-upload v-model="uploadConfig.imageData"
+		@delete="deleteImage" @add="addImage" 
+		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
+		:server-url="uploadConfig.serverUrl" 
+		:header="uploadConfig.header">
+		</robby-image-upload>
 	</view>
 
 </template>
@@ -26,6 +32,7 @@
 <script>
 	import util from '@/common/util.js'
 	import module from '@/common/moduleLink.js'
+	import robbyImageUpload  from '@/components/robby-image-upload';
 	export default {
 		data() {
 			 const currentDate = util.getDate({
@@ -38,12 +45,23 @@
 					language: null
 				},
 				placeInfo:{
-					begintime:currentDate,
-					endtime:'',
+					begintime:null,
+					endtime:null,
 					description:'',
 					address:'',
-					id:null
-				}				
+					id:null,
+					imageUrl:null
+				},
+				uploadConfig:{
+					serverUrl: this.$common.uploadUrl(),
+					serverUrlDeleteImage: null,
+					hearder: null,
+					formData: null,
+					imageData : [],
+					fileKeyName: 'file',
+					showUploadProgerss:false,
+					limitNumber: 1,
+				}
 			}
 		},
 		computed: {
@@ -52,8 +70,17 @@
 			},
 			endDate() {
 				return util.getDate('end');
-			}
+			},
+			startTime(){
+				if(!this.placeInfo.begintime) return '请选择';
+				return this.placeInfo.begintime
+			},
+			endTime(){
+				if(!this.placeInfo.endtime) return '请选择';
+				return this.placeInfo.endtime
+			},
 		},
+		components:{robbyImageUpload},
 		onLoad: function (options) {
 			uni.setNavigationBarTitle({
 				title: options.name
@@ -62,6 +89,8 @@
 			if(options.id){
 				this.loadData(options.id)
 			}
+			let token=uni.getStorageSync('USER').token;
+			this.uploadConfig.header={'token':token};
 		},
 		onNavigationBarButtonTap(e) {
 			this.save()
@@ -76,7 +105,15 @@
 						let _data=res.data.data.contentPlaceInfo
 						util.loadObj(this.placeInfo,_data)
 						this.placeInfo.begintime=util.dateFormat(this.placeInfo.begintime)
-						this.placeInfo.endtime=util.dateFormat(this.placeInfo.endtime)
+						if(this.placeInfo.endtime){
+							this.placeInfo.endtime=util.dateFormat(this.placeInfo.endtime)
+						}
+						if(this.placeInfo.imageUrl){
+							let imgs=this.placeInfo.imageUrl.split(',')
+							for(let i=0;i<imgs.length;i++){
+								this.uploadConfig.imageData.push(imgs[i])
+							}
+						}
 					}else{
 						uni.showToast({
 							title:'加载失败',icon:'none'
@@ -91,7 +128,7 @@
 				this.placeInfo.endtime = e.target.value
 			},
 			save:function(){
-				let postParam= {name:null,description:null,begintime:null,endtime:null}
+				let postParam= {address: null,name:null,description:null,begintime:null,endtime:null}
 				util.loadObj(postParam,this.placeInfo);
 				postParam.language=this.param.language
 				let url = null;
@@ -102,6 +139,9 @@
 					url='contentPlace/createPlace';
 					postParam.userId=this.param.userId
 					postParam.moduleId=this.param.moduleId
+				}
+				if(this.uploadConfig.imageData.length){
+					postParam['imageUrl']=this.uploadConfig.imageData.join(',')
 				}
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
@@ -115,6 +155,12 @@
 						});
 					}
 				})
+			},
+			deleteImage: function(e){
+				console.log(e)
+			},
+			addImage: function(e){
+				console.log(e)
 			}
 		}
 	}

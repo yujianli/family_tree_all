@@ -36,11 +36,15 @@
 <script>
 	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import dataJson from '@/static/appData.json';
+	import util from '@/common/util.js'
 	export default {
 		data() {
 			return {
-				userId: null,
-				moduleId: null,
+				param:{
+					userId: null,
+					moduleId: null,
+					language:null
+				},
 				appearanceList:[],
 				options: [{
 					text: '删除',
@@ -56,22 +60,28 @@
 			// uniSwipeAction
 		},
 		onLoad:function(options){
-			this.userId=options.userId;
-			this.moduleId=options.moduleId;
-			this.loadData(options.userId,options.moduleId);
+			util.loadObj(this.param,options)
+			
 		},
-		
+		onShow:function(){
+			this.loadData();
+		},
 		methods: {
 			jumpToDetail:function(id){
 				uni.navigateTo({
-				    url: '/pages/appearance/detail?id='+ id+'&userId='+this.userId+'&moduleId='+this.moduleId
+				    url: '/pages/appearance/detail'+util.jsonToQuery({
+						userId:this.param.userId,
+						moduleId:this.param.moduleId,
+						language:this.param.language,
+						id:id
+					})
 				});
 			},
-			loadData:function(userId,moduleId){
+			loadData:function(){
 				this.$http.get('appearance/query',{
-					userId:userId,
-					moduleId:moduleId,
-					language:this.$common.language,
+					userId:this.param.userId,
+					moduleId:this.param.moduleId,
+					language:this.param.language,
 					page:1,
 					rows:10
 				}).then((res)=>{
@@ -103,10 +113,7 @@
 			},
 			add:function(){
 				uni.navigateTo({
-					url:'edit'+ util.jsonToQuery({
-						userId:this.param.userId,
-						moduleId:this.param.moduleId
-					})
+					url:'edit'+ util.jsonToQuery(this.param)
 				})
 			}
 		}
