@@ -26,7 +26,6 @@
 							<text class="time">{{ content.createDate }}</text>
 						</view>
 					</view>
-
 				</view>
 			</uni-swipe-action>
 		</view>

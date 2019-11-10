@@ -5,6 +5,7 @@ export default {
 		1: "../personalInfo/personalInfo",
 		2: "../appearance/list",
 		4: "../hobby/stageList",
+		5: "../video/video",
 		6: "../hobby/list",
 		7: "../hobby/list",
 		8: "../hobby/list",
@@ -18,7 +19,9 @@ export default {
 		16: "../hobby/stageList",
 		17: "../hobby/placeList",
 		18: "../hobby/list",
-		19: "../hobby/list"
+		19: "../hobby/list",
+		31: "../hobby/stageList",
+		32: "../hobby/stageList"
 	},
 	//模块ID对应模块类型
 	linkFlag: function(moduleId) {
@@ -50,6 +53,10 @@ export default {
 			case 15:
 				//校园经历
 			case 16:
+				//车辆
+			case 31:
+				//婚礼
+			case 32:
 				flag = 'period';
 				break;
 			case 17:
@@ -70,6 +77,8 @@ export default {
 		4: '计划名称',
 		14: '恋爱对象',
 		15: '历程',
-		16: '历程'
+		16: '历程',
+		31: '车辆名称',
+		32: '婚礼'
 	}
 }

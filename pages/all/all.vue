@@ -6,6 +6,7 @@
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
 			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
+				<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
 				<view class="card_inner">
 					<text class="card_title">{{contentInfo.content}}</text>
 					<view class="card_others">
@@ -127,6 +128,9 @@
 						for (let i = 0; i < this.contentList.length; i++) {
 							if (this.contentList[i].tags) {
 								this.contentList[i].tags = this.contentList[i].tags.split(',')
+							}
+							if(this.contentList[i].imageUrl){
+								this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
 							}
 						}
 					} else {

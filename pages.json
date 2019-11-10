@@ -286,71 +286,8 @@
 					}
 				}
 			}
-		}, {
-			"path": "pages/daily/list/list",
-			"style": {
-				"navigationBarTitleText": "日记"
-			}
 		},
 		{
-			"path": "pages/daily/detail/detail",
-			"style": {
-				"navigationBarTitleText": "日记",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "编辑",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/daily/edit/edit",
-			"style": {
-				"navigationBarTitleText": "日记"
-			}
-		}, {
-			"path": "pages/article/list/list",
-			"style": {
-				"navigationBarTitleText": "文摘"
-			}
-		},
-		{
-			"path": "pages/article/detail/detail",
-			"style": {
-				"navigationBarTitleText": "文摘",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "编辑",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/article/edit/edit",
-			"style": {
-				"navigationBarTitleText": "文摘"
-			}
-		},
-		{
-			"path": "pages/schedule/edit/edit",
-			"style": {
-				"navigationBarTitleText": "计划安排"
-			}
-		},
-		{
-			"path": "pages/schedule/list/list",
-			"style": {
-				"navigationBarTitleText": "计划安排"
-			}
-		},{
             "path" : "pages/family/index/index",
             "style": {
             	"app-plus": {

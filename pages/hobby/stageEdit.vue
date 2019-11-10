@@ -1,24 +1,53 @@
 <template>
 	<view class="container">
-		<view class="wrapper">
-			<text class="inner_title">起始年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="stageInfo.begintime">
-				<view>{{stageInfo.begintime}}</view>
-			</picker>
+		<view v-if="param.moduleId==='32'">
+			<view class="wrapper">
+				<text class="inner_title">婚礼时间</text>
+				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
+				 :value="stageInfo.begintime">
+					<view>{{stageInfo.begintime | formatDate}}</view>
+				</picker>
+			</view>
+			<view class="wrapper">
+				<text class="inner_title">新郎名字</text>
+				<input class="input" type="text" placeholder-style="color:#999" placeholder="新郎名字" v-model="newName" />
+			</view>
+			<view class="wrapper">
+				<text class="inner_title">新娘名字</text>
+				<input class="input" type="text" placeholder-style="color:#999" placeholder="新娘名字" v-model="brideName" />
+			</view>
 		</view>
-		<view class="wrapper">
-			<text class="inner_title">结束年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="stageInfo.endtime">
-				<view>{{stageInfo.endtime}}</view>
-			</picker>
-		</view>
-		<view class="wrapper">
-			<text class="inner_title">{{typeCtrlName}}</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
+		<view v-else>
+			<view class="wrapper">
+				<text class="inner_title" v-if="param.moduleId==='31'">购买年月</text>
+				<text class="inner_title" v-else>起始年月</text>
+				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
+				 :value="startTime">
+					<view>{{startTime}}</view>
+				</picker>
+			</view>
+			<view class="wrapper">
+				<text class="inner_title" v-if="param.moduleId==='31'">出售年月</text>
+				<text class="inner_title" v-else>结束年月</text>
+				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'"
+				 :value="endTime">
+					<view>{{endTime}}</view>
+				</picker>
+			</view>
+			<view class="wrapper">
+				<text class="inner_title">{{typeCtrlName}}</text>
+				<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
+			</view>
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" placeholder="内容" />
-			</view>
+		</view>
+		<robby-image-upload v-model="uploadConfig.imageData"
+		@delete="deleteImage" @add="addImage" 
+		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
+		:server-url="uploadConfig.serverUrl" 
+		:header="uploadConfig.header">
+		</robby-image-upload>
 	</view>
 
 </template>
@@ -26,6 +55,8 @@
 <script>
 	import util from '@/common/util.js'
 	import module from '@/common/moduleLink.js'
+	import config from '@/common/componetConfig.js'
+	import robbyImageUpload  from '@/components/robby-image-upload';
 	export default {
 		data() {
 			 const currentDate = util.getDate({
@@ -38,12 +69,25 @@
 					language: null
 				},
 				stageInfo:{
-					begintime:currentDate,
-					endtime:currentDate,
+					begintime:null,
+					endtime:null,
 					description:'',
 					name:'',
-					id:null
-				}				
+					id:null,
+					imageUrl:null
+				},
+				brideName:'',
+				newName:'',
+				uploadConfig:{
+					serverUrl: this.$common.uploadUrl(),
+					serverUrlDeleteImage: null,
+					hearder: null,
+					formData: null,
+					imageData : [],
+					fileKeyName: 'file',
+					showUploadProgerss:false,
+					limitNumber: 1,
+				},
 			}
 		},
 		computed: {
@@ -52,6 +96,14 @@
 			},
 			endDate() {
 				return util.getDate('end');
+			},
+			startTime(){
+				if(!this.stageInfo.begintime) return '请选择';
+				return this.stageInfo.begintime
+			},
+			endTime(){
+				if(!this.stageInfo.endtime) return '请选择';
+				return this.stageInfo.endtime
 			},
 			typeCtrlName:function(){
 				let _name = module.viewCtrlName[this.param.moduleId]
@@ -62,6 +114,13 @@
 				}
 			}
 		},
+		filters:{
+			formatDate: function(value) {
+				if (!value) return '';
+				return util.dateFormat(value, 'yyyy年MM月dd日');
+			}
+		},
+		components:{robbyImageUpload},
 		onLoad: function (options) {
 			uni.setNavigationBarTitle({
 				title: options.name
@@ -70,6 +129,8 @@
 			if(options.id){
 				this.loadData(options.id)
 			}
+			let token=uni.getStorageSync('USER').token;
+			this.uploadConfig.header={'token':token};
 		},
 		onNavigationBarButtonTap(e) {
 			this.saveSchedule()
@@ -83,6 +144,16 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPeriodInfo
 						util.loadObj(this.stageInfo,_data)
+						this.stageInfo.begintime=util.dateFormat(_data.startTime)
+						let names=this.stageInfo.name.split(',');
+						this.newName=names[0];
+						this.brideName=names[1];
+						if(this.stageInfo.imageUrl){
+							let imgs=this.stageInfo.imageUrl.split(',')
+							for(let i=0;i<imgs.length;i++){
+								this.uploadConfig.imageData.push(imgs[i])
+							}
+						}
 					}else{
 						uni.showToast({
 							title:'加载失败',icon:'none'
@@ -99,6 +170,9 @@
 			saveSchedule:function(){
 				let postParam= {name:null,description:null,begintime:null,endtime:null}
 				util.loadObj(postParam,this.stageInfo);
+				if(this.param.moduleId==='32'){
+					postParam['name']=this.newName+','+this.brideName
+				}
 				postParam.language=this.param.language
 				let url = null;
 				if(this.stageInfo.id){
@@ -108,6 +182,9 @@
 					url='contentPeriod/createPeriod';
 					postParam.userId=this.param.userId
 					postParam.moduleId=this.param.moduleId
+				}
+				if(this.uploadConfig.imageData.length){
+					postParam['imageUrl']=this.uploadConfig.imageData.join(',')
 				}
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
@@ -121,6 +198,12 @@
 						});
 					}
 				})
+			},
+			deleteImage: function(e){
+				console.log(e)
+			},
+			addImage: function(e){
+				console.log(e)
 			}
 		}
 	}

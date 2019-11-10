@@ -2,9 +2,9 @@
 	<view class="container">
 		<view class="wrapper">
 			<text class="inner_title">时间：</text>
-			<picker class="input" mode="date" :value="createDate" :start="startDate" :end="endDate" @change="bindDateChange"
+			<picker class="input" mode="date" :value="contentInfo.createDate" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'">
-				<view>{{createDate}}</view>
+				<view>{{contentInfo.createDate | formatDate2}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -19,8 +19,9 @@
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.stageCtrl">
 			<text class="inner_title">{{stageCtrlName}}：</text>
-			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stageList" range-key="name">
-				<view class="input">{{stageList[stageIdx].startTime| formatDate}}-{{stageList[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
+			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stages" range-key="name">
+				<view class="input" v-if="['31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
+				<view class="input" v-else>{{stages[stageIdx].startTime| formatDate}}-{{stages[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.placeCtrl">
@@ -43,6 +44,8 @@
 		:server-url="uploadConfig.serverUrl" 
 		:header="uploadConfig.header">
 		</robby-image-upload>
+<!-- 		<hUpload :uploadUrl="uploadConfig.serverUrl" :header="uploadConfig.header"
+		@schange="schange" @upload="setAttachData"></hUpload> -->
 		<view>
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
@@ -77,6 +80,7 @@
 <script>
 	//组件文档参考地址 https://github.com/smalltee/robby-image-upload
 	import robbyImageUpload  from '@/components/robby-image-upload';
+	import hUpload from '@/components/h-upload.vue'
 	import robbyTags from '@/components/robby-tags';
 	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue';
 	import wPicker from "@/components/w-picker/w-picker.vue";
@@ -134,11 +138,12 @@
 				endDate:util.getDate('end'),
 				removeEnable: false,
 				uploadConfig:{
-					serverUrl: 'http://47.99.133.113:8989/api/upload',
+					serverUrl: this.$common.uploadUrl(),
 					serverUrlDeleteImage: null,
 					hearder: null,
 					formData: null,
 					imageData : [],
+					fileKeyName: 'file',
 					showUploadProgerss:false,
 					limitNumber: 8,
 				},
@@ -148,14 +153,15 @@
 				relationEnableDel: true,
 				relationEnableAdd: true,
 				relationList:[],
-				typeVal:'',
 				imageList:[]
 				
 			}
 		},
 		computed:{
 			createDate:function(){
-				return util.dateFormat(this.contentInfo.createDate)
+				let dt= util.dateFormat(this.contentInfo.createDate)
+				console.log(dt)
+				return dt;
 			},
 			stageCtrlName:function(){
 				let _name = module.viewCtrlName[this.param.moduleId]
@@ -168,16 +174,28 @@
 			stageCtrlValue:function(){
 				return util.dateFormat(this.contentInfo.periodStartTime)+'-'
 				+util.dateFormat(this.contentInfo.periodEndTime)+ ' '
-				
+			},
+			stages:function(){
+				let _list = this.stageList;
+				if(this.param.moduleId==='32'){
+					for(let i=1;i<_list.length;i++){
+						_list[i].name=_list[i].name.replace(',','与').concat('的婚礼')
+					}
+				}
+				return _list
 			}
 		},
 		filters:{
 			formatDate:function(value){
 				if(!value) return ''
 				return util.dateFormat(value, 'yyyy.MM.dd')
+			},
+			formatDate2:function(value){
+				if(!value) return ''
+				return util.dateFormat(value)
 			}
 		},
-		components:{robbyImageUpload,robbyTags,uniPopup,wPicker},
+		components:{robbyImageUpload,robbyTags,uniPopup,wPicker,hUpload},
 		onLoad:function(options){
 			uni.setNavigationBarTitle({
 				title:options.name
@@ -200,9 +218,7 @@
 			}
 			
 			let token=uni.getStorageSync('USER').token;
-			//let token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI2MSJ9.l9gwfxqVh8dYqiMODN8-M4iq8RpscvYm9l-oqy0zjxQ'
 			this.uploadConfig.header={'token':token};
-			// this.uploadConfig.header={'token':token,'Content-Type':'multipart/form-data'}
 		},
 		onNavigationBarButtonTap(e) {
 			this.save()
@@ -242,9 +258,11 @@
 								this.placeIdx = this.placeList.findIndex((item)=>item.id==id);
 								break;
 						}
-						let imgs=this.contentInfo.imageUrls.split(',')
-						for(let i=0;i<imgs.length;i++){
-							this.uploadConfig.imageData.push(imgs[i])
+						if(this.contentInfo.imageUrls){
+							let imgs=this.contentInfo.imageUrls.split(',')
+							for(let i=0;i<imgs.length;i++){
+								this.uploadConfig.imageData.push(imgs[i])
+							}
 						}
 					} else {
 						uni.showToast({
@@ -395,9 +413,11 @@
 			addImage: function(e){
 				console.log(e)
 			},
-			onConfirm(val){
-				console.log(val);
-				this.typeVal=val.result;
+			schange:function(e){
+				console.log(e)
+			},
+			upload:function(e){
+				console.log(e)
 			}
 		}
 	}

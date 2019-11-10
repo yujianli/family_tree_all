@@ -31,7 +31,9 @@
 			videoLimit: {
 				type: Number,
 				default: 1
-			}
+			},
+			uploadUrl:String,
+			header:Object
 		},
 		data() {
 			return {
@@ -52,15 +54,12 @@
 							mask: true
 						})
 						for (var i = 0; i < res.tempFilePaths.length; i++) {
-							
-
 							uni.uploadFile({
-								url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
+								url: that.uploadUrl, 
 								filePath: res.tempFilePaths[i],
 								name: 'file',
-								formData: {
-									'user': 'test'
-								},
+								header: that.header,
+								formData: null,
 								success: (uploadFileRes) => {
 									console.log(uploadFileRes.data);
 									//将返回的数据存入img,并通知外界
@@ -106,9 +105,10 @@
 						})
 						// 上传视频
 						uni.uploadFile({
-							url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
+							url: 'http://47.99.133.113:8989/api/upload', //仅为示例，非真实的接口地址
 							filePath: res.tempFilePath,
 							name: 'file',
+							header: that.header,
 							success: (uploadFileRes) => {
 								console.log(uploadFileRes.data);
 									//将返回的数据存入img,并通知外界

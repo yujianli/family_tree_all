@@ -2,14 +2,20 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
-			<view class="card_item" v-for="(stage, index) in stageList" :key="index" @tap="jumpToPage(stage)">
+			<view class="card_item" v-for="(stage, index) in stages" :key="index" @tap="jumpToPage(stage)">
 				<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
 				<view class="card_inner">
 					<view class="card_title">{{ stage.name }}</view>
-					<view class="time mt20">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
+					<!--婚礼时间-->
+					<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime | formatDate }}</view>
+					<!--车辆日期-->
+					<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
+					<view class="time mt20" v-else>{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
 					<view class="card_others card_others_1">
 						<view class="inner_flex">
-							<text class="time">{{ stage.description }}</text>
+							<!--车辆已出售-->
+							<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
+							<text class="time" v-else>{{ stage.description }}</text>
 							<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
 						</view>
 					</view>
@@ -21,6 +27,7 @@
 
 <script>
 	import util from '@/common/util.js';
+	import config from '@/common/componetConfig.js'
 	export default {
 		data() {
 			return {
@@ -32,13 +39,39 @@
 					language: null
 				},
 				stageList: [],
-				isEdit:false
+				isEdit: false,
+				ctrlEnable: {
+					dateFirstCtrl: true,
+					dateSecondCtrl: false
+				}
 			};
+		},
+		computed: {
+			stages: function() {
+				let self = this
+				for (let i = 0; i < this.stageList.length; i++) {
+					if (this.param.moduleId === '32') {
+						self.stageList[i].name = self.stageList[i].name.replace(',', '与').concat('的婚礼')
+						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
+					}
+					self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl
+				}
+				return self.stageList
+			}
 		},
 		filters: {
 			formatDate: function(value) {
 				if (!value) return '';
 				return util.dateFormat(value, 'yyyy.MM.dd');
+			},
+			buyDesc: function(value) {
+				if (!value) return '';
+				return '购买于' + util.dateFormat(value, 'yyyy年MM月dd日')
+			},
+			saleDesc: function(value) {
+				if (!value) return '';
+				let curDt = new Date().getDate();
+				if (curDt >= value) return '已出售'
 			}
 		},
 		onLoad: function(options) {
@@ -46,28 +79,16 @@
 				title: options.name
 			});
 			util.loadObj(this.param, options);
+			// this.initControl(this.param.moduleId)
 		},
 		onShow: function() {
 			this.loadData();
 		},
 		onNavigationBarButtonTap(e) {
-			// let pages = getCurrentPages();
-			// let page = pages[pages.length - 1];
-			// let currentWebview = page.$getAppWebview();
-			// let titleObj = currentWebview.getStyle().titleNView;
-			// console.log(titleObj)
-			// console.log(currentWebview)
-			// var tn = currentWebview.getStyle().titleNView;
-			// tn.buttons[0].text = buttons;
-			// currentWebview.setStyle({
-			// 	titleNView: tn
-			// });
-			
+			this.isEdit = !this.isEdit;
 			const buttonIndex = e.index;
 			if (buttonIndex === 0) {
-				console.log(e.text);
-				this.edit = !this.edit;
-							
+
 				let pages = getCurrentPages();
 				let page = pages[pages.length - 1];
 				// #ifdef APP-PLUS
@@ -75,11 +96,9 @@
 				let titleObj = currentWebview.getStyle().titleNView;
 				console.log(JSON.stringify(titleObj.buttons[0]));
 				if (!titleObj.buttons) return;
-				if(titleObj.buttons[0].text == '编辑'){
-					this.isEdit=true
+				if (titleObj.buttons[0].text == '编辑') {
 					titleObj.buttons[0].text = "完成";
-				}else{
-					this.isEdit=false
+				} else {
 					titleObj.buttons[0].text = "编辑";
 				}
 				currentWebview.setStyle({
@@ -87,26 +106,27 @@
 				});
 				// #endif
 			}
-			
-			// let url = 'placeEdit' + util.jsonToQuery(this.param)
-			// uni.navigateTo({
-			// 	url: url
-			// })
 		},
 		methods: {
+			// initControl: function(moduleId) {
+			// 	let id = parseInt(moduleId);
+			// 	let stageListConfig = config.stageList;
+			// 	this.ctrlEnable.dateFirstCtrl = stageListConfig.dateFirstCtrl.indexOf(id) >= 0;
+			// 	this.ctrlEnable.dateSecondCtrl = stageListConfig.dateSecondCtrl.indexOf(id) >= 0;
+			// },
 			jumpToPage: function(item) {
-				if(this.isEdit){
+				if (this.isEdit) {
 					let url = 'stageEdit' + util.jsonToQuery({
-						userId:this.param.userId,
-						moduleId:this.param.moduleId,
-						language:this.param.language,
-						id:item.id,
+						userId: this.param.userId,
+						moduleId: this.param.moduleId,
+						language: this.param.language,
+						id: item.id,
 						name: this.param.name
 					})
 					uni.navigateTo({
 						url: url
 					})
-				}else{
+				} else {
 					let _param = this.param;
 					_param['stageId'] = item.id;
 					_param['stageName'] = item.name;
@@ -114,11 +134,6 @@
 						url: 'list' + util.jsonToQuery(_param)
 					});
 				}
-				// let _param = this.param;
-				// _param['id'] = item.id;
-				// uni.navigateTo({
-				// 	url: 'stageDetail' + util.jsonToQuery(_param)
-				// });
 			},
 			jumpToList: function(item) {
 				let _param = this.param;
