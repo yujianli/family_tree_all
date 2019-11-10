@@ -94,7 +94,16 @@
 		{
 			"path": "pages/hobby/placeList",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
 			}
 		},
 		{
