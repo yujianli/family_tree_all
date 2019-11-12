@@ -190,5 +190,6 @@
 		line-height: 1.5;
 		text-align: center;
 		color: #fff;
+		z-index: 999999;
 	}
 </style>

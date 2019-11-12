@@ -49,26 +49,16 @@
 		<view>
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
-				<text class="edit_other_opts">添加标签</text>
+				<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
 			</view>
-			
-			<robby-tags class="edit_other_opts"
-				v-model="tagList" 
-				:enable-del="tagEnableDel" 
-				:enable-add="tagEnableAdd">
-			</robby-tags>
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
-				<text class="edit_other_opts">添加关联</text>
+				<view class="mul_tags" :style="{display: relationList.length > 0 ? 'inline-block': 'none'}">{{relationList | formatWords}}</view>
+				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" placeholder="添加关联" />
 			</view>
-			
-			<robby-tags class="edit_other_opts"
-				v-model="relationList" 
-				:enable-del="relationEnableDel" 
-				:enable-add="relationEnableAdd">
-			</robby-tags>
 		</view>	
 		<view class="opt_container" v-if="removeEnable">
 			<button class="btn_delete" @tap="remove">删除记录</button>
@@ -81,7 +71,6 @@
 	//组件文档参考地址 https://github.com/smalltee/robby-image-upload
 	import robbyImageUpload  from '@/components/robby-image-upload';
 	import hUpload from '@/components/h-upload.vue'
-	import robbyTags from '@/components/robby-tags';
 	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue';
 	import wPicker from "@/components/w-picker/w-picker.vue";
 	import util from '@/common/util.js'
@@ -148,12 +137,11 @@
 					limitNumber: 8,
 				},
 				tagList:[],
-				tagEnableDel: true,
-				tagEnableAdd: true,
-				relationEnableDel: true,
-				relationEnableAdd: true,
 				relationList:[],
-				imageList:[]
+				imageList:[],
+				
+				relation:'',
+				tag:'',
 				
 			}
 		},
@@ -193,9 +181,13 @@
 			formatDate2:function(value){
 				if(!value) return ''
 				return util.dateFormat(value)
+			},
+			formatWords:function(value){
+				if(!value) return []
+				return value.join('  ');
 			}
 		},
-		components:{robbyImageUpload,robbyTags,uniPopup,wPicker,hUpload},
+		components:{robbyImageUpload,uniPopup,wPicker,hUpload},
 		onLoad:function(options){
 			uni.setNavigationBarTitle({
 				title:options.name
@@ -418,6 +410,20 @@
 			},
 			upload:function(e){
 				console.log(e)
+			},
+			setTags:function(e){
+				let tagList = this.tagList;
+				if(e.detail.value){
+					tagList.push(e.detail.value);
+					this.tag = '';
+				}
+			},
+			setRelation:function(e){
+				let relationList = this.relationList;
+				if(e.detail.value){
+					relationList.push(e.detail.value);
+					this.relation = '';
+				}
 			}
 		}
 	}
@@ -456,6 +462,9 @@
 		color: #303641;
 		flex:1;
 		text-align:left;
+		&.smallipt{
+			padding:6upx 10upx;font-size: 12upx;flex:none;width:100upx;color: #EE9C36;
+		}
 	}
 	.mul_input{
 		height: 492upx;
@@ -490,15 +499,19 @@
 	.btn_delete:after {
 		border: 0px;
 	}
-	
+	.mul_tags{
+		margin-right: 29upx;
+		color: #56D282;
+	}
 	.edit_other_opts{
-		font-size: 32upx;color: #EE9C36;
+		font-size: 25upx;color: #EE9C36;
 	}
 	.tags_wrapper{
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		margin-top: 24upx;
+		font-size: 25upx;
 	}
 	.icon_tags{
 		width: 38upx;height: 38upx;margin-right: 21upx;

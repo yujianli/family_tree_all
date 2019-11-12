@@ -52,6 +52,14 @@
 				<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
 			</picker>
 		</view>
+	
+		<view class="tags_wrapper">
+			<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
+			<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
+		</view>
+		
+		
 	</view>
 </template>
 
@@ -100,8 +108,16 @@
 					trousersSize: '',
 					shoeSize: '',
 					language: ''
-				}
+				},
+				tagList:[],
+				tag:''
 			};
+		},
+		filters:{
+			formatWords:function(value){
+				if(!value) return []
+				return value.join('  ');
+			}
 		},
 		onLoad: function(options) {
 			util.loadObj(this.param, options)
@@ -198,12 +214,21 @@
 						});
 					}
 				})
+			},
+			setTags:function(e){
+				console.log(e);
+				console.log(this.tagList);
+				let tagList = this.tagList;
+				if(e.detail.value){
+					tagList.push(e.detail.value);
+					this.tag = '';
+				}
 			}
 		}
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
 	.container {
 		padding-left: 30upx;
 		padding-right: 30upx;
@@ -241,11 +266,30 @@
 		color: #303641;
 		flex: 1;
 		text-align: right;
+		&.smallipt{
+			text-align: left;
+			padding:6upx 10upx;font-size: 12upx;flex:none;width:100upx;color: #EE9C36;
+		}
 	}
 
 	.mul_input {
 		font-size: 34upx;
 		color: #303641;
 		flex: 1;
+	}
+	
+	.tags_wrapper{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-top: 24upx;
+		font-size: 25upx;
+	}
+	.icon_tags{
+		width: 38upx;height: 38upx;margin-right: 21upx;
+	}
+	.mul_tags{
+		margin-right: 29upx;
+		color: #56D282;
 	}
 </style>

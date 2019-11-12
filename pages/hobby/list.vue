@@ -14,20 +14,22 @@
 		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
-			<uni-swipe-action :options="options">
-				<view class="card_item" v-for="(content, i) in contentList" v-bind:key="content.contentId" @tap="jumpToDetail(content)">
-					<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
-					<view class="card_inner">
-						<text class="card_title">{{ content.content }}</text>
-						<view class="card_others">
-							<view class="tags">
-								<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
+				<uni-swipe-action :options="options">
+					<view class="card_item"  @tap="jumpToDetail(content)">
+						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<text class="card_title">{{ content.content }}</text>
+							<view class="card_others">
+								<view class="tags">
+									<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+								</view>
+								<text class="time">{{ content.createDate }}</text>
 							</view>
-							<text class="time">{{ content.createDate }}</text>
 						</view>
 					</view>
-				</view>
-			</uni-swipe-action>
+				</uni-swipe-action>
+			</view>
 		</view>
 	</view>
 </template>
@@ -336,6 +338,6 @@
 		line-height: 1.5;
 		text-align: center;
 		color: #fff;
-		z-index: 9999;
+		z-index: 9999999;
 	}
 </style>

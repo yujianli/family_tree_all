@@ -17,8 +17,14 @@
 					<image :src="pic" class="detail_pic"></image>
 				</view>
 			</view>
-			<view class="detail_tag">{{content.tags}}</view>
-			<view class="detail_tag">{{content.associatedPerson}}</view>
+			<view class="detail_tag">
+				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
+				{{content.tags}}
+			</view>
+			<view class="detail_tag">
+				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
+				{{content.associatedPerson}}
+			</view>
 		</view>
 		<view class="detail_opt_container">
 			<button class="detail_opt_btn active" @tap="previousClick">上一页</button>

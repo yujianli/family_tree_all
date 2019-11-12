@@ -3,8 +3,8 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
-<!-- 			<uni-swipe-action :options="options">
- -->				<view class="container" @tap="jumpToDetail(appearance.id)">
+			<uni-swipe-action :options="options">
+				<view class="container" @tap="jumpToDetail(appearance.id)">
 					<view>{{appearance.age}}岁</view>
 					<view class="title">{{appearance.title}}</view>
 					<view class="row">
@@ -28,13 +28,13 @@
 						<view></view>
 					</view>
 				</view>
-			<!-- </uni-swipe-action> -->
+			</uni-swipe-action>
 		</view>
 	</view>
 </template>
 
 <script>
-	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import dataJson from '@/static/appData.json';
 	import util from '@/common/util.js'
 	export default {
@@ -57,7 +57,7 @@
 			
 		},
 		components:{
-			// uniSwipeAction
+			uniSwipeAction
 		},
 		onLoad:function(options){
 			util.loadObj(this.param,options)
@@ -148,6 +148,7 @@
 		line-height: 1.5;
 		text-align: center;
 		color: #fff;
+		z-index: 999999;
 	}
 </style>
 
