@@ -23,23 +23,28 @@
 </template>
 
 <script>
+	import util from '@/common/util.js'
 	export default {
 		data() {
 			return {
-				userId: null,
+				param:{
+					userId: null,
+					isFamily: 1,
+					language: null
+				},
 				basicFuncList: [],
 				otherFuncList: []
 			}
 		},
-		onLoad: function(option) {
-			this.userId = option.userId;
-			this.loadUserModule(option.userId);
+		onLoad: function(options) {
+			util.loadObj(this.param,options)
+			this.loadUserModule(options.userId);
 		},
 		methods: {
 			loadUserModule: function(userId) {
 				this.$http.get('module/user/all', {
-					'isFamily': 1,
-					'language': this.$common.language,
+					'isFamily': this.param.isFamily,
+					'language': this.param.language,
 					'userId': userId
 				}).then((res) => {
 					if (res.data.code === 200) {
@@ -55,8 +60,8 @@
 			},
 			loadAllModule: function() {
 				this.$http.get('module/all', {
-					'isFamily': 1,
-					'language': this.$common.language
+					'isFamily': this.param.isFamily,
+					'language': this.param.language
 				}).then((res) => {
 					if (res.data.code === 200) {
 						let _list = res.data.data.module;
@@ -101,9 +106,9 @@
 				var moduleIds = this.basicFuncList.map((item)=>item.id+'@'+item.sort)
 				this.$http.post('module/edit',{
 					moduleIds:moduleIds.join(','),
-					language: this.$common.language,
-					userId: this.userId,
-					isFamily: 1
+					language: this.param.language,
+					userId: this.param.userId,
+					isFamily: this.param.isFamily
 				}).then((res)=>{
 					if(res.data.code===200){
 						uni.showToast({
