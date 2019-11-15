@@ -297,7 +297,7 @@
 			}
 		},
 		{
-            "path" : "pages/family/index/index",
+            "path" : "pages/index/familyIndex",
             "style": {
             	"app-plus": {
             		"titleNView": false //禁用原生导航栏

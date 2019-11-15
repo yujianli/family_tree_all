@@ -1,6 +1,0 @@
-{
-  "titleNView": false,
-  "usingComponents": {
-    "uni-swiper-dot": "/components/uni-ui/uni-swiper-dot/uni-swiper-dot"
-  }
-}
