@@ -57,20 +57,25 @@
 
 		<view class="card_list">
 			<view class="more" @tap="toMore">更多</view>
-			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
-				<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-				<view class="card_inner">
-					<text class="card_title">{{contentInfo.content}}</text>
-					<view class="card_others">
-						<view class="tags">
-							<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-								{{tag}}
-							</text>
+			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
+				<uni-swipe-action :options="options">
+					<view class="card_item" @tap="jumpToDetail(contentInfo)">
+						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<text class="card_title">{{contentInfo.content}}</text>
+							<view class="card_others">
+								<view class="tags">
+									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+										{{tag}}
+									</text>
+								</view>
+								<text class="time">{{contentInfo.createDate | formatDate}}</text>
+							</view>
 						</view>
-						<text class="time">{{contentInfo.createDate | formatDate}}</text>
 					</view>
-				</view>
+				</uni-swipe-action>
 			</view>
+			
 		</view>
 	</view>
 </template>
@@ -79,6 +84,7 @@
 	import util from '@/common/util.js';
 	import moduleLink from '@/common/moduleLink.js';
 	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
+	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	export default {
 		data() {
 			return {
@@ -131,11 +137,18 @@
 					height: 0,
 					selectedBorder: 0
 				},
-				contentList:[]
+				contentList:[],
+				options: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#ED4848',
+						width:'105px'
+					}
+				}]
 			};
 		},
 		components: {
-			uniSwiperDot
+			uniSwiperDot,uniSwipeAction
 		},
 		computed:{
 

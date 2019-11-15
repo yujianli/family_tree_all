@@ -41,6 +41,10 @@
 				<text class="inner_title">鞋尺寸</text>
 				<view>{{appearanceInfo.shoeSize}}</view>
 			</view>
+			<view class="detail_tag">
+				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
+				aaa  bbb cccc
+			</view>
 
 			<view class="opt_container"><button class="btn_delete" @tap="remove">删除</button></view>
 		</view>
@@ -217,5 +221,25 @@ export default {
 
 	.btn_delete:after {
 		border: 0px;
+	}
+	
+	.detail_tag {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		margin-top: 24upx;
+		font-size: 28upx;
+		color: #56D282;
+	
+		text {
+			margin-right: 12upx;
+		}
+	}
+	
+	.icon_tags {
+		width: 38upx;
+		height: 38upx;
+		margin-right: 21upx;
 	}
 </style>
