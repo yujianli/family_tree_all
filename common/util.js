@@ -20,6 +20,9 @@ export default {
 		}
 		let _date = null;
 		switch (format) {
+			case 'yyyy-MM-dd':
+				_date = `${year}-${month}-${day}`;
+				break;
 			case 'yyyy/MM/dd':
 				_date = `${year}/${month}/${day}`;
 				break;

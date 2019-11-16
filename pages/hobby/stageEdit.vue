@@ -144,7 +144,10 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPeriodInfo
 						util.loadObj(this.stageInfo,_data)
+						console.log('——data');
+						console.log(_data);
 						this.stageInfo.begintime=util.dateFormat(_data.startTime)
+						this.stageInfo.endtime=util.dateFormat(_data.endTime)
 						let names=this.stageInfo.name.split(',');
 						this.newName=names[0];
 						this.brideName=names[1];

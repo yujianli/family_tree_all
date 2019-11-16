@@ -58,7 +58,7 @@
 		<view class="card_list">
 			<view class="more" @tap="toMore">更多</view>
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-				<uni-swipe-action :options="options">
+				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
 					<view class="card_item" @tap="jumpToDetail(contentInfo)">
 						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
 						<view class="card_inner">
@@ -163,21 +163,21 @@
 			let user = uni.getStorageSync("USER");
 			this.userId = user.id;
 			// 提醒试用到期
-			uni.showModal({
-				title: '温馨提示',
-				content: '试用期已到期，请支付年费后继续使用？',
-				cancelText:'以后再说',
-				confirmColor:'#4DC578',
-				success: function (res) {
-					if (res.confirm) { 
-					  uni.navigateTo({
-						url: '/pages/fee/fee'
-					  });
-					} else if (res.cancel) {
-						console.log('用户点击取消');
-					}
-				}
-			});
+			// uni.showModal({
+			// 	title: '温馨提示',
+			// 	content: '试用期已到期，请支付年费后继续使用？',
+			// 	cancelText:'以后再说',
+			// 	confirmColor:'#4DC578',
+			// 	success: function (res) {
+			// 		if (res.confirm) { 
+			// 		  uni.navigateTo({
+			// 			url: '/pages/fee/fee'
+			// 		  });
+			// 		} else if (res.cancel) {
+			// 			console.log('用户点击取消');
+			// 		}
+			// 	}
+			// });
 		},
 		onShow: function() {
 			this.loadModule(this.userId);
@@ -300,7 +300,36 @@
 				uni.navigateTo({
 					url:'/pages/all/all?userId='+this.userId
 				})
-			}
+			},
+			deleteContent(contentId) {
+				var self = this
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: function (res) {
+						if (res.confirm) {
+						  self.$http
+						  	.post('content/delete', {
+						  		language: self.$common.language,
+						  		contentId: contentId
+						  	})
+						  	.then(res => {
+						  		if (res.data.code === 200) {
+						  			self.loadIndexContent();
+						  		} else {
+						  			uni.showToast({
+						  				title: '内容删除失败',
+						  				icon: 'none'
+						  			});
+						  		}
+						  	});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 		}
 	};
 </script>

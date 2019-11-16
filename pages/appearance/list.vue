@@ -3,7 +3,7 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
-			<uni-swipe-action :options="options">
+			<uni-swipe-action :options="options" @click="remove(appearance.id)">
 				<view class="container" @tap="jumpToDetail(appearance.id)">
 					<view>{{appearance.age}}岁</view>
 					<view class="title">{{appearance.title}}</view>
@@ -26,6 +26,10 @@
 					<view class="row">
 						<view>鞋尺寸：{{appearance.shoeSize}}码</view>
 						<view></view>
+					</view>
+					<view class="row">
+						<view style="font-size: 25upx;color: #56D282;">aaa  bbb cccc ddd eee ffff ggg hh ii jj</view>
+						<view style="font-size: 25upx;color: #999999;">2019/11/12</view>
 					</view>
 				</view>
 			</uni-swipe-action>
@@ -115,6 +119,34 @@
 				uni.navigateTo({
 					url:'edit'+ util.jsonToQuery(this.param)
 				})
+			},
+			remove: function(id) {
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: res => {
+						if (res.confirm) {
+						  this.$http.post('appearance/deleteAppearance', {
+						  		appearanceId: id,
+						  		language: this.param.language
+						  	})
+						  	.then(res => {
+						  		if (res.data.code === 200) {
+						  			this.loadData();
+						  		} else {
+						  			uni.showToast({
+						  				title: '删除失败',
+						  				icon: 'none'
+						  			});
+						  		}
+						  	});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+						
+					}
+				});
 			}
 		}
 	}

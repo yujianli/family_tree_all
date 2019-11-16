@@ -5,20 +5,25 @@
 		</view>
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
-			<view class="card_item" v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id" @tap="jumpToDetail(contentInfo)">
-				<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-				<view class="card_inner">
-					<text class="card_title">{{contentInfo.content}}</text>
-					<view class="card_others">
-						<view class="tags">
-							<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-								{{tag}}
-							</text>
+			<view  v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
+				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
+					<view class="card_item" @tap="jumpToDetail(contentInfo)">
+						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<text class="card_title">{{contentInfo.content}}</text>
+							<view class="card_others">
+								<view class="tags">
+									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+										{{tag}}
+									</text>
+								</view>
+								<text class="time">{{contentInfo.createDate | formatDate}}</text>
+							</view>
 						</view>
-						<text class="time">{{contentInfo.createDate | formatDate}}</text>
 					</view>
-				</view>
+				</uni-swipe-action>
 			</view>
+			
 			<!-- 	</uni-swipe-action> -->
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
@@ -47,7 +52,7 @@
 
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
-	//import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import uniDrawer from '@/components/uni-ui/uni-drawer/uni-drawer.vue'
 	import util from '@/common/util.js'
 	export default {
@@ -89,7 +94,7 @@
 		},
 		components: {
 			uniSearchBar,
-			// uniSwipeAction,
+			uniSwipeAction,
 			uniDrawer
 		},
 		filters: {
@@ -190,7 +195,36 @@
 				});
 				this.selectedModules = activeArr;
 				this.closeDrawer();
-			}
+			},
+			deleteContent(contentId) {
+				var self = this
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: function (res) {
+						if (res.confirm) {
+						  self.$http
+						  	.post('content/delete', {
+						  		language: self.$common.language,
+						  		contentId: contentId
+						  	})
+						  	.then(res => {
+						  		if (res.data.code === 200) {
+						  			self.loadIndexContent();
+						  		} else {
+						  			uni.showToast({
+						  				title: '内容删除失败',
+						  				icon: 'none'
+						  			});
+						  		}
+						  	});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 		},
 		onNavigationBarButtonTap(event) {
 			const buttonIndex = event.index;
@@ -204,7 +238,8 @@
 				this.closeDrawer();
 				return true;
 			}
-		}
+		},
+		
 	}
 </script>
 
