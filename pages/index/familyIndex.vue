@@ -4,27 +4,28 @@
 
 		<view class="family_select_container">
 			<view @tap="tabSelect">
-				<text>家族</text>
-				<image src="../../../static/images/arrow.png"></image>
+				<text>{{familyTitle}}</text>
+				<image src="../../static/images/arrow.png"></image>
 			</view>
 
 			<view class="inner_select" :style="{'display': showSelect ? 'block' : 'none'}">
-				<view class="active">万少波的家族树</view>
-				<view>万氏家族</view>
+				<!-- <view class="active">万少波的家族树</view> -->
+				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
 			</view>
 		</view>
 
-		<view class="func_container" style="margin-top: 38upx;">
-			<view class="func_wrapper" v-for="(familyFunc,index) in familyFuncList" @tap="jumpToList(familyFunc.url)">
-				<image class="pic_menu" :src="familyFunc.pic"></image>
-				<text class="text">{{familyFunc.name}}</text>
+<!-- 		<view class="func_container" style="margin-top: 38upx;">
+			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
+				<image class="pic_menu" :src="basicFunc.icon"></image>
+				<text class="text">{{ basicFunc.name }}</text>
 			</view>
-		</view>
-
+		</view> -->
+		<funchead :userId="param.userId" :isFamily="2" :language="param.language"
+		@gotoList="jumpToList"></funchead>
 		<view class="family_training_container">
 			<view class="title">家训</view>
 			<view class="content">
-				夫君子之行，静以修身，俭以养德。非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。淫慢则不能励
+				{{instruction}}
 			</view>
 		</view>
 
@@ -50,69 +51,32 @@
 </template>
 
 <script>
+	import funchead from '@/components/funchead.vue'
+	import moduleLink from '@/common/moduleLink.js';
+	import util from '@/common/util.js';
 	export default {
-		onLoad: function() {},
+		
 		data() {
 			return {
+				param:{
+					userId:null,
+					isFamily: 2,
+					language: this.$common.language
+				},
+				familyId:null,
 				showSelect: false,
-				familyFuncList: [{
-						id: 1,
-						name: '族谱图',
-						pic: '../../../static/images/icon_func_1.png'
-					}, {
-						id: 2,
-						name: '成员列表',
-						pic: '../../../static/images/icon_func_2.png'
-					},
-					{
-						id: 3,
-						name: '大事记',
-						pic: '../../../static/images/icon_func_3.png'
-					},
-					{
-						id: 4,
-						name: '族群协商',
-						pic: '../../../static/images/icon_func_4.png'
-					},
-					{
-						id: 5,
-						name: '照片视频',
-						pic: '../../../static/images/icon_func_5.png'
-					},
-					{
-						id: 6,
-						name: '撰写家训',
-						pic: '../../../static/images/icon_func_6.png'
-					},
-					{
-						id: 7,
-						name: '家族设置',
-						pic: '../../../static/images/icon_func_7.png'
-					},
-					{
-						id: 8,
-						name: '传承',
-						pic: '../../../static/images/icon_func_8.png'
-					},
-					{
-						id: 9,
-						name: '亡故',
-						pic: '../../../static/images/icon_func_9.png'
-					},
-					{
-						id: 10,
-						name: '更多',
-						pic: '../../../static/images/icon_func_0.png'
-					}
-				],
+				familyTitle: '家族',
+				familyList:[],
+				instruction: '',
+				basicFuncList: [],
 				testInfoList: [{
 					id: 1,
 					content: '这是一则很重要的新闻，欢迎大家',
-					pic: '../../../static/images/icon_func_1.png',
+					pic: '../../static/images/icon_func_1.png',
 				}, {
 					id: 2,
 					content: '这是一则很重要的新闻，欢迎大家',
-					pic: '../../../static/images/icon_func_2.png',
+					pic: '../../static/images/icon_func_2.png',
 				}, {
 					id: 3,
 					content: '超级长的故，这是一则很重要的新闻，欢迎大家,超级长的故事',
@@ -120,11 +84,42 @@
 				}]
 			}
 		},
-		components: {},
+		components: {funchead},
+		onLoad: function() {
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.loadFamilyList()
+			// this.loadFamilyInfo()
+		},
 		methods: {
-			jumpToList: function(url) {
+			jumpToList: function(json) {
+				console.log(JSON.stringify(json))
+				let linkUrl= json.url
+				switch (json.moduleId) {
+					case 0:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId: this.param.userId,
+							isFamily: this.param.isFamily,
+							language: this.param.language
+						});
+						break;
+					case 21:
+						linkUrl = linkUrl + util.jsonToQuery({
+							familyId:this.familyId,
+							language: this.param.language
+						});
+						break;
+					default:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId: this.userId,
+							moduleId: module.id,
+							flag: moduleLink.linkFlag(module.id),
+							name: module.name,
+							language: this.language
+						});
+				}
 				uni.navigateTo({
-					url: url
+					url: linkUrl
 				});
 			},
 			jumpToAll: function() {
@@ -134,13 +129,71 @@
 			},
 			tabSelect: function() {
 				this.showSelect = !this.showSelect;
+			},
+			selFamily:function(item){
+				this.familyTitle=item.name
+				this.familyId=item.id
+				this.showSelect=false
+				this.loadFamilyInfo()
+			},
+			loadFamilyList:function(){
+				this.$http.get('family/familyList',{
+					userId: this.param.userId,
+					language: this.param.language
+				}).then((res)=>{
+					if(res.data.code===200){
+						this.familyList=res.data.data.familyList
+						this.familyId=this.familyList[0].id
+						this.selFamily(this.familyList[0])
+						// this.loadFamilyInfo()
+					}else{
+						uni.showToast({
+							title: '家族信息加载失败',icon:'none'
+						});
+					}
+				})
+			},
+			loadModule: function(userId) {
+				this.$http.get('module/user/all', {
+						isFamily: 2,
+						language: this.param.language,
+						userId: this.param.userId
+					}).then(res => {
+						if (res.data.code === 200) {
+							this.basicFuncList = res.data.data.module;
+							this.basicFuncList.push({
+								id: 0,
+								name: '更多',
+								icon: '../../static/images/icon_func_0.png'
+							});
+						} else {
+							uni.showToast({
+								title: '模块信息加载失败',
+								icon: 'none'
+							});
+						}
+					});
+			},
+			loadFamilyInfo:function(){
+				this.$http.get('family/detail',{
+					familyId:this.familyId,
+					language:this.param.language
+				}).then(res=>{
+					if(res.data.code===200){
+						this.instruction=res.data.data.family.instruction
+					}else{
+						uni.showToast({
+							title: '家族信息加载失败',icon:'none'
+						});
+					}
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-	@import '../../../common/card.less';
+	@import '../../common/card.less';
 
 	.status_bar {
 		height: var(--status-bar-height);

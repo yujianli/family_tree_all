@@ -24,6 +24,7 @@ export default {
 		28: "../hobby/list",
 		29: "../hobby/list",
 		30: "../hobby/list",
+		21: "../family/trainEdit",
 		31: "../hobby/stageList",
 		32: "../hobby/stageList"
 	},

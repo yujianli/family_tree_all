@@ -297,13 +297,29 @@
 			}
 		},
 		{
-            "path" : "pages/family/index/index",
+            "path" : "pages/index/familyIndex",
             "style": {
             	"app-plus": {
             		"titleNView": false //禁用原生导航栏
             	}
             }
-        },{
+        },
+		{
+		    "path" : "pages/family/trainEdit",
+			"style": {
+				"navigationBarTitleText": "家训",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
             "path" : "pages/family/search/search",
             "style": {
             	"navigationBarTitleText": "族人搜索"
@@ -354,7 +370,7 @@
 				"text": "人物"
 			},
 			{
-				"pagePath": "pages/family/index/index",
+				"pagePath": "pages/index/familyIndex",
 				"iconPath": "static/images/family.png",
 				"selectedIconPath": "static/images/family_active.png",
 				"text": "族谱"

@@ -155,6 +155,9 @@
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentCategory;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
+							if(!this.seledFlagId){
+								this.seledFlagId=this.moduleList[0].id
+							}
 							this.loadContent(this.seledFlagId);
 						} else {
 							uni.showToast({
@@ -174,6 +177,9 @@
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentPeriodList;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
+							if(!this.seledFlagId){
+								this.seledFlagId=this.moduleList[0].id
+							}
 							this.loadContent(this.seledFlagId);
 						} else {
 							uni.showToast({

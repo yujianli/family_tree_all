@@ -162,7 +162,6 @@
 		onLoad:function(){
 			let user = uni.getStorageSync("USER");
 			this.userId = user.id;
-			// this.userId=61
 			// 提醒试用到期
 			// uni.showModal({
 			// 	title: '温馨提示',
@@ -197,6 +196,13 @@
 					return false
 				}
 				switch (module.id) {
+					case 0:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId:this.userId,
+							isFamily:1,
+							language:this.$common.language
+						});
+						break;
 					case 1:
 						linkUrl = linkUrl + '?id=' + this.personInfo.id;
 						break;

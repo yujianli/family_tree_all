@@ -98,6 +98,7 @@
 				
 				uni.chooseImage({
 					count: _self.limit ? (_self.limit - _self.imageList.length) : 999,
+					sizeType: ['compressed'],
 					success: function(e){
 						var imagePathArr = e.tempFilePaths
 						
