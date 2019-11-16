@@ -21,6 +21,7 @@ export default {
 		18: "../hobby/list",
 		19: "../hobby/list",
 		21: "../family/trainEdit",
+		22: "../hobby/list",
 		31: "../hobby/stageList",
 		32: "../hobby/stageList"
 	},
@@ -44,6 +45,8 @@ export default {
 			case 12:
 				//八卦风水
 			case 18:
+				//大事记
+			case 22:
 				flag = 'category';
 				break;
 				//计划安排
