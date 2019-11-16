@@ -381,21 +381,25 @@
 					content: '确认删除该记录？',
 					confirmText: '确认',
 					success: res => {
-						this.$http.post('content/delete', {
-							contentId:this.param.contentId,
-							language: this.param.language,
-						}).then((res)=>{
-							if(res.data.code===200){
-								uni.navigateBack({
-									delta:2
-								})
-							}else{
-								uni.showToast({
-									title: '删除失败',
-									icon: 'none'
-								});
-							}
-						})
+						if (res.confirm) {
+						  this.$http.post('content/delete', {
+						  	contentId:this.param.contentId,
+						  	language: this.param.language,
+						  }).then((res)=>{
+						  	if(res.data.code===200){
+						  		uni.navigateBack({
+						  			delta:2
+						  		})
+						  	}else{
+						  		uni.showToast({
+						  			title: '删除失败',
+						  			icon: 'none'
+						  		});
+						  	}
+						  })
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
 					},
 				})
 			},

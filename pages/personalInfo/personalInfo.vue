@@ -1,7 +1,9 @@
 <template>
 	<view class="container">
-		<view class="wrapper avatar_wrapper">
-			<image :src="imageUrl" style="width: 80px;height: 80px;" @tap="openAlbum()"></image>
+		<view class="wrapper avatar_wrapper" style="position: relative;">
+			<image :src="imageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('avatar')"></image>
+			
+			<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx" @tap="openAlbum('signature')"></image>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">姓名</text>
@@ -150,39 +152,52 @@
 				endDate:util.getDate('end'),
 				isPassedAway: false,
 				baseInfo: {
-							userId:'',
-				            name: '',
-				            sex: '',
-				            birthPlace: '',
-				            placeResidence: '',
-				            mobile: '',
-							headUrl: '../../static/images/avatar.png',
-							birth: '',
-							bloodType: '',
-							birthTime: '',
-				            fixedTelephone: '',
-				            nationality: '',
-				            zodiac: '',
-				            corporeity: '',
-				            gene: '',
-				            brief: '',
-							language:'zh_CN',
-							constellation: '',
-							career: '',
-							emailAddress: '',
-							isPassedAway: 0,
-							passingAway: '',
-				            temperament: '',
-				            idCard: ''
-				        }
+					userId:'',
+					name: '',
+					sex: '',
+					birthPlace: '',
+					placeResidence: '',
+					mobile: '',
+					headUrl: '.',
+					signature: '',
+					birth: '',
+					bloodType: '',
+					birthTime: '',
+					fixedTelephone: '',
+					nationality: '',
+					zodiac: '',
+					corporeity: '',
+					gene: '',
+					brief: '',
+					language:'zh_CN',
+					constellation: '',
+					career: '',
+					emailAddress: '',
+					isPassedAway: 0,
+					passingAway: '',
+					temperament: '',
+					idCard: ''
+				},
+				defaultAvatar:'../../static/images/avatar.png',
+				defaultSignature:'../../static/images/avatar.png'
 			}
 		},
 		computed:{
 			imageUrl:function(){
 				if(this.baseInfo.headUrl){
 					return this.$common.picPrefix()+this.baseInfo.headUrl
+				} else {
+					return this.defaultAvatar
 				}
-			}
+			},
+			signatureUrl:function(){
+				if(this.baseInfo.signature){
+					return this.$common.picPrefix()+this.baseInfo.signature
+				} else {
+					return this.defaultSignature
+				}
+			},
+			
 		},
 		filters: {
 			formatDate: function(value) {
@@ -307,7 +322,7 @@
 					});
 				}
 			},
-			openAlbum:function(){
+			openAlbum:function(type){
 				let url = this.$common.uploadUrl(); 
 				let self = this;
 				uni.chooseImage({
@@ -335,7 +350,13 @@
 								}
 							})
 						}).then((res)=>{
-							self.baseInfo.headUrl=res
+							console.log(type);
+							if(type =='avatar'){
+								self.baseInfo.headUrl=res
+							} else if(type == 'signature'){
+								self.baseInfo.signature=res
+							}
+							
 							console.log(res)
 						})
 						        
@@ -358,6 +379,12 @@
 					this.baseInfo.passingAway='';
 					this.passingAwayDate='请选择';
 					delete requestParam['passingAway'];
+				}
+				if(this.baseInfo.headUrl == this.defaultAvatar){
+					this.baseInfo.headUrl = '';
+				}
+				if(this.baseInfo.signature == this.defaultSignature){
+					this.baseInfo.signature = '';
 				}
 				this.$http.post('base/editBase', requestParam).then((res)=>{
 					if(res.data.code===200){

@@ -20,6 +20,10 @@ export default {
 		17: "../hobby/placeList",
 		18: "../hobby/list",
 		19: "../hobby/list",
+		26: "../hobby/list",
+		28: "../hobby/list",
+		29: "../hobby/list",
+		30: "../hobby/list",
 		31: "../hobby/stageList",
 		32: "../hobby/stageList"
 	},
@@ -54,6 +58,20 @@ export default {
 				//校园经历
 			case 16:
 				//车辆
+			case 26:
+				flag = 'category';
+				break;
+				//通信记录
+			case 28:
+				flag = 'category';
+				break;
+				//自媒体关注
+			case 29:
+				flag = 'category';
+				break;
+				//收藏品
+			case 30:
+				//节日纪事
 			case 31:
 				//婚礼
 			case 32:

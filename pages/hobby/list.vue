@@ -15,7 +15,7 @@
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action :options="options">
+				<uni-swipe-action :options="options" @click="deleteContent(content.contentId)">
 					<view class="card_item"  @tap="jumpToDetail(content)">
 						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 						<view class="card_inner">
@@ -291,7 +291,37 @@
 							name: this.param.name
 						})
 				});
-			}
+			},
+			deleteContent(contentId) {
+				var self = this
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: function (res) {
+						if (res.confirm) {
+						  self.$http
+						  	.post('content/delete', {
+						  		language: self.param.language,
+						  		contentId: contentId
+						  	})
+						  	.then(res => {
+						  		if (res.data.code === 200) {
+						  			self.loadSelfDesc();
+						  			self.loadModule(self.param.moduleId);
+						  		} else {
+						  			uni.showToast({
+						  				title: '内容删除失败',
+						  				icon: 'none'
+						  			});
+						  		}
+						  	});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 		}
 	};
 </script>

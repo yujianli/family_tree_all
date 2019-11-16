@@ -94,7 +94,7 @@
 		filters: {
 			formatDate: function(value) {
 				if (!value) return ''
-				return util.dateFormat(value)
+				return util.dateFormat(value,'yyyy/MM/dd')
 			}
 		},
 		onLoad: function(options) {
