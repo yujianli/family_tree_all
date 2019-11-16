@@ -102,12 +102,24 @@
 				this.$emit('schange', e.detail.fullScreen)
 			},
 			delItem: function(item, index1, index2) {
+				let self = this
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除吗？',
 					success: function(res) {
 						if (res.confirm) {
-							console.log('用户点击确定');
+							self.$http.post('resource/delete',{
+								resourceId: item.id,
+								language: self.param.language
+							}).then(res=>{
+								if(res.data.code===200){
+									self.mediaList[index1].list.splice(index2,1)
+								}else{
+									uni.showToast({
+										title: '删除失败',icon:'none'
+									});
+								}
+							})
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}

@@ -20,11 +20,12 @@
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
 		</view> -->
-		<funchead :userId="param.userId" :isFamily="2" :language="param.language"></funchead>
+		<funchead :userId="param.userId" :isFamily="2" :language="param.language"
+		@gotoList="jumpToList"></funchead>
 		<view class="family_training_container">
 			<view class="title">家训</view>
 			<view class="content">
-				夫君子之行，静以修身，俭以养德。非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。淫慢则不能励
+				{{instruction}}
 			</view>
 		</view>
 
@@ -51,67 +52,23 @@
 
 <script>
 	import funchead from '@/components/funchead.vue'
+	import moduleLink from '@/common/moduleLink.js';
+	import util from '@/common/util.js';
 	export default {
 		
 		data() {
 			return {
 				param:{
 					userId:null,
+					isFamily: 2,
 					language: this.$common.language
 				},
+				familyId:null,
 				showSelect: false,
 				familyTitle: '家族',
 				familyList:[],
-				basicFuncList: [{
-						id: 1,
-						name: '族谱图',
-						pic: '../../static/images/icon_func_1.png'
-					}, {
-						id: 2,
-						name: '成员列表',
-						pic: '../../static/images/icon_func_2.png'
-					},
-					{
-						id: 3,
-						name: '大事记',
-						pic: '../../static/images/icon_func_3.png'
-					},
-					{
-						id: 4,
-						name: '族群协商',
-						pic: '../../static/images/icon_func_4.png'
-					},
-					{
-						id: 5,
-						name: '照片视频',
-						pic: '../../static/images/icon_func_5.png'
-					},
-					{
-						id: 6,
-						name: '撰写家训',
-						pic: '../../static/images/icon_func_6.png'
-					},
-					{
-						id: 7,
-						name: '家族设置',
-						pic: '../../static/images/icon_func_7.png'
-					},
-					{
-						id: 8,
-						name: '传承',
-						pic: '../../static/images/icon_func_8.png'
-					},
-					{
-						id: 9,
-						name: '亡故',
-						pic: '../../static/images/icon_func_9.png'
-					},
-					{
-						id: 10,
-						name: '更多',
-						pic: '../../static/images/icon_func_0.png'
-					}
-				],
+				instruction: '',
+				basicFuncList: [],
 				testInfoList: [{
 					id: 1,
 					content: '这是一则很重要的新闻，欢迎大家',
@@ -132,11 +89,37 @@
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
 			this.loadFamilyList()
+			// this.loadFamilyInfo()
 		},
 		methods: {
-			jumpToList: function(url) {
+			jumpToList: function(json) {
+				console.log(JSON.stringify(json))
+				let linkUrl= json.url
+				switch (json.moduleId) {
+					case 0:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId: this.param.userId,
+							isFamily: this.param.isFamily,
+							language: this.param.language
+						});
+						break;
+					case 21:
+						linkUrl = linkUrl + util.jsonToQuery({
+							familyId:this.familyId,
+							language: this.param.language
+						});
+						break;
+					default:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId: this.userId,
+							moduleId: module.id,
+							flag: moduleLink.linkFlag(module.id),
+							name: module.name,
+							language: this.language
+						});
+				}
 				uni.navigateTo({
-					url: url
+					url: linkUrl
 				});
 			},
 			jumpToAll: function() {
@@ -149,7 +132,9 @@
 			},
 			selFamily:function(item){
 				this.familyTitle=item.name
+				this.familyId=item.id
 				this.showSelect=false
+				this.loadFamilyInfo()
 			},
 			loadFamilyList:function(){
 				this.$http.get('family/familyList',{
@@ -158,6 +143,9 @@
 				}).then((res)=>{
 					if(res.data.code===200){
 						this.familyList=res.data.data.familyList
+						this.familyId=this.familyList[0].id
+						this.selFamily(this.familyList[0])
+						// this.loadFamilyInfo()
 					}else{
 						uni.showToast({
 							title: '家族信息加载失败',icon:'none'
@@ -186,6 +174,20 @@
 						}
 					});
 			},
+			loadFamilyInfo:function(){
+				this.$http.get('family/detail',{
+					familyId:this.familyId,
+					language:this.param.language
+				}).then(res=>{
+					if(res.data.code===200){
+						this.instruction=res.data.data.family.instruction
+					}else{
+						uni.showToast({
+							title: '家族信息加载失败',icon:'none'
+						});
+					}
+				})
+			}
 		}
 	}
 </script>

@@ -43,29 +43,35 @@
 					});
 					return false
 				}
-				switch (module.id) {
-					case 0:
-						linkUrl = linkUrl + util.jsonToQuery({
-							userId: this.userId,
-							isFamily: this.isFamily,
-							language: this.language
-						});
-						break;
-					case 1:
-						linkUrl = linkUrl + '?id=' + this.personId;
-						break;
-					default:
-						linkUrl = linkUrl + util.jsonToQuery({
-							userId: this.userId,
-							moduleId: module.id,
-							flag: moduleLink.linkFlag(module.id),
-							name: module.name,
-							language: this.language
-						});
-				}
-				uni.navigateTo({
-					url: linkUrl
-				});
+				this.$emit('gotoList', {
+					url:linkUrl,
+					moduleId:module.id,
+					moduleName:module.name,
+					flag:moduleLink.linkFlag(module.id)
+				})
+				// switch (module.id) {
+				// 	case 0:
+				// 		linkUrl = linkUrl + util.jsonToQuery({
+				// 			userId: this.userId,
+				// 			isFamily: this.isFamily,
+				// 			language: this.language
+				// 		});
+				// 		break;
+				// 	case 1:
+				// 		linkUrl = linkUrl + '?id=' + this.personId;
+				// 		break;
+				// 	default:
+				// 		linkUrl = linkUrl + util.jsonToQuery({
+				// 			userId: this.userId,
+				// 			moduleId: module.id,
+				// 			flag: moduleLink.linkFlag(module.id),
+				// 			name: module.name,
+				// 			language: this.language
+				// 		});
+				// }
+				// uni.navigateTo({
+				// 	url: linkUrl
+				// });
 			},
 			loadModule: function() {
 				this.$http.get('module/user/all', {

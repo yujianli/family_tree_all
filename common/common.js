@@ -12,5 +12,8 @@ export default {
 	},
 	uploadUrl(){
 		return this.apiPrefix + 'upload';
+	},
+	deleteImgUrl(){
+		return this.apiPrefix + 'resource/delete'
 	}
 }

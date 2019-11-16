@@ -139,7 +139,6 @@
 				tagList:[],
 				relationList:[],
 				imageList:[],
-				
 				relation:'',
 				tag:'',
 				
