@@ -184,7 +184,7 @@
 </script>
 
 <style lang="less" scoped>
-	@import '../../common/card.less';
+	@import '../../common/card.css';
 
 	.search_info {
 		margin-top: 40upx;

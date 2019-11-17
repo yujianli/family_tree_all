@@ -80,6 +80,7 @@
 </template>
 
 <script>
+	import MescrollUni from "mescroll-uni";
 	import util from '@/common/util.js';
 	import moduleLink from '@/common/moduleLink.js';
 	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
@@ -161,7 +162,7 @@
 			}
 		},
 		onLoad:function(){
-			
+			console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
 			// 	title: '温馨提示',
@@ -180,6 +181,7 @@
 			// });
 		},
 		onShow: function() {
+			console.log(JSON.stringify(this.personInfo))
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
 			this.loadModule();
@@ -348,7 +350,7 @@
 
 
 <style lang="less" scoped>
-	@import '../../common/card.less';
+	@import '../../common/card.css';
 
 	.status_bar {
 		height: var(--status-bar-height);

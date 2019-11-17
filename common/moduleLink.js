@@ -4,6 +4,7 @@ export default {
 		0: "../funcList/funcList",
 		1: "../personalInfo/personalInfo",
 		2: "../appearance/list",
+		3: "../hobby/list",
 		4: "../hobby/stageList",
 		5: "../video/video",
 		6: "../hobby/list",
@@ -38,6 +39,8 @@ export default {
 	linkFlag: function(moduleId) {
 		let flag = null;
 		switch (moduleId) {
+			//主要大事
+			case 3:
 			//健康状况
 			case 8:
 				//生活习惯

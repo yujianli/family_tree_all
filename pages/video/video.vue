@@ -204,7 +204,7 @@
 </script>
 
 <style lang="less" scoped>
-	@import '../../common/card.less';
+	@import '../../common/card.css';
 
 	.status_bar {
 		height: var(--status-bar-height);

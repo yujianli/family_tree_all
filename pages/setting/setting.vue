@@ -35,27 +35,20 @@
 </template>
 
 <script>
-	// import {
-	// 	mapState,
-	// 	mapMutations
-	// } from 'vuex';
 	export default {
 		data() {
 			return {
 				
 			}
 		},
-		// computed: mapState([ 'hasLogin','userInfo']),
 		methods: {
-			// ...mapMutations(['logout']),
 			bindLogin() {
-				if (this.hasLogin) {
-					this.logout()
-				} else {
-					uni.navigateTo({
-						url: '/pages/login/login'
-					})
-				}
+				
+				uni.removeStorageSync('USER');
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+				
 			},
 			setLanguage(){
 				uni.navigateTo({url: '/pages/language/language'});

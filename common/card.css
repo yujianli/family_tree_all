@@ -83,13 +83,12 @@
 	display: flex;flex-direction: row;
 	justify-content: space-between;align-items: center;
 	padding-top: 39upx;
-	text{
-		font-size: 31upx;color: #000;font-weight: 600;
-	}
-		
-	image{
-		width: 30upx;height: 29upx;
-	}
+}
+.self_intro_container text{
+	font-size: 31upx;color: #000;font-weight: 600;
+}
+.self_intro_container image{
+	width: 30upx;height: 29upx;
 }
 	
 .intro_detail{

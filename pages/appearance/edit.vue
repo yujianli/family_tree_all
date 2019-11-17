@@ -55,7 +55,12 @@
 	
 		<view class="tags_wrapper">
 			<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
+			<!-- #ifdef H5 -->
 			<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+			<!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="mul_tags">{{tagList | formatWords}}</view>
+			<!-- #endif -->
 			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
 		</view>
 		
@@ -272,7 +277,7 @@
 		text-align: right;
 		&.smallipt{
 			text-align: left;
-			padding:6upx 10upx;font-size: 12upx;flex:none;width:100upx;color: #EE9C36;
+			padding:6upx 10upx;font-size: 20upx;flex:none;width:100upx;color: #EE9C36;
 		}
 	}
 

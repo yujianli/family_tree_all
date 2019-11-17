@@ -12,10 +12,14 @@
 			<view class="intro_detail">{{ selfDesc }}</view>
 		</view>
 		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
+		
+		
+		
+		
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action :options="options" @tap="deleteContent(content.contentId)">
+				<uni-swipe-action :options="options" @click="deleteContent(content.contentId)">
 					<view class="card_item" @tap="jumpToDetail(content)">
 						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 						<view class="card_inner">
@@ -203,7 +207,8 @@
 					moduleId: null,
 					page: null,
 					rows: null,
-					language: null
+					language: null,
+					isFamily:null
 				};
 				util.loadObj(reqParam, this.param);
 				let modId = parseInt(this.param.moduleId)
@@ -215,9 +220,9 @@
 						case 'category':
 							reqParam['categoryId'] = flagId;
 							break;
-							// case 'period':
-							// 	reqParam['periodId'] = flagId;
-							// 	break;
+						case 'period':
+							reqParam['periodId'] = flagId;
+							break;
 						case 'place':
 							reqParam['placeId'] = flagId;
 							break;
@@ -310,31 +315,38 @@
 					success: function(res) {
 						if (res.confirm) {
 							self.$http.post('content/delete', {
-									language: self.param.language,
-									contentId: contentId
-								}).then(res => {
-									if (res.data.code === 200) {
-										self.loadSelfDesc();
-										self.loadModule(self.param.moduleId);
-									} else {
-										uni.showToast({
-											title: '内容删除失败',
-											icon: 'none'
-										});
-									}
-								});
+								language: self.param.language,
+								contentId: contentId
+							}).then(res => {
+								if (res.data.code === 200) {
+									self.loadSelfDesc();
+									self.loadModule(self.param.moduleId);
+								} else {
+									uni.showToast({
+										title: '内容删除失败',
+										icon: 'none'
+									});
+								}
+							});
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
 					}
 				});
-			}
+			},
+			bindClick(e) {
+				console.log(e)
+				uni.showToast({
+					title: `点击了${e.content.text}按钮`,
+					icon: 'none'
+				})
+			},
 		}
 	};
 </script>
 
 <style lang="less" scoped>
-	@import '../../common/card.less';
+	@import '../../common/card.css';
 
 	.category_container {
 		display: flex;

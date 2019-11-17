@@ -46,7 +46,8 @@
 					moduleId: null,
 					name: null,
 					flag: null,
-					language: null
+					language: null,
+					isFamily:null
 				},
 				stageList: [],
 				isEdit: false,
@@ -217,7 +218,7 @@
 </script>
 
 <style lang="less" scoped>
-	@import '../../common/card.less';
+	@import '../../common/card.css';
 
 	.search_info {
 		margin-top: 40upx;

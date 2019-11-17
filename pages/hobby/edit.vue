@@ -480,7 +480,7 @@
 		flex:1;
 		text-align:left;
 		&.smallipt{
-			padding:6upx 10upx;font-size: 12upx;flex:none;width:100upx;color: #EE9C36;
+			padding:6upx 10upx;font-size: 20upx;flex:none;width:100upx;color: #EE9C36;
 		}
 	}
 	.mul_input{

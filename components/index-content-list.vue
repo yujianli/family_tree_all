@@ -139,5 +139,55 @@
 </script>
 
 <style lang="less" scoped>
-	@import '../common/card.less';
+	@import '../common/card.css';
+	
+	.slide_list {
+		transition: all 100ms;
+		transition-timing-function: ease-out;
+		min-width: 200%;
+		height: 160upx;
+	}
+	
+	.now-message-info {
+		box-sizing:border-box;
+		display: flex;
+		align-items: center;
+		/* justify-content: space-between; */
+		font-size: 16px;
+		clear:both;
+		height: 160upx;
+		padding: 0 30upx;
+		margin-bottom: 20upx;
+		background: #FFFFFF;
+	}
+	.now-message-info,
+	.group-btn {
+		float: left;
+	}
+	
+	.group-btn {
+		display: flex;
+		flex-direction: row;
+		height: 160upx;
+		min-width: 100upx;
+		align-items: center;
+	
+	}
+	
+	.group-btn .btn-div {
+		height: 160upx;
+		color: #fff;
+		text-align: center;
+		padding: 0 50upx;
+		font-size: 34upx;
+		line-height: 160upx;
+	}
+	
+	.group-btn .top {
+		background-color: #c4c7cd;
+	}
+	
+	.group-btn .removeM {
+		background-color: #ff3b32;
+	}
 </style>

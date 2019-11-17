@@ -29,7 +29,7 @@
 					</view>
 					<view class="row">
 						<view style="font-size: 25upx;color: #56D282;">{{appearance.tags}}</view>
-						<view style="font-size: 25upx;color: #999999;">2019/11/12</view>
+						<view style="font-size: 25upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
 					</view>
 				</view>
 			</uni-swipe-action>
@@ -63,9 +63,14 @@
 		components:{
 			uniSwipeAction
 		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return ''
+				return util.dateFormat(value)
+			}
+		},
 		onLoad:function(options){
 			util.loadObj(this.param,options)
-			
 		},
 		onShow:function(){
 			this.loadData();
@@ -100,6 +105,8 @@
 							_list[i].shoeSize= this.bindProp('size',_list[i].shoeSize);
 							if(_list[i].tags){
 								_list[i].tags=_list[i].tags.replace(/,/g,' ')
+							}else{
+								_list[i].tags=' '
 							}
 						}
 						this.appearanceList=_list

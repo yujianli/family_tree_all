@@ -22,6 +22,11 @@
 			"style": {
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
+				},
+				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus": {
+					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				}
 			}
 		},
@@ -181,7 +186,7 @@
 				}
 			}
 		},
-		
+
 		{
 			"path": "pages/personalInfo/personalInfo",
 			"style": {
@@ -297,15 +302,15 @@
 			}
 		},
 		{
-            "path" : "pages/index/familyIndex",
-            "style": {
-            	"app-plus": {
-            		"titleNView": false //禁用原生导航栏
-            	}
-            }
-        },
+			"path": "pages/index/familyIndex",
+			"style": {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
 		{
-		    "path" : "pages/family/trainEdit",
+			"path": "pages/family/trainEdit",
 			"style": {
 				"navigationBarTitleText": "家训",
 				"app-plus": {
@@ -320,7 +325,7 @@
 			}
 		},
 		{
-		    "path" : "pages/family/inherit",
+			"path": "pages/family/inherit",
 			"style": {
 				"navigationBarTitleText": "传承",
 				"app-plus": {
@@ -335,45 +340,43 @@
 			}
 		},
 		{
-            "path" : "pages/family/search/search",
-            "style": {
-            	"navigationBarTitleText": "族人搜索"
-            }
-        },{
-            "path" : "pages/family/result/result",
-            "style": {
-            	"navigationBarTitleText": "族人搜索"
-            }
-        },{
-            "path" : "pages/family/info/info",
-            "style": {
-            	"navigationBarTitleText": "查看详情"
-            }
-        }
-        ,{
-            "path" : "pages/family/setting/setting",
-            "style": {
-            	"navigationBarTitleText": "家族设置",
-            	"app-plus": {
-            		"titleNView": {
-            			"buttons": [{
-            				"text": "编辑",
-            				"fontSize": "32upx",
-            				"color": "#333333"
-            			}]
-            		}
-            	}
-            }
-        }
-        ,{
-            "path" : "pages/404/404",
-            "style": {
-            	"app-plus": {
-            		"titleNView": false //禁用原生导航栏
-            	}
-            }
-        }
-    ],
+			"path": "pages/family/search/search",
+			"style": {
+				"navigationBarTitleText": "族人搜索"
+			}
+		}, {
+			"path": "pages/family/result/result",
+			"style": {
+				"navigationBarTitleText": "族人搜索"
+			}
+		}, {
+			"path": "pages/family/info/info",
+			"style": {
+				"navigationBarTitleText": "查看详情"
+			}
+		}, {
+			"path": "pages/family/setting/setting",
+			"style": {
+				"navigationBarTitleText": "家族设置",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/404/404",
+			"style": {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
