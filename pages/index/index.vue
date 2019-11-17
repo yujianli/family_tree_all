@@ -6,13 +6,13 @@
 				<text class="person_name person_name_active">{{personInfo.name}}（本人）</text>
 				<view class="tab_line"></view>
 			</view>
-<!-- 			<view>
+			<!-- 			<view>
 				<text class="person_name">杨林艳（配偶）</text>
 				<view class="tab_line tab_line_active"></view>
 			</view> -->
 		</view>
 		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
-<!-- 		<view class="func_container">
+		<!-- 		<view class="func_container">
 			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{ basicFunc.name }}</text>
@@ -90,10 +90,10 @@
 	export default {
 		data() {
 			return {
-				param:{
-					userId:null,
-					isFamily:1,
-					language:this.$common.language
+				param: {
+					userId: null,
+					isFamily: 1,
+					language: this.$common.language
 				},
 				basicFuncList: [{
 					id: -1,
@@ -143,25 +143,29 @@
 					height: 0,
 					selectedBorder: 0
 				},
-				contentList:[],
+				contentList: [],
 				options: [{
 					text: '删除',
 					style: {
 						backgroundColor: '#ED4848',
-						width:'105px'
+						width: '105px'
 					}
 				}]
 			};
 		},
-		components: {uniSwiperDot,uniSwipeAction,indexContentList,
-		funchead},
-		filters:{
-			formatDate:function(value){
-				if(!value) return ''
+		components: {
+			uniSwiperDot,
+			uniSwipeAction,
+			indexContentList,
+			funchead
+		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return ''
 				return util.dateFormat(value)
 			}
 		},
-		onLoad:function(){
+		onLoad: function() {
 			console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
@@ -212,10 +216,12 @@
 				});
 			},
 			jumpToList: function(json) {
-				let linkUrl= json.url
+				let linkUrl = json.url
 				switch (json.moduleId) {
 					case 0:
-						linkUrl = linkUrl + util.jsonToQuery(this.param);
+						let _param = this.param
+						_param['personId'] = this.personInfo.id
+						linkUrl = linkUrl + util.jsonToQuery(_param);
 						break;
 					case 1:
 						linkUrl = linkUrl + '?id=' + this.personInfo.id;
@@ -249,20 +255,20 @@
 			// },
 			loadModule: function() {
 				this.$http.get('module/user/all', this.param).then(res => {
-						if (res.data.code === 200) {
-							this.basicFuncList = res.data.data.module;
-							this.basicFuncList.push({
-								id: 0,
-								name: '更多',
-								icon: '../../static/images/icon_func_0.png'
-							});
-						} else {
-							uni.showToast({
-								title: '模块信息加载失败',
-								icon: 'none'
-							});
-						}
-					});
+					if (res.data.code === 200) {
+						this.basicFuncList = res.data.data.module;
+						this.basicFuncList.push({
+							id: 0,
+							name: '更多',
+							icon: '../../static/images/icon_func_0.png'
+						});
+					} else {
+						uni.showToast({
+							title: '模块信息加载失败',
+							icon: 'none'
+						});
+					}
+				});
 			},
 			loadUserInfo: function() {
 				this.$http

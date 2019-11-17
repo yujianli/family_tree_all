@@ -126,7 +126,8 @@
 						linkUrl = linkUrl + util.jsonToQuery({
 							userId: this.param.userId,
 							isFamily: this.param.isFamily,
-							language: this.param.language
+							language: this.param.language,
+							familyId: this.param.familyId
 						});
 						break;
 					case 21:
