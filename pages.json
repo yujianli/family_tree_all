@@ -178,7 +178,7 @@
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
-							"text": "保存",
+							"text": "编辑",
 							"fontSize": "32upx",
 							"color": "#333333"
 						}]
