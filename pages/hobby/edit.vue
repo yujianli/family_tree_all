@@ -11,6 +11,13 @@
 			<text class="inner_title">地点：</text>
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
+		<!-- 节日纪事 -->
+		<view class="wrapper" v-if="param.moduleId==='30'">
+			<text class="inner_title">节日：</text>
+			<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="fesIdx" :range="festivalList">
+				<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
+			</picker>
+		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
@@ -36,7 +43,7 @@
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
-		</view>
+			</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
 		@delete="deleteImage" @add="addImage" 
@@ -86,6 +93,7 @@
 	import util from '@/common/util.js'
 	import config from '@/common/componetConfig.js'
 	import module from '@/common/moduleLink.js'
+	import dataJson from '@/static/appData.json';
 	export default {
 		data() {
 			return {
@@ -111,6 +119,8 @@
 				stageList:[{id:-1,name:'请选择'}],
 				placeIdx:0,
 				placeList:[{id:-1,address:'请选择'}],
+				fesIdx:[0,0],
+				festivalStr:'',
 				typeEnable: false,
 				contentInfo:{
 					periodId: null,
@@ -156,6 +166,19 @@
 			}
 		},
 		computed:{
+			festivalList:function(){
+				let arr=['请选择'];
+				let dt=new Date();
+				let curYear=dt.getFullYear();
+				for(let i=curYear-10,j=curYear+10;i<=j;i++){
+					arr.push(i.toString())
+				}
+				let fesArr=dataJson['festival']
+				let arrs=[]
+				arrs[0]=arr
+				arrs[1]=fesArr
+				return arrs;
+			},
 			createDate:function(){
 				return util.dateFormat(this.contentInfo.createDate)
 			},
@@ -247,6 +270,13 @@
 						if(this.contentInfo.associatedPerson){
 							this.relationList=this.contentInfo.associatedPerson.split(',')
 						}
+						if(this.param.moduleId==='30' && this.contentInfo.weather){
+							let arrs=this.contentInfo.weather.split('-');
+							let idx1 = this.festivalList[0].findIndex(item=>item===arrs[0])
+							let idx2 = this.festivalList[1].findIndex(item=>item===arrs[1])
+							this.fesIdx[0]=idx1
+							this.fesIdx[1]=idx2
+						}
 						let id=null;
 						switch(this.param.flag){
 							case 'category':
@@ -332,6 +362,11 @@
 						}
 					})
 			},
+			bindMultiPickerColumnChange:function(e){
+				console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value)
+				this.fesIdx[e.detail.column]=e.detail.value
+				this.$forceUpdate()
+			},
 			bindDateChange:function(e){
 				this.contentInfo.time=e.target.value
 			},
@@ -362,6 +397,14 @@
 				postParam.associatedPerson=this.relationList.join(',')
 				postParam.isFamily=this.param.isFamily
 				postParam.language=this.param.language
+				//节日纪事 节日存储字段到天气字段里
+				if(this.param.moduleId==='30'){
+					if(this.fesIdx[0]!==0 && this.fesIdx[1]!==0){
+						let year=this.festivalList[0][this.fesIdx[0]];
+						let name=this.festivalList[1][this.fesIdx[1]];
+						postParam.weather=year+'-'+name
+					}
+				}
 				if(this.uploadConfig.imageData.length){
 					postParam['imageUrls']=this.uploadConfig.imageData.join(',')
 				}

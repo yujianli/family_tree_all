@@ -4,6 +4,7 @@
 			<view class="detail_hd">
 				<view>{{content.time | formatDate}}</view>
 				<view>{{content.position}}</view>
+				<view v-if="param.moduleId==='30'">{{content.weather}}</view>
 				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
 				<view v-if="ctrlEnable.stageCtrl">{{content.periodName}}</view>
 				<view v-if="ctrlEnable.placeCtrl">{{content.address}}</view>
