@@ -43,7 +43,7 @@
 			</view>
 			<view class="detail_tag">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
-				aaa  bbb cccc
+				<view>{{tags}}</view>
 			</view>
 
 			<view class="opt_container"><button class="btn_delete" @tap="remove">删除</button></view>
@@ -78,6 +78,12 @@ export default {
 				tags: ''
 			}
 		};
+	},
+	computed:{
+		tags:function(){
+			if(!this.appearanceInfo.tags) return ''
+			return this.appearanceInfo.tags.replace(/,/g,' ')
+		}
 	},
 	onLoad: function(options) {
 		util.loadObj(this.param,options)

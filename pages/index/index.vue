@@ -11,13 +11,13 @@
 				<view class="tab_line tab_line_active"></view>
 			</view> -->
 		</view>
-		<view class="func_container">
-			<!-- <navigator url="/pages/hobby/list/list" hover-class="navigator-hover"> -->
+		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
+<!-- 		<view class="func_container">
 			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
-		</view>
+		</view> -->
 		<!-- 		<view class="person_intro">
 			<image src="personInfo.headUrl" style="width: 44px;height: 44px;"></image>
 			<text class="name">{{personInfo.name}}</text>
@@ -54,8 +54,8 @@
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
-
-		<view class="card_list">
+		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
+		<!-- <view class="card_list">
 			<view class="more" @tap="toMore">更多</view>
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
@@ -75,8 +75,7 @@
 					</view>
 				</uni-swipe-action>
 			</view>
-			
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -85,15 +84,21 @@
 	import moduleLink from '@/common/moduleLink.js';
 	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import indexContentList from '@/components/index-content-list.vue'
+	import funchead from '@/components/funchead.vue'
 	export default {
 		data() {
 			return {
+				param:{
+					userId:null,
+					isFamily:1,
+					language:this.$common.language
+				},
 				basicFuncList: [{
 					id: -1,
 					name: '更多',
 					icon: '../../static/images/icon_func_0.png'
 				}],
-				userId: -1,
 				personInfo: {
 					id: -1,
 					headUrl: '../../static/images/test.png',
@@ -147,12 +152,8 @@
 				}]
 			};
 		},
-		components: {
-			uniSwiperDot,uniSwipeAction
-		},
-		computed:{
-
-		},
+		components: {uniSwiperDot,uniSwipeAction,indexContentList,
+		funchead},
 		filters:{
 			formatDate:function(value){
 				if(!value) return ''
@@ -160,8 +161,7 @@
 			}
 		},
 		onLoad:function(){
-			let user = uni.getStorageSync("USER");
-			this.userId = user.id;
+			
 			// 提醒试用到期
 			// uni.showModal({
 			// 	title: '温馨提示',
@@ -180,66 +180,73 @@
 			// });
 		},
 		onShow: function() {
-			this.loadModule(this.userId);
-			this.loadUserInfo(this.userId);
-			this.loadIndexContent();
-			
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.loadModule();
+			this.loadUserInfo();
+			// this.loadIndexContent();
+			// this.$refs.funchead.loadIndexContent()
 		},
 		methods: {
-			jumpToList: function(module) {
-				let linkUrl = moduleLink.linkUrl[module.id];
-				if (!linkUrl) {
-					uni.showToast({
-						title: '正在开发中...',
-						icon: 'none'
-					});
-					return false
-				}
-				switch (module.id) {
-					case 0:
-						linkUrl = linkUrl + util.jsonToQuery({
-							userId:this.userId,
-							isFamily:1,
-							language:this.$common.language
+			loadModule: function() {
+				this.$http.get('module/user/all', {
+					isFamily: this.param.isFamily,
+					language: this.param.language,
+					userId: this.param.userId
+				}).then(res => {
+					if (res.data.code === 200) {
+						this.basicFuncList = res.data.data.module;
+						this.basicFuncList.push({
+							id: 0,
+							name: '更多',
+							icon: '../../static/images/icon_func_0.png'
 						});
+					} else {
+						uni.showToast({
+							title: '模块信息加载失败',
+							icon: 'none'
+						});
+					}
+				});
+			},
+			jumpToList: function(json) {
+				let linkUrl= json.url
+				switch (json.moduleId) {
+					case 0:
+						linkUrl = linkUrl + util.jsonToQuery(this.param);
 						break;
 					case 1:
 						linkUrl = linkUrl + '?id=' + this.personInfo.id;
 						break;
 					default:
 						linkUrl = linkUrl + util.jsonToQuery({
-							userId: this.userId,
-							moduleId: module.id,
-							flag: moduleLink.linkFlag(module.id),
-							name: module.name,
-							language: this.$common.language
+							userId: this.param.userId,
+							moduleId: json.moduleId,
+							flag: moduleLink.linkFlag(json.moduleId),
+							name: json.moduleName,
+							language: this.param.language,
+							isFamily: this.param.isFamily
 						});
 				}
 				uni.navigateTo({
 					url: linkUrl
 				});
 			},
-			jumpToDetail:function(content){
-				let p = {
-					userId: this.userId,
-					moduleId: content.moduleId,
-					flag: content.flag,
-					contentId: content.id,
-					name: content.moduleName
-				}
-				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
-				uni.navigateTo({
-					url: url
-				});
-			},
-			loadModule: function(userId) {
-				this.$http
-					.get('module/user/all', {
-						isFamily: 1,
-						language: this.$common.language,
-						userId: userId
-					})
-					.then(res => {
+			// jumpToDetail:function(content){
+			// 	let p = {
+			// 		userId: this.param.userId,
+			// 		moduleId: content.moduleId,
+			// 		flag: content.flag,
+			// 		contentId: content.id,
+			// 		name: content.moduleName
+			// 	}
+			// 	let url = '/pages/hobby/detail' + util.jsonToQuery(p);
+			// 	uni.navigateTo({
+			// 		url: url
+			// 	});
+			// },
+			loadModule: function() {
+				this.$http.get('module/user/all', this.param).then(res => {
 						if (res.data.code === 200) {
 							this.basicFuncList = res.data.data.module;
 							this.basicFuncList.push({
@@ -255,11 +262,11 @@
 						}
 					});
 			},
-			loadUserInfo: function(userId) {
+			loadUserInfo: function() {
 				this.$http
 					.get('base/selectBase', {
-						language: this.$common.language,
-						userId: userId
+						language: this.param.language,
+						userId: this.param.userId
 					})
 					.then(res => {
 						if (res.data.code === 200) {
@@ -272,64 +279,69 @@
 						}
 					});
 			},
-			loadIndexContent:function(){
-				this.$http.get('content/userCards',{
-					userId:this.userId,
-					page:1,
-					rows:20,
-					language:this.$common.language
-				}).then((res)=>{
-					if(res.data.code===200){
-						this.contentList = res.data.data.contentList;
-						for(let i=0;i<this.contentList.length;i++){
-							if(this.contentList[i].tags){
-								this.contentList[i].tags=this.contentList[i].tags.split(',')
-							}
-							if(this.contentList[i].imageUrl){
-								this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
-							}
-						}
-					}else{
-						uni.showToast({
-							title: '首页内容加载失败',icon:'none'
-						});
-					}
-				})
-			},
-			toMore:function(){
-				uni.navigateTo({
-					url:'/pages/all/all?userId='+this.userId
-				})
-			},
-			deleteContent(contentId) {
-				var self = this
-				uni.showModal({
-					title: '删除',
-					content: '确认删除该记录？',
-					confirmText: '确认',
-					success: function (res) {
-						if (res.confirm) {
-						  self.$http
-						  	.post('content/delete', {
-						  		language: self.$common.language,
-						  		contentId: contentId
-						  	})
-						  	.then(res => {
-						  		if (res.data.code === 200) {
-						  			self.loadIndexContent();
-						  		} else {
-						  			uni.showToast({
-						  				title: '内容删除失败',
-						  				icon: 'none'
-						  			});
-						  		}
-						  	});
-						} else if (res.cancel) {
-							console.log('用户点击取消');
-						}
-					}
-				});
-			},
+			// loadIndexContent:function(){
+			// 	this.$http.get('content/userCards',{
+			// 		userId:this.param.userId,
+			// 		page:1,
+			// 		rows:10,
+			// 		language:this.param.language,
+			// 		isFamily:this.param.isFamily
+			// 	}).then((res)=>{
+			// 		if(res.data.code===200){
+			// 			this.contentList = res.data.data.contentList;
+			// 			for(let i=0;i<this.contentList.length;i++){
+			// 				if(this.contentList[i].tags){
+			// 					this.contentList[i].tags=this.contentList[i].tags.split(',')
+			// 				}
+			// 				if(this.contentList[i].imageUrl){
+			// 					this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
+			// 				}
+			// 			}
+			// 		}else{
+			// 			uni.showToast({
+			// 				title: '首页内容加载失败',icon:'none'
+			// 			});
+			// 		}
+			// 	})
+			// },
+			// toMore:function(){
+			// 	uni.navigateTo({
+			// 		url:'/pages/all/all'+ util.jsonToQuery({
+			// 			userId: this.param.userId,
+			// 			language: this.param.language,
+			// 			isFamily: this.isFamily
+			// 		})
+			// 	})
+			// },
+			// deleteContent(contentId) {
+			// 	var self = this
+			// 	uni.showModal({
+			// 		title: '删除',
+			// 		content: '确认删除该记录？',
+			// 		confirmText: '确认',
+			// 		success: function (res) {
+			// 			if (res.confirm) {
+			// 			  self.$http
+			// 			  	.post('content/delete', {
+			// 			  		language: self.$common.language,
+			// 			  		contentId: contentId
+			// 			  	})
+			// 			  	.then(res => {
+			// 			  		if (res.data.code === 200) {
+			// 			  			self.loadIndexContent();
+			// 			  		} else {
+			// 			  			uni.showToast({
+			// 			  				title: '内容删除失败',
+			// 			  				icon: 'none'
+			// 			  			});
+			// 			  		}
+			// 			  	});
+			// 			} else if (res.cancel) {
+			// 				console.log('用户点击取消');
+			// 			}
+			// 		}
+			// 	});
+			// }
 		}
 	};
 </script>

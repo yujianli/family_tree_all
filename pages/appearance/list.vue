@@ -28,7 +28,7 @@
 						<view></view>
 					</view>
 					<view class="row">
-						<view style="font-size: 25upx;color: #56D282;">aaa  bbb cccc ddd eee ffff ggg hh ii jj</view>
+						<view style="font-size: 25upx;color: #56D282;">{{appearance.tags}}</view>
 						<view style="font-size: 25upx;color: #999999;">2019/11/12</view>
 					</view>
 				</view>
@@ -98,6 +98,9 @@
 							_list[i].clothSize= this.bindProp('size',_list[i].clothSize);
 							_list[i].trousersSize= this.bindProp('size',_list[i].trousersSize);
 							_list[i].shoeSize= this.bindProp('size',_list[i].shoeSize);
+							if(_list[i].tags){
+								_list[i].tags=_list[i].tags.replace(/,/g,' ')
+							}
 						}
 						this.appearanceList=_list
 					}else{

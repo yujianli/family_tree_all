@@ -47,6 +47,21 @@
 			}
 		},
 		{
+			"path": "pages/hobby/edit",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/hobby/stageList",
 			"style": {
 				"navigationBarTitleText": "",
@@ -123,21 +138,6 @@
 		},
 		{
 			"path": "pages/hobby/placeEdit",
-			"style": {
-				"navigationBarTitleText": "",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "提交",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/hobby/edit",
 			"style": {
 				"navigationBarTitleText": "",
 				"app-plus": {
@@ -320,6 +320,21 @@
 			}
 		},
 		{
+		    "path" : "pages/family/inherit",
+			"style": {
+				"navigationBarTitleText": "传承",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
             "path" : "pages/family/search/search",
             "style": {
             	"navigationBarTitleText": "族人搜索"
@@ -347,6 +362,14 @@
             				"color": "#333333"
             			}]
             		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/404/404",
+            "style": {
+            	"app-plus": {
+            		"titleNView": false //禁用原生导航栏
             	}
             }
         }

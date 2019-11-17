@@ -4,8 +4,8 @@
 			<view class="wrapper">
 				<text class="inner_title">婚礼时间</text>
 				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
-				 :value="stageInfo.begintime">
-					<view>{{stageInfo.begintime | formatDate}}</view>
+				 :value="startTime">
+					<view>{{startTime}}</view>
 				</picker>
 			</view>
 			<view class="wrapper">
@@ -18,7 +18,7 @@
 			</view>
 		</view>
 		<view v-else>
-			<view class="wrapper">
+			<view class="wrapper" v-if="param.moduleId!=='27'">
 				<text class="inner_title" v-if="param.moduleId==='31'">购买年月</text>
 				<text class="inner_title" v-else>起始年月</text>
 				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
@@ -26,7 +26,7 @@
 					<view>{{startTime}}</view>
 				</picker>
 			</view>
-			<view class="wrapper">
+			<view class="wrapper" v-if="param.moduleId!=='27'">
 				<text class="inner_title" v-if="param.moduleId==='31'">出售年月</text>
 				<text class="inner_title" v-else>结束年月</text>
 				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'"
@@ -38,10 +38,20 @@
 				<text class="inner_title">{{typeCtrlName}}</text>
 				<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
 			</view>
+			<view class="wrapper" v-if="param.moduleId==='27'">
+				<text class="inner_title">联系电话</text>
+				<input class="input" type="text" placeholder-style="color:#999" placeholder="联系电话" v-model="stageInfo.mobile" />
+			</view>
+			<view class="wrapper" v-if="param.moduleId==='27'">
+				<text class="inner_title">类型</text>
+				<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
+					<view class="input">{{ typeList[idx].name }}</view>
+				</picker>
+			</view>
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" placeholder="内容" />
-		</view>
+			</view>
 		<robby-image-upload v-model="uploadConfig.imageData"
 		@delete="deleteImage" @add="addImage" 
 		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
@@ -68,16 +78,21 @@
 					moduleId: null,
 					language: null
 				},
+				id:null,
 				stageInfo:{
 					begintime:null,
 					endtime:null,
 					description:'',
 					name:'',
 					id:null,
-					imageUrl:null
+					imageUrl:null,
+					mobile:'',
+					type:''
 				},
 				brideName:'',
 				newName:'',
+				typeList:[{id:-1,name:'请选择'}],
+				idx:0,
 				uploadConfig:{
 					serverUrl: this.$common.uploadUrl(),
 					serverUrlDeleteImage: null,
@@ -125,10 +140,15 @@
 			uni.setNavigationBarTitle({
 				title: options.name
 			})
+			this.id=options.id
 			util.loadObj(this.param,options)
-			if(options.id){
-				this.loadData(options.id)
+			if(this.param.moduleId==='27'){
+				//同事朋友模块初始化类型
+				this.loadTypeData()
+			}else{
+				if(options.id) this.loadData(options.id)
 			}
+			
 			let token=uni.getStorageSync('USER').token;
 			this.uploadConfig.header={'token':token};
 		},
@@ -144,13 +164,14 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPeriodInfo
 						util.loadObj(this.stageInfo,_data)
-						console.log('——data');
-						console.log(_data);
 						this.stageInfo.begintime=util.dateFormat(_data.startTime)
 						this.stageInfo.endtime=util.dateFormat(_data.endTime)
 						let names=this.stageInfo.name.split(',');
 						this.newName=names[0];
 						this.brideName=names[1];
+						if(this.stageInfo.type){
+							this.idx=this.typeList.findIndex((item)=>item.id==this.stageInfo.type)
+						}
 						if(this.stageInfo.imageUrl){
 							let imgs=this.stageInfo.imageUrl.split(',')
 							for(let i=0;i<imgs.length;i++){
@@ -164,6 +185,26 @@
 					}
 				})
 			},
+			loadTypeData:function(){
+				this.$http.get('category/query',{
+					moduleId:this.param.moduleId,
+					language:this.param.language
+				}).then(res=>{
+					if(res.data.code===200){
+						this.typeList=this.typeList.concat(res.data.data.contentCategory);
+						if(this.id) this.loadData(this.id)
+					}else{
+						uni.showToast({
+							title: '加载失败',icon:'none'
+						});
+					}
+				})
+			},
+			typeBindPickerChange:function(e){
+				let id = this.typeList[e.target.value].id
+				this.stageInfo.type=id;
+				this.idx=e.target.value
+			},
 			bindSDateChange: function(e) {
 				this.stageInfo.begintime = e.target.value
 			},
@@ -171,13 +212,17 @@
 				this.stageInfo.endtime = e.target.value
 			},
 			saveSchedule:function(){
-				let postParam= {name:null,description:null,begintime:null,endtime:null}
+				let postParam= {name:null,description:null,begintime:null,endtime:null,mobile:null,type:null}
 				util.loadObj(postParam,this.stageInfo);
 				if(this.param.moduleId==='32'){
 					postParam['name']=this.newName+','+this.brideName
 				}
 				postParam.language=this.param.language
 				let url = null;
+				//接口bug，不加时间提交失败
+				if(this.param.moduleId==='27'){
+					postParam.begintime=util.getDate()
+				}
 				if(this.stageInfo.id){
 					url='contentPeriod/editPeriod';
 					postParam.contentPeriodId=this.stageInfo.id

@@ -2,9 +2,9 @@
 	<view class="container">
 		<view class="wrapper">
 			<text class="inner_title">时间：</text>
-			<picker class="input" mode="date" :value="contentInfo.createDate" :start="startDate" :end="endDate" @change="bindDateChange"
+			<picker class="input" mode="date" :value="contentInfo.time" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'">
-				<view>{{contentInfo.createDate | formatDate2}}</view>
+				<view>{{contentInfo.time}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -20,7 +20,7 @@
 		<view class="wrapper" v-if="ctrlEnable.stageCtrl">
 			<text class="inner_title">{{stageCtrlName}}：</text>
 			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stages" range-key="name">
-				<view class="input" v-if="['31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
+				<view class="input" v-if="['27','31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
 				<view class="input" v-else>{{stages[stageIdx].startTime| formatDate}}-{{stages[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
 			</picker>
 		</view>
@@ -36,7 +36,7 @@
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
-			</view>
+		</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
 		@delete="deleteImage" @add="addImage" 
@@ -49,14 +49,24 @@
 		<view>
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
+				<!-- #ifdef H5 -->
 				<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+				<!-- #endif -->
+				<!-- #ifdef APP-PLUS -->
+				<view class="mul_tags" >{{tagList | formatWords}}</view>
+				<!-- #endif -->
 				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
 			</view>
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
+				<!-- #ifdef H5 -->
 				<view class="mul_tags" :style="{display: relationList.length > 0 ? 'inline-block': 'none'}">{{relationList | formatWords}}</view>
+				<!-- #endif -->
+				<!-- #ifdef APP-PLUS -->
+				<view class="mul_tags" >{{relationList | formatWords}}</view>
+				<!-- #endif -->
 				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" placeholder="添加关联" />
 			</view>
 		</view>	
@@ -85,7 +95,8 @@
 					contentId: null,
 					flag: null,
 					name: null,
-					language: null
+					language: null,
+					isFamily: null
 				},
 				ctrlEnable:{
 					typeCtrl: true,
@@ -121,7 +132,7 @@
 					categoryId: null,
 					periodStartTime: null,
 					periodEndTime:null,
-					createDate: util.getDate()
+					time: util.getDate()
 				},
 				startDate:util.getDate('start'),
 				endDate:util.getDate('end'),
@@ -146,9 +157,7 @@
 		},
 		computed:{
 			createDate:function(){
-				let dt= util.dateFormat(this.contentInfo.createDate)
-				console.log(dt)
-				return dt;
+				return util.dateFormat(this.contentInfo.createDate)
 			},
 			stageCtrlName:function(){
 				let _name = module.viewCtrlName[this.param.moduleId]
@@ -182,8 +191,10 @@
 				return util.dateFormat(value)
 			},
 			formatWords:function(value){
-				if(!value) return []
-				return value.join('  ');
+				if(!value || value.length<=0) return []
+				let str= value.join('  ');
+				console.log(str)
+				return str
 			}
 		},
 		components:{robbyImageUpload,uniPopup,wPicker,hUpload},
@@ -227,7 +238,9 @@
 			loadContent:function(){
 				this.$http.get('content/detail', this.param).then((res)=>{
 					if (res.data.code === 200) {
-						this.contentInfo = res.data.data.contentInfo
+						let _data = res.data.data.contentInfo
+						util.loadObj(this.contentInfo,_data)
+						this.contentInfo.time=util.dateFormat(this.contentInfo.time)
 						if(this.contentInfo.tags){
 							this.tagList=this.contentInfo.tags.split(',')
 						}
@@ -320,7 +333,7 @@
 					})
 			},
 			bindDateChange:function(e){
-				this.contentInfo.createDate=e.target.value
+				this.contentInfo.time=e.target.value
 			},
 			typeBindPickerChange:function(e){
 				let id = this.typeList[e.target.value].id
@@ -341,15 +354,18 @@
 				let postParam={
 					content:null,categoryId:null,periodId:null,placeId:null,
 					tags:null,position:null,language:null,imageUrls:null,
-					videoUrls:null,duration:null,associatedPerson:null,weather:null
+					videoUrls:null,duration:null,associatedPerson:null,weather:null,
+					isFamily:null
 				}
 				util.loadObj(postParam,this.contentInfo)
 				postParam.tags=this.tagList.join(',')
 				postParam.associatedPerson=this.relationList.join(',')
+				postParam.isFamily=this.param.isFamily
 				postParam.language=this.param.language
 				if(this.uploadConfig.imageData.length){
 					postParam['imageUrls']=this.uploadConfig.imageData.join(',')
 				}
+				postParam.time=this.contentInfo.time
 				let url = null;
 				if(this.contentInfo.id){
 					url='content/edit';
@@ -359,8 +375,8 @@
 					postParam.userId=this.param.userId
 					postParam.moduleId=this.param.moduleId
 					postParam.flag=this.param.flag
-					postParam.time=this.contentInfo.createDate
 				}
+				
 				util.nullFilter(postParam)
 				this.$http.post(url,postParam).then((res)=>{
 					if(res.data.code===200){
@@ -415,16 +431,14 @@
 				console.log(e)
 			},
 			setTags:function(e){
-				let tagList = this.tagList;
 				if(e.detail.value){
-					tagList.push(e.detail.value);
+					this.tagList.push(e.detail.value);
 					this.tag = '';
 				}
 			},
 			setRelation:function(e){
-				let relationList = this.relationList;
 				if(e.detail.value){
-					relationList.push(e.detail.value);
+					this.relationList.push(e.detail.value);
 					this.relation = '';
 				}
 			}

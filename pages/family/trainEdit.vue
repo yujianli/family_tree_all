@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<view class="wrapper">
+<!-- 		<view class="wrapper">
 			<text class="inner_title">家族名字：</text>
 			<input class="input" type="text" placeholder-style="color:#999" v-model="family.name" placeholder="家族名字" />
-		</view>
+		</view> -->
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="family.instruction" placeholder="家训内容" />
 		</view>
@@ -20,7 +20,7 @@
 					language:null
 				},
 				family:{
-					name: '',
+					// name: '',
 					instruction: ''
 				}
 			}
@@ -70,6 +70,16 @@
 		padding-left:30upx;
 		padding-right:30upx;
 		padding-bottom: 120upx;
+	}
+	.wrapper{
+		height: 110upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #E5E5E5;
 	}
 	.mul_wrapper{
 		display: flex;

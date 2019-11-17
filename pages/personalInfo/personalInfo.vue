@@ -2,7 +2,9 @@
 	<view class="container">
 		<view class="wrapper avatar_wrapper" style="position: relative;">
 			<image :src="imageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('avatar')"></image>
-			
+<!-- 			<avatar selWidth="200px" selHeight="400upx" @upload="myUpload" :avatarSrc="imageUrl"
+			        avatarStyle="width: 200upx; height: 200upx; border-radius: 100%;">
+			</avatar> -->
 			<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx" @tap="openAlbum('signature')"></image>
 		</view>
 		<view class="wrapper">
@@ -121,6 +123,7 @@
 </template>
 
 <script>
+	import avatar from "@/components/yq-avatar/yq-avatar.vue";
 	import dataJson from '@/static/appData.json'
 	import util from '@/common/util.js'
 	import reg from '@/common/bizRule.js'
@@ -182,6 +185,7 @@
 				defaultSignature:'../../static/images/avatar.png'
 			}
 		},
+		components:{avatar},
 		computed:{
 			imageUrl:function(){
 				if(this.baseInfo.headUrl){
@@ -322,6 +326,11 @@
 					});
 				}
 			},
+			myUpload(rsp) {
+				console.log(rsp)
+				this.url = rsp.path; //更新头像方式一
+				
+			},
 			openAlbum:function(type){
 				let url = this.$common.uploadUrl(); 
 				let self = this;
@@ -424,7 +433,7 @@
 		align-items: flex-start;
 	}
 	.avatar_wrapper{
-		margin-top: 44upx;
+		margin-top: 58upx;
 		justify-content: center;
 		margin-bottom: 36upx;
 	}

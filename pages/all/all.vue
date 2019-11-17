@@ -5,7 +5,7 @@
 		</view>
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
-			<view  v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
+			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
 					<view class="card_item" @tap="jumpToDetail(contentInfo)">
 						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
@@ -23,7 +23,7 @@
 					</view>
 				</uni-swipe-action>
 			</view>
-			
+
 			<!-- 	</uni-swipe-action> -->
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
@@ -58,7 +58,11 @@
 	export default {
 		data() {
 			return {
-				userId: null,
+				param: {
+					userId: null,
+					language: null,
+					isFamily: null
+				},
 				options: [{
 					text: '删除',
 					style: {
@@ -104,17 +108,18 @@
 			}
 		},
 		onLoad: function(options) {
-			this.userId = options.userId
+			util.loadObj(this.param, options)
 			this.loadIndexContent()
 			this.loadAllModule()
 		},
 		methods: {
 			jumpToDetail: function(content) {
 				let p = {
-					userId: this.userId,
+					userId: this.param.userId,
 					moduleId: content.moduleId,
 					flag: content.flag,
-					contentId: content.id
+					contentId: content.id,
+					name: content.moduleName
 				}
 				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
@@ -123,10 +128,11 @@
 			},
 			loadIndexContent: function() {
 				this.$http.get('content/userCards', {
-					userId: this.userId,
+					userId: this.param.userId,
 					page: 1,
-					rows: 20,
-					language: this.$common.language
+					rows: 10,
+					language: this.param.language,
+					isFamily: this.param.isFamily
 				}).then((res) => {
 					if (res.data.code === 200) {
 						this.contentList = res.data.data.contentList;
@@ -134,8 +140,8 @@
 							if (this.contentList[i].tags) {
 								this.contentList[i].tags = this.contentList[i].tags.split(',')
 							}
-							if(this.contentList[i].imageUrl){
-								this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
+							if (this.contentList[i].imageUrl) {
+								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl
 							}
 						}
 					} else {
@@ -148,12 +154,12 @@
 			},
 			loadAllModule: function() {
 				this.$http.get('module/all', {
-					'isFamily': 1,
-					'language': this.$common.language
+					isFamily: this.param.isFamily,
+					language: this.param.language
 				}).then((res) => {
 					if (res.data.code === 200) {
 						this.modules = res.data.data.module;
-						for(let i =0;i<this.modules.length;i++){
+						for (let i = 0; i < this.modules.length; i++) {
 							this.modules[i]['hasActive'] = false
 						}
 					} else {
@@ -174,11 +180,11 @@
 				//this.selectedModules.push(module);
 				if (module.hasActive) {
 					this.$forceUpdate();
-					this.$set(module,'hasActive',false);
-					
+					this.$set(module, 'hasActive', false);
+
 				} else {
 					this.$forceUpdate();
-					this.$set(module,'hasActive',true);
+					this.$set(module, 'hasActive', true);
 				}
 				console.log(this.modules);
 				// console.log(index);
@@ -202,23 +208,23 @@
 					title: '删除',
 					content: '确认删除该记录？',
 					confirmText: '确认',
-					success: function (res) {
+					success: function(res) {
 						if (res.confirm) {
-						  self.$http
-						  	.post('content/delete', {
-						  		language: self.$common.language,
-						  		contentId: contentId
-						  	})
-						  	.then(res => {
-						  		if (res.data.code === 200) {
-						  			self.loadIndexContent();
-						  		} else {
-						  			uni.showToast({
-						  				title: '内容删除失败',
-						  				icon: 'none'
-						  			});
-						  		}
-						  	});
+							self.$http
+								.post('content/delete', {
+									language: self.param.language,
+									contentId: contentId
+								})
+								.then(res => {
+									if (res.data.code === 200) {
+										self.loadIndexContent();
+									} else {
+										uni.showToast({
+											title: '内容删除失败',
+											icon: 'none'
+										});
+									}
+								});
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -239,15 +245,17 @@
 				return true;
 			}
 		},
-		
+
 	}
 </script>
 
 <style lang="less" scoped>
 	@import '../../common/card.less';
-	.pd18{
+
+	.pd18 {
 		padding: 18upx;
 	}
+
 	.category_container {
 		display: flex;
 		flex-direction: row;
@@ -284,6 +292,7 @@
 		padding-left: 40upx;
 		padding-right: 40upx;
 		padding-top: 36upx;
+
 		view {
 			border: 1px solid #FF9797;
 			border-radius: 8upx;
@@ -299,18 +308,21 @@
 			padding-right: 2upx;
 		}
 	}
-	.all_types_container{
+
+	.all_types_container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		.all_types_wrapper{
+
+		.all_types_wrapper {
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
 			flex-wrap: wrap;
+
 			view {
 				border: 1px solid #999;
 				border-radius: 8upx;
@@ -324,19 +336,23 @@
 				margin-bottom: 10upx;
 				padding-left: 2upx;
 				padding-right: 2upx;
-				&.active{
+
+				&.active {
 					color: #4DC578;
 					border-color: #4DC578;
 				}
 			}
 		}
-		
+
 	}
-	.text{
-		font-size: 31upx;color: #666;
+
+	.text {
+		font-size: 31upx;
+		color: #666;
 		margin-bottom: 18upx;
 	}
-	.all_opt_btn_container{
+
+	.all_opt_btn_container {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -346,22 +362,23 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 85upx;
-		.all_opt_btn{
-			flex:1;
-			font-size:31upx;
+
+		.all_opt_btn {
+			flex: 1;
+			font-size: 31upx;
 			color: #4DC578;
 			background-color: #f9f9f9;
 			border-radius: 0;
-			&:after{
-				border:0px;
+
+			&:after {
+				border: 0px;
 			}
-			&.active{
+
+			&.active {
 				background-color: #4DC578;
 				color: #ffffff;
 			}
-			
-		}	
+
+		}
 	}
-	
-	
 </style>

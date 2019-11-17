@@ -20,14 +20,19 @@ export default {
 		17: "../hobby/placeList",
 		18: "../hobby/list",
 		19: "../hobby/list",
+		21: "../family/trainEdit",
+		22: "../hobby/list",
+		24: "../hobby/list",
+		25: "../hobby/list",
 		26: "../hobby/list",
+		27: "../hobby/stageList",
 		28: "../hobby/list",
 		29: "../hobby/list",
 		30: "../hobby/list",
-		21: "../family/trainEdit",
-		22: "../hobby/list",
 		31: "../hobby/stageList",
-		32: "../hobby/stageList"
+		32: "../hobby/stageList",
+		33: "../family/inherit",
+		34: "../video/video"
 	},
 	//模块ID对应模块类型
 	linkFlag: function(moduleId) {
@@ -37,6 +42,12 @@ export default {
 			case 8:
 				//生活习惯
 			case 9:
+				//大事记
+			case 22:
+				//族群协商
+			case 24:
+				//节日纪事
+			case 30:
 				flag = 'self';
 				break;
 				//工资理财
@@ -49,8 +60,14 @@ export default {
 			case 12:
 				//八卦风水
 			case 18:
-				//大事记
-			case 22:
+				//亡故
+			case 25:
+				//通信记录
+			case 26:
+				//自媒体关注
+			case 28:
+				//收藏品
+			case 29:
 				flag = 'category';
 				break;
 				//计划安排
@@ -61,26 +78,15 @@ export default {
 			case 15:
 				//校园经历
 			case 16:
+				//同事朋友
+			case 27:
 				//车辆
-			case 26:
-				flag = 'category';
-				break;
-				//通信记录
-			case 28:
-				flag = 'category';
-				break;
-				//自媒体关注
-			case 29:
-				flag = 'category';
-				break;
-				//收藏品
-			case 30:
-				//节日纪事
 			case 31:
 				//婚礼
 			case 32:
 				flag = 'period';
 				break;
+				//住宅居室
 			case 17:
 				flag = 'place';
 				break;
@@ -90,16 +96,17 @@ export default {
 	//根据内容请求类型分为flag值传与不传，类型ID（categoryId、periodId、placeId）值传与不传
 	requestParam: {
 		//不需要flag值（日记，心得感想，格言）
-		notFlag: [9, 11, 13, 19],
+		notFlag: [9, 11, 13, 19, 22],
 		//不需要类型ID（日记）
-		notTypeId: [9, 11, 13, 17, 19]
+		notTypeId: [9, 11, 13, 17, 19, 22]
 	},
-	isStage: [4, 14, 15, 16, 17],
+	isStage: [4, 14, 15, 16, 17, 27],
 	viewCtrlName: {
 		4: '计划名称',
 		14: '恋爱对象',
 		15: '历程',
 		16: '历程',
+		27: '名字',
 		31: '车辆名称',
 		32: '婚礼'
 	}

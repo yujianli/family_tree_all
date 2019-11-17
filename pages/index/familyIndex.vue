@@ -20,16 +20,15 @@
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
 		</view> -->
-		<funchead :userId="param.userId" :isFamily="2" :language="param.language"
-		@gotoList="jumpToList"></funchead>
+		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
 		<view class="family_training_container">
 			<view class="title">家训</view>
 			<view class="content">
 				{{instruction}}
 			</view>
 		</view>
-
-		<view class="card_list">
+ 		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
+			<!-- <view class="card_list">
 			<view class="more" @tap="jumpToAll">更多</view>
 			<view class="card_item" v-for="(item ,index) in testInfoList" :key="index">
 				<image :style="{display: item.pic == '' ? 'none' : 'block'}" :src="item.pic" class="card_pic"></image>
@@ -44,26 +43,26 @@
 					</view>
 				</view>
 			</view>
-		</view>
-
+		</view> -->
+		
 	</view>
 
 </template>
 
 <script>
 	import funchead from '@/components/funchead.vue'
+	import indexContentList from '@/components/index-content-list.vue'
 	import moduleLink from '@/common/moduleLink.js';
 	import util from '@/common/util.js';
 	export default {
-		
 		data() {
 			return {
 				param:{
 					userId:null,
-					isFamily: 2,
-					language: this.$common.language
+					familyId:null,
+					language: this.$common.language,
+					isFamily: 2
 				},
-				familyId:null,
 				showSelect: false,
 				familyTitle: '家族',
 				familyList:[],
@@ -84,14 +83,41 @@
 				}]
 			}
 		},
-		components: {funchead},
+		components: {funchead,indexContentList},
 		onLoad: function() {
-			let user = uni.getStorageSync("USER");
-			this.param.userId = user.id;
-			this.loadFamilyList()
+			
 			// this.loadFamilyInfo()
 		},
+		onShow:function(){
+			let user = uni.getStorageSync("USER");
+			this.param.language = this.$common.language
+			this.param.userId = user.id;
+			this.loadModule();
+			this.loadFamilyList()
+			// this.$refs.indexcontentlist.loadIndexContent()
+		},
 		methods: {
+			loadModule: function() {
+				this.$http.get('module/user/all', {
+					isFamily: this.param.isFamily,
+					language: this.param.language,
+					userId: this.param.userId
+				}).then(res => {
+					if (res.data.code === 200) {
+						this.basicFuncList = res.data.data.module;
+						this.basicFuncList.push({
+							id: 0,
+							name: '更多',
+							icon: '../../static/images/icon_func_0.png'
+						});
+					} else {
+						uni.showToast({
+							title: '模块信息加载失败',
+							icon: 'none'
+						});
+					}
+				});
+			},
 			jumpToList: function(json) {
 				console.log(JSON.stringify(json))
 				let linkUrl= json.url
@@ -105,34 +131,41 @@
 						break;
 					case 21:
 						linkUrl = linkUrl + util.jsonToQuery({
-							familyId:this.familyId,
+							familyId:this.param.familyId,
+							language: this.param.language
+						});
+						break;
+					case 33:
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId:this.param.userId,
 							language: this.param.language
 						});
 						break;
 					default:
 						linkUrl = linkUrl + util.jsonToQuery({
-							userId: this.userId,
-							moduleId: module.id,
-							flag: moduleLink.linkFlag(module.id),
-							name: module.name,
-							language: this.language
+							userId: this.param.userId,
+							moduleId: json.moduleId,
+							flag: moduleLink.linkFlag(json.moduleId),
+							name: json.moduleName,
+							language: this.param.language,
+							isFamily: this.param.isFamily
 						});
 				}
 				uni.navigateTo({
 					url: linkUrl
 				});
 			},
-			jumpToAll: function() {
-				// uni.navigateTo({
-				// 	url: '/pages/all/all'
-				// });
-			},
+			// jumpToAll: function() {
+			// 	uni.navigateTo({
+			// 		url: '/pages/all/all'
+			// 	});
+			// },
 			tabSelect: function() {
 				this.showSelect = !this.showSelect;
 			},
 			selFamily:function(item){
 				this.familyTitle=item.name
-				this.familyId=item.id
+				this.param.familyId=item.id
 				this.showSelect=false
 				this.loadFamilyInfo()
 			},
@@ -143,9 +176,7 @@
 				}).then((res)=>{
 					if(res.data.code===200){
 						this.familyList=res.data.data.familyList
-						this.familyId=this.familyList[0].id
 						this.selFamily(this.familyList[0])
-						// this.loadFamilyInfo()
 					}else{
 						uni.showToast({
 							title: '家族信息加载失败',icon:'none'
@@ -155,7 +186,7 @@
 			},
 			loadModule: function(userId) {
 				this.$http.get('module/user/all', {
-						isFamily: 2,
+						isFamily: this.param.isFamily,
 						language: this.param.language,
 						userId: this.param.userId
 					}).then(res => {
@@ -176,7 +207,7 @@
 			},
 			loadFamilyInfo:function(){
 				this.$http.get('family/detail',{
-					familyId:this.familyId,
+					familyId:this.param.familyId,
 					language:this.param.language
 				}).then(res=>{
 					if(res.data.code===200){

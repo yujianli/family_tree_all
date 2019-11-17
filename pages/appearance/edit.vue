@@ -163,6 +163,9 @@
 				}).then((res) => {
 					if (res.data.code === 200) {
 						util.loadObj(this.appearance, res.data.data.appearanceInfo);
+						if(this.appearance.tags){
+							this.tagList=this.appearance.tags.split(',')
+						}
 						this.idx.faceShape = this.appearance.faceShape;
 						this.idx.tshirtSize = this.appearance.tshirtSize;
 						this.idx.shirtSize = this.appearance.shirtSize;
@@ -194,6 +197,7 @@
 					language: ''
 				}
 				util.loadObj(postParam, this.appearance)
+				postParam['tags']=this.tagList.join(',')
 				if (this.isEdit) {
 					postParam['appearanceId']=this.param.id
 				} else {
@@ -216,8 +220,8 @@
 				})
 			},
 			setTags:function(e){
-				console.log(e);
-				console.log(this.tagList);
+				// console.log(e);
+				// console.log(this.tagList);
 				let tagList = this.tagList;
 				if(e.detail.value){
 					tagList.push(e.detail.value);

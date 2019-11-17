@@ -31,7 +31,8 @@
 				param: {
 					userId: null,
 					moduleId: null,
-					language: null
+					language: null,
+					isFamily: null
 				},
 				moduleList: [],
 				tabActiveIdx: 0,
@@ -128,14 +129,20 @@
 			},
 			loadModule: function() {
 				this.$http.get('module/all', {
-						isFamily: 1,
+						isFamily: this.param.isFamily,
 						language: this.param.language
 					})
 					.then(res => {
 						if (res.data.code === 200) {
 							let _list = res.data.data.module;
+							//删除个人照片模块
 							let idx = _list.findIndex((item, i) => {
 								return item.id === 5
+							})
+							_list.splice(idx, 1)
+							//删除族谱照片模块
+							idx = _list.findIndex((item, i) => {
+								return item.id === 34
 							})
 							_list.splice(idx, 1)
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
@@ -161,7 +168,8 @@
 					userId: this.param.userId,
 					page: 1,
 					rows: 10,
-					language: this.param.language
+					language: this.param.language,
+					isFamily: this.param.isFamily
 				}
 				if (this.modId) {
 					postParam['moduleId'] = this.modId

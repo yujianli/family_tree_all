@@ -2,7 +2,7 @@
 	<view>
 		<view class="detail_container">
 			<view class="detail_hd">
-				<view>{{content.createDate | formatDate}}</view>
+				<view>{{content.time | formatDate}}</view>
 				<view>{{content.position}}</view>
 				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
 				<view v-if="ctrlEnable.stageCtrl">{{content.periodName}}</view>
@@ -19,11 +19,11 @@
 			</view>
 			<view class="detail_tag">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
-				{{content.tags}}
+				{{tagInfo}}
 			</view>
 			<view class="detail_tag">
 				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
-				{{content.associatedPerson}}
+				{{associateInfo}}
 			</view>
 		</view>
 		<view class="detail_opt_container">
@@ -47,7 +47,8 @@
 					contentId: null,
 					flag: null,
 					name: null,
-					language: null
+					language: null,
+					isFamily: null
 				},
 				ctrlEnable: {
 					typeCtrl: true,
@@ -77,11 +78,19 @@
 					periodEndTime: '',
 					periodName: null,
 					address:null,
-					createDate: null
+					time: null
 				}
 			}
 		},
 		computed: {
+			tagInfo:function(){
+				if(!this.content.tags)return ''
+				return this.content.tags.replace(/,/g,' ')
+			},
+			associateInfo:function(){
+				if(!this.content.associatedPerson)return ''
+				return this.content.associatedPerson.replace(/,/g,' ')
+			},
 			images: function() {
 				if (!this.content.imageUrls) return [];
 				let imgs = this.content.imageUrls.split(',')

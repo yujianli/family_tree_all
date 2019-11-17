@@ -15,8 +15,8 @@
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action :options="options" @click="deleteContent(content.contentId)">
-					<view class="card_item"  @tap="jumpToDetail(content)">
+				<uni-swipe-action :options="options" @tap="deleteContent(content.contentId)">
+					<view class="card_item" @tap="jumpToDetail(content)">
 						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 						<view class="card_inner">
 							<text class="card_title">{{ content.content }}</text>
@@ -24,7 +24,7 @@
 								<view class="tags">
 									<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
 								</view>
-								<text class="time">{{ content.createDate }}</text>
+								<text class="time">{{ content.createDate | formatDate}}</text>
 							</view>
 						</view>
 					</view>
@@ -52,7 +52,8 @@
 					flag: null,
 					flagId: null,
 					name: '',
-					language: null
+					language: null,
+					isFamily: null
 				},
 				ctrlEnable: {
 					tabCtrl: true,
@@ -76,6 +77,12 @@
 			uniSearchBar,
 			uniSwipeAction,
 			myTab
+		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return ''
+				return util.dateFormat(value)
+			}
 		},
 		onLoad: function(options) {
 			let title = null;
@@ -109,7 +116,8 @@
 					flag: this.param.flag,
 					contentId: content.contentId,
 					name: this.param.name,
-					language: this.param.language
+					language: this.param.language,
+					isFamily: this.param.isFamily
 				};
 				let url = '/pages/hobby/detail' + util.jsonToQuery(p);
 				uni.navigateTo({
@@ -155,8 +163,8 @@
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentCategory;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
-							if(!this.seledFlagId){
-								this.seledFlagId=this.moduleList[0].id
+							if (!this.seledFlagId) {
+								this.seledFlagId = this.moduleList[0].id
 							}
 							this.loadContent(this.seledFlagId);
 						} else {
@@ -177,8 +185,8 @@
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentPeriodList;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
-							if(!this.seledFlagId){
-								this.seledFlagId=this.moduleList[0].id
+							if (!this.seledFlagId) {
+								this.seledFlagId = this.moduleList[0].id
 							}
 							this.loadContent(this.seledFlagId);
 						} else {
@@ -224,9 +232,6 @@
 							} else {
 								this.contentList[i].tags = [];
 							}
-							if (this.contentList[i].createDate) {
-								this.contentList[i].createDate = util.dateFormat(this.contentList[i].createDate);
-							}
 							if (this.contentList[i].imageUrl) {
 								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl;
 							}
@@ -254,9 +259,6 @@
 							} else {
 								this.contentList[i].tags = [];
 							}
-							if (this.contentList[i].createDate) {
-								this.contentList[i].createDate = util.dateFormat(this.contentList[i].createDate);
-							}
 							if (this.contentList[i].imageUrl) {
 								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl;
 							}
@@ -283,7 +285,8 @@
 							moduleId: this.param.moduleId,
 							flag: this.param.flag,
 							name: this.param.name,
-							language: this.param.language
+							language: this.param.language,
+							isFamily: this.param.isFamily
 						})
 				});
 			},
@@ -304,30 +307,28 @@
 					title: '删除',
 					content: '确认删除该记录？',
 					confirmText: '确认',
-					success: function (res) {
+					success: function(res) {
 						if (res.confirm) {
-						  self.$http
-						  	.post('content/delete', {
-						  		language: self.param.language,
-						  		contentId: contentId
-						  	})
-						  	.then(res => {
-						  		if (res.data.code === 200) {
-						  			self.loadSelfDesc();
-						  			self.loadModule(self.param.moduleId);
-						  		} else {
-						  			uni.showToast({
-						  				title: '内容删除失败',
-						  				icon: 'none'
-						  			});
-						  		}
-						  	});
+							self.$http.post('content/delete', {
+									language: self.param.language,
+									contentId: contentId
+								}).then(res => {
+									if (res.data.code === 200) {
+										self.loadSelfDesc();
+										self.loadModule(self.param.moduleId);
+									} else {
+										uni.showToast({
+											title: '内容删除失败',
+											icon: 'none'
+										});
+									}
+								});
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
 					}
 				});
-			},
+			}
 		}
 	};
 </script>

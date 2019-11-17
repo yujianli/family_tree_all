@@ -13,26 +13,26 @@
 	export default {
 		name: 'funchead',
 		props: {
-			userId: Number,
-			isFamily: {
-				type: Number,
-				default: 1
-			},
-			personId: Number,
-			language: String
+			// userId: Number,
+			// isFamily: {
+			// 	type: Number,
+			// 	default: 1
+			// },
+			// personId: Number,
+			// language: String
+			basicFuncList:{
+				type: Array,
+				default: []
+			}
 		},
 		data() {
 			return {
-				basicFuncList: [{
-					id: -1,
-					name: '更多',
-					icon: '../../static/images/icon_func_0.png'
-				}],
+				
 			}
 		},
-		created(){
-			this.loadModule()
-		},
+		// created(){
+		// 	this.loadModule()
+		// },
 		methods: {
 			jumpToList: function(module) {
 				let linkUrl = moduleLink.linkUrl[module.id];
@@ -49,51 +49,7 @@
 					moduleName:module.name,
 					flag:moduleLink.linkFlag(module.id)
 				})
-				// switch (module.id) {
-				// 	case 0:
-				// 		linkUrl = linkUrl + util.jsonToQuery({
-				// 			userId: this.userId,
-				// 			isFamily: this.isFamily,
-				// 			language: this.language
-				// 		});
-				// 		break;
-				// 	case 1:
-				// 		linkUrl = linkUrl + '?id=' + this.personId;
-				// 		break;
-				// 	default:
-				// 		linkUrl = linkUrl + util.jsonToQuery({
-				// 			userId: this.userId,
-				// 			moduleId: module.id,
-				// 			flag: moduleLink.linkFlag(module.id),
-				// 			name: module.name,
-				// 			language: this.language
-				// 		});
-				// }
-				// uni.navigateTo({
-				// 	url: linkUrl
-				// });
-			},
-			loadModule: function() {
-				this.$http.get('module/user/all', {
-					isFamily: this.isFamily,
-					language: this.language,
-					userId: this.userId
-				}).then(res => {
-					if (res.data.code === 200) {
-						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: '更多',
-							icon: '../../static/images/icon_func_0.png'
-						});
-					} else {
-						uni.showToast({
-							title: '模块信息加载失败',
-							icon: 'none'
-						});
-					}
-				});
-			},
+			}
 		}
 	}
 </script>

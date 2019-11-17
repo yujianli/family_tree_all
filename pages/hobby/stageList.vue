@@ -2,24 +2,33 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
-			<view class="card_item" v-for="(stage, index) in stages" :key="index" @tap="jumpToPage(stage)">
-				<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
-				<view class="card_inner">
-					<view class="card_title">{{ stage.name }}</view>
-					<!--婚礼时间-->
-					<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime | formatDate }}</view>
-					<!--车辆日期-->
-					<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
-					<view class="time mt20" v-else>{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
-					<view class="card_others card_others_1">
-						<view class="inner_flex">
-							<!--车辆已出售-->
-							<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
-							<text class="time" v-else>{{ stage.description }}</text>
-							<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+			<view v-for="(stage, index) in stages" :key="index">
+				<uni-swipe-action :options="options" @tap="deleteContent(stage.id)">
+					<view class="card_item" @tap="jumpToPage(stage)">
+						<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<!--同事朋友-->
+							<view class="inner_flex" v-if="param.moduleId=='27'">
+								<view class="card_title">{{stage.name}}</view>
+								<view class="card_title">{{stage.mobile}}</view>
+							</view>
+							<view class="card_title" v-else>{{ stage.name }}</view>
+							<!--婚礼时间-->
+							<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime}}</view>
+							<!--车辆日期-->
+							<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
+							<view class="time mt20" v-if="enableDateCtrl">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
+							<view class="card_others card_others_1">
+								<view class="inner_flex">
+									<!--车辆已出售-->
+									<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
+									<text class="time" v-else>{{ stage.description }}</text>
+									<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+								</view>
+							</view>
 						</view>
 					</view>
-				</view>
+				</uni-swipe-action>
 			</view>
 		</view>
 	</view>
@@ -28,6 +37,7 @@
 <script>
 	import util from '@/common/util.js';
 	import config from '@/common/componetConfig.js'
+	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	export default {
 		data() {
 			return {
@@ -43,10 +53,20 @@
 				ctrlEnable: {
 					dateFirstCtrl: true,
 					dateSecondCtrl: false
-				}
+				},
+				options: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#ED4848',
+						width: '105px'
+					}
+				}]
 			};
 		},
 		computed: {
+			enableDateCtrl: function() {
+				return ['27', '31', '32'].indexOf(this.param.moduleId) === -1
+			},
 			stages: function() {
 				let self = this
 				for (let i = 0; i < this.stageList.length; i++) {
@@ -74,12 +94,12 @@
 				if (curDt >= value) return '已出售'
 			}
 		},
+		components:{uniSwipeAction},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name
 			});
 			util.loadObj(this.param, options);
-			// this.initControl(this.param.moduleId)
 		},
 		onShow: function() {
 			this.loadData();
@@ -163,6 +183,33 @@
 						name: this.param.name,
 						language: this.param.language
 					})
+				});
+			},
+			deleteContent:function(id){
+				var self = this
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: function(res) {
+						if (res.confirm) {
+							self.$http.post('contentPeriod/deletePeriod', {
+									language: self.param.language,
+									contentPeriodId: id
+								}).then(res => {
+									if (res.data.code === 200) {
+										self.loadData();
+									} else {
+										uni.showToast({
+											title: '内容删除失败',
+											icon: 'none'
+										});
+									}
+								});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
 				});
 			}
 		}

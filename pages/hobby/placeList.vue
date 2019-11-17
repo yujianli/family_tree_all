@@ -2,18 +2,22 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
-			<view class="card_item" v-for="(place, index) in places" :key="index" @tap="jumpToPage(place)">
-				<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
-				<view class="card_inner">
-					<view class="card_title">{{ place.address }}</view>
-					<view class="time mt20">{{place.begintime | buyDesc}}</view>
-					<view class="card_others card_others_1">
-						<view class="inner_flex">
-							<text class="time">{{ place.endtime| saleDesc }}</text>
-							<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+			<view v-for="(place, index) in places" :key="index">
+				<uni-swipe-action :options="options" @tap="deleteContent(place.id)">
+					<view class="card_item" @tap="jumpToPage(place)">
+						<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<view class="card_title">{{ place.address }}</view>
+							<view class="time mt20">{{place.begintime | buyDesc}}</view>
+							<view class="card_others card_others_1">
+								<view class="inner_flex">
+									<text class="time">{{ place.endtime| saleDesc }}</text>
+									<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+								</view>
+							</view>
 						</view>
 					</view>
-				</view>
+				</uni-swipe-action>
 			</view>
 		</view>
 	</view>
@@ -21,6 +25,7 @@
 
 <script>
 	import util from '@/common/util.js';
+	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	export default {
 		data() {
 			return {
@@ -32,10 +37,17 @@
 					language: null
 				},
 				placeList: [],
-				isEdit: false
+				isEdit: false,
+				options: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#ED4848',
+						width: '105px'
+					}
+				}]
 			}
 		},
-		computed:{
+		computed: {
 			places: function() {
 				let self = this
 				for (let i = 0; i < this.placeList.length; i++) {
@@ -55,6 +67,7 @@
 				if (curDt >= value) return '已售出'
 			}
 		},
+		components:{uniSwipeAction},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name
@@ -68,7 +81,7 @@
 			this.isEdit = !this.isEdit;
 			const buttonIndex = e.index;
 			if (buttonIndex === 0) {
-		
+
 				let pages = getCurrentPages();
 				let page = pages[pages.length - 1];
 				// #ifdef APP-PLUS
@@ -137,6 +150,33 @@
 						name: this.param.name,
 						language: this.param.language
 					})
+				});
+			},
+			deleteContent:function(id){
+				var self = this
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: function(res) {
+						if (res.confirm) {
+							self.$http.post('contentPlace/deletePlace', {
+									language: self.param.language,
+									contentPlaceId: id
+								}).then(res => {
+									if (res.data.code === 200) {
+										self.loadData();
+									} else {
+										uni.showToast({
+											title: '内容删除失败',
+											icon: 'none'
+										});
+									}
+								});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
 				});
 			}
 		}
