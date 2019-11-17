@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="container">
-			<view class="wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="!isEdit && jumpToList(basicFunc)">
+			<view class="wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 				<image class="pic_menu" :src="basicFunc.icon"></image>
 				<text class="text">{{basicFunc.name}}</text>
 				<image v-if="isEdit" src="../../static/images/icon_menu_delete.png" class="pic_opt" @tap="removeFunc(basicFunc.id)"></image>
@@ -11,7 +11,7 @@
 			<text>以下功能最多展示在首页（9个）</text>
 		</view>
 		<view class="container">
-			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList" v-bind:key="otherFunc.id" @tap="!isEdit && jumpToList( otherFunc)">
+			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList" v-bind:key="otherFunc.id" @tap="jumpToList(otherFunc)">
 				<image class="pic_menu" :src="otherFunc.icon"></image>
 				<text class="text">{{otherFunc.name}}</text>
 				<image v-if="isEdit" src="../../static/images/icon_menu_add.png" class="pic_opt" @tap="addFunc(otherFunc.id)"></image>
@@ -130,6 +130,7 @@
 				})
 			},
 			jumpToList: function(module) {
+				if(this.isEdit) return
 				let linkUrl = moduleLink.linkUrl[module.id];
 				if (!linkUrl) {
 					uni.showToast({
@@ -170,6 +171,7 @@
 			}
 		},
 		onNavigationBarButtonTap(event) {
+			const buttonIndex = event.index;
 			if (buttonIndex === 0) {
 				if(this.isEdit){
 					this.save();

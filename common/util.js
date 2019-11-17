@@ -69,7 +69,7 @@ export default {
 	//对象空值属性过滤
 	nullFilter: function(obj) {
 		for (var i in obj) {
-			if (!obj[i]) {
+			if (obj[i]===null || obj[i]===undefined || obj[i]==='') {
 				delete obj[i]
 			}
 		}

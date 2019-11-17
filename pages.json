@@ -20,14 +20,15 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
-				},
-				"enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
-				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
-				"app-plus": {
-					"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
 				}
+				// "enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
+				// "disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				// "app-plus": {
+				// 	"bounce": "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消, 点此查看H5端的取消方法... )
+				// }
 			}
 		},
 		{

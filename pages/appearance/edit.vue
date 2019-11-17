@@ -161,6 +161,14 @@
 				}
 				this.appearance[prop] = dataJson[key][index].key;
 			},
+			bindProp: function(prop, key, val) {
+				for (var i = 0; i < dataJson[key].length; i++) {
+					if (dataJson[key][i].key === val) {
+						this.idx[prop]=i
+						break
+					}
+				}
+			},
 			loadData: function(appearanceId) {
 				this.$http.get('appearance/detailAppearance', {
 					appearanceId: this.param.id,
@@ -171,12 +179,12 @@
 						if(this.appearance.tags){
 							this.tagList=this.appearance.tags.split(',')
 						}
-						this.idx.faceShape = this.appearance.faceShape;
-						this.idx.tshirtSize = this.appearance.tshirtSize;
-						this.idx.shirtSize = this.appearance.shirtSize;
-						this.idx.clothSize = this.appearance.clothSize;
-						this.idx.trousersSize = this.appearance.trousersSize;
-						this.idx.shoeSize = this.appearance.shoeSize;
+						this.bindProp('faceShape','faceShape',this.appearance.faceShape)
+						this.bindProp('tshirtSize','size',this.appearance.tshirtSize)
+						this.bindProp('shirtSize','size',this.appearance.shirtSize)
+						this.bindProp('clothSize','size',this.appearance.clothSize)
+						this.bindProp('trousersSize','size',this.appearance.trousersSize)
+						this.bindProp('shoeSize','size',this.appearance.shoeSize)
 					} else {
 						uni.showToast({
 							title: '体貌特征信息加载失败',
