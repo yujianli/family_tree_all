@@ -4,8 +4,13 @@
 		<form class="loginView" @submit="submit">
 			<view style="margin-top:22px;margin-bottom: 33px;justify-content: center;"><text style="font-size: 27px;color: #333;">登录</text></view>
 			<view v-if="isShow" class="input-view"><input class="input" type="text" v-model="quickLoginInfo.nickname" placeholder="请输入姓名,首次输入后将不可修改" name="nickname" placeholder-style="color:#999" /></view>
+			<view v-if="isShow" class="input-view">
+				<text class="inner_title">性别</text>
+				<picker @change="sexBindPickerChange" :value="sexIdx" :range="sexData" range-key="value" name="sex">
+					<view class="input">{{ sexData[sexIdx].value }}</view>
+				</picker>
+			</view>
 			<view class="input-view"><input class="input" type="text" v-model="quickLoginInfo.mobile" placeholder="请输入手机号" name="mobile" placeholder-style="color:#999" /></view>
-
 			<view class="input-view" style="position: relative;">
 				<input class="input" v-model="quickLoginInfo.code" placeholder="输入验证码" name="code" placeholder-style="color:#999" />
 				<button class="sendCode" :disabled="sendCodeInfo.hasSend" @tap="sendCode">
@@ -21,6 +26,7 @@
 <script>
 //来自 graceUI 的表单验证， 使用说明见手册 http://grace.hcoder.net/doc/info/73-3.html
 import graceChecker from '@/common/graceChecker.js'
+import dataJson from '@/static/appData.json'
 
 
 export default {
@@ -30,8 +36,11 @@ export default {
 			quickLoginInfo: {
 				nickname: '',
 				mobile: '',
-				code: ''
+				code: '',
+				sex:'',
 			},
+			sexData:dataJson['sex'],
+			sexIdx:0,
 			sendCodeInfo: {
 				time: 60,
 				hasSend: false,
@@ -88,26 +97,34 @@ export default {
 			
 		},
 		submit: function(e){
-			let {nickname, mobile, code} = e.detail.value;
+			let {nickname, mobile, code,sex} = e.detail.value;
+			
 			let rule = [
 				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" },
-				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" }
+				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" },
 			];
 			if(this.isShow && !nickname){
 				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_\u4e00-\u9fa5]+$", errorMsg: "请填写姓名"})
+			}
+			if(this.isShow && !sex){
+				rule.push({name: "sex", checkType: "in", checkRule: "1,2", errorMsg: "请选择性别"})
 			}
 			let checkLogin = graceChecker.check(e.detail.value, rule);
 			if(!checkLogin){
 				uni.showToast({ title: graceChecker.error, icon: "none" });
 				return false;
 			}
-			
-			this.$http.post('auth/autoLogin', {
-				name:nickname,
-				username:mobile, 
-				validateCode: code, 
+			let formData = {
+				username:mobile,
+				validateCode: code,
 				language: 'zn_CH',
-			},{hasToken:false}).then((res)=>{
+			}
+			if(this.isShow){
+				formData.sex = sex;
+				formData.name = nickname;
+			}
+			
+			this.$http.post('auth/autoLogin',formData,{hasToken:false}).then((res)=>{
 				//console.log(res);
 				if(res.data.code===200){
 					//缓存用户信息
@@ -182,7 +199,15 @@ export default {
 					url: '/pages/index/index'
 				});
 			}
-		}
+		},
+		sexBindPickerChange: function(e) {
+		    this.sexIndex = e.target.value
+			this.selProp('sex', e.target.value)
+		},
+		selProp:function(prop, index){
+			this.sexIdx=index;
+			this.quickLoginInfo[prop]=dataJson[prop][index].key;
+		},
 	}
 };
 </script>
@@ -216,6 +241,7 @@ export default {
 		background-color: #fff;
 		flex-direction: row;
 		box-sizing: border-box;
+		align-items: center;
 	}
 
 	.input {
@@ -223,6 +249,7 @@ export default {
 		color: #333;
 		height: 120upx;
 		flex: 1;
+		line-height: 120upx;
 	}
 
 	.other_opt {
@@ -254,11 +281,24 @@ export default {
 		padding-left: 0;
 		padding-right: 0;
 		color: #999;
-		z-index: 999999;
+		z-index: 999;
 	}
 
 	button:after {
 		border: 0;
 		border-radius: 0;
+	}
+	
+	.wrapper{
+		height: 110upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.inner_title{
+		font-size: 34upx;
+		color: #333;
+		margin-right: 40upx;
 	}
 </style>
