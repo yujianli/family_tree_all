@@ -44,7 +44,7 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">居住地</text>
-			<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地" />
+			<input class="input" type="text" v-model="baseInfo.updateBy" placeholder-style="color:#999" placeholder="居住地" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">固定电话</text>
@@ -52,7 +52,7 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业" />
+			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" placeholder="职业" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">体质</text>
@@ -96,6 +96,7 @@
 				isPassedAway: false,
 				baseInfo: {
 					familyUserId: null,
+					userId:null,
 					name: '',
 					sex: '',
 					birthPlace: '',
@@ -114,7 +115,7 @@
 					passingAway: '',
 					createBy: ''
 				},
-				defaultAvatar:'../../static/images/avatar.png'
+				defaultAvatar:'../../../static/images/avatar.png'
 			}
 		},
 		components:{avatar},
@@ -133,24 +134,25 @@
 				return util.dateFormat(value)
 			}
 		},
-		onLoad: function (option) {
-			this.loadData(option.id)
+		onLoad: function (options) {
+			util.loadObj(this.baseInfo,options)
+			this.loadData()
 		},
 		methods: {
-			loadData: function(id){
-				this.$http.get('familyUser/detilFamilyUser', {
-					userId:this.baseInfo.familyUserId,
+			loadData: function(){
+				this.$http.post('familyUser/detilFamilyUser', {
+					familyUserId:this.baseInfo.familyUserId,
+					userId:this.baseInfo.userId,
 					language: this.baseInfo.language,
 					}).then((res)=>{
 					if(res.data.code === 200){
-						let _info = res.data.data.baseInfo;
+						let _info = res.data.data.familyUserInfo;
 						util.loadObj(this.baseInfo, _info);
 						this.initProp('sex',_info.sex);
 						this.initProp('zodiac',_info.zodiac);
 						this.initProp('nationality',_info.nationality);
 						this.initProp('birthTime',_info.birthTime);
 						this.initProp('corporeity',_info.corporeity);
-						this.initProp('bloodType',_info.bloodType);
 						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
 						this.isPassedAway=_info.isPassedAway==1;
@@ -164,7 +166,6 @@
 				})
 			},
 			sexBindPickerChange: function(e) {
-			    this.sexIndex = e.target.value
 				this.selProp('sex', e.target.value)
 			},
 			nationalityBindPickerChange: function(e) {
@@ -178,30 +179,18 @@
 			},
 			bindDateChange: function(e) {
 				let _date = e.target.value
-				console.log(e.target.value);
-				// if(_date.length<5){
-				// 	uni.showToast({
-				// 		title: '请选择日期', icon:'none'
-				// 	});
-				// 	return false;
-				// }
 				this.baseInfo.birth = _date;
-				console.log(_date);
-
-				// this.birthDate = _date.replace('-','年')+ '月'
 				this.birthDate=_date;
 			},
 			switchChange: function(e){
 				this.isPassedAway = e.target.value
 				this.baseInfo.isPassedAway = e.target.value?1:0
-				console.log('是否在世，携带值为', this.baseInfo.isPassedAway)
 			},
 			bindPassingAwayDateChange: function(e) {
 				console.log(e.target.value);
 				let _date = e.target.value
 				if(this.isPassedAway) {
 					this.baseInfo.passingAway=_date;
-					// this.passingAwayDate = _date.replace('-','年')+ '月'
 					this.passingAwayDate=_date;
 				} else {
 					this.baseInfo.passingAway='';
@@ -212,9 +201,6 @@
 			corporeityBindPickerChange: function(e) {
 				this.selProp('corporeity', e.target.value)
 			},
-			bloodTypeBindPickerChange: function(e) {
-				this.selProp('bloodType', e.target.value)
-			},
 			constellationBindPickerChange: function(e) {
 				this.selProp('constellation', e.target.value)
 			},
@@ -223,7 +209,7 @@
 				this.baseInfo[prop]=dataJson[prop][index].key;
 			},
 			initProp:function(prop, val){
-				console.log(dataJson[prop])
+				if(!val)return
 				for(var i=0;i<dataJson[prop].length;i++){
 					if(dataJson[prop][i].key===val){
 						this.idx[prop]=i;

@@ -40,15 +40,15 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业" />
+			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" placeholder="职业" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">与之间的关系</text>
+			<text class="inner_title">与{{pname}}之间的关系</text>
 			<view>{{relationName}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">同辈排行</text>
-			<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" placeholder="同辈排行" />
+			<input class="input" type="text" v-model="baseInfo.ranking" placeholder-style="color:#999" placeholder="同辈排行" />
 		</view>
 	</view>
 
@@ -61,6 +61,7 @@
 	import reg from '@/common/bizRule.js'
 
 	export default {
+		//参数familyUserId=20191028000041&familyId=1044&userId=63&language=zh_CN&pname=张大爷&relationId=3
 		data() {
 			return {
 				arr: {
@@ -69,6 +70,7 @@
 				idx: {
 					sex: 0
 				},
+				pname:'',
 				relation:[],
 				birthDate: '请选择',
 				passingAwayDate: '请选择',
@@ -82,16 +84,16 @@
 					name: '',
 					sex: '',
 					relationId: null,
-					ranking: null,
+					ranking: '',
 					mobile: '',
 					headUrl: '.',
 					birth: '',
-					career: '',
+					createBy: '',
 					language: null,
 					isPassedAway: 0,
 					passingAway: ''
 				},
-				defaultAvatar: '../../static/images/avatar.png'
+				defaultAvatar: '../../../static/images/avatar.png'
 			}
 		},
 		components: {avatar},
@@ -105,7 +107,7 @@
 			},
 			relationName:function(){
 				if(this.relation.length){
-					return this.relation[this.baseInfo.relationId].name
+					return this.relation.find(item=>item.id===parseInt(this.baseInfo.relationId)).name
 				}
 			}
 		},
@@ -116,10 +118,9 @@
 			}
 		},
 		onLoad: function(options) {
+			this.pname=options.pname
 			util.loadObj(this.baseInfo, options)
-			if (options.familyUserId) {
-				this.loadData()
-			}
+			this.loadRelation()
 		},
 		methods: {
 			loadRelation:function(){
@@ -127,8 +128,7 @@
 					language:this.baseInfo.language
 				}).then(res=>{
 					if(res.data.code===200){
-						let _arr = res.data.data.relationType
-						this.arr['relation']=this.arr['relation'].concat(_arr)
+						this.relation = res.data.data.relationType
 					}
 				})
 			},

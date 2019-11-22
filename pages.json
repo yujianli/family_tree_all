@@ -357,6 +357,36 @@
 			}
 		},
 		{
+			"path": "pages/family/person/create",
+			"style": {
+				"navigationBarTitleText": "族人新增",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/family/person/edit",
+			"style": {
+				"navigationBarTitleText": "族人修改",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/family/search/search",
 			"style": {
 				"navigationBarTitleText": "族人搜索"
