@@ -244,7 +244,23 @@
 					}
 				}
 			}
-		}, {
+		}, 
+		{
+			"path": "pages/family/genealogy",
+			"style": {
+				"navigationBarTitleText": "族谱",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "搜索",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		}, 
+		{
 			"path": "pages/language/language",
 			"style": {
 				"navigationBarTitleText": "选择语言",
