@@ -387,7 +387,8 @@
 				if(!this.isPassedAway){
 					this.baseInfo.passingAway='';
 					this.passingAwayDate='请选择';
-					delete requestParam['passingAway'];
+					//delete requestParam['passingAway'];
+					requestParam['passingAway'] = '';
 				}
 				if(this.baseInfo.headUrl == this.defaultAvatar){
 					this.baseInfo.headUrl = '';

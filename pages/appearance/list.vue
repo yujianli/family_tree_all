@@ -3,35 +3,37 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
-			<uni-swipe-action :options="options" @click="remove(appearance.id)">
-				<view class="container" @tap="jumpToDetail(appearance.id)">
-					<view>{{appearance.age}}岁</view>
-					<view class="title">{{appearance.title}}</view>
-					<view class="row">
-						<view>身高：{{appearance.height}}cm</view>
-						<view>T恤尺寸：{{appearance.tshirtSize}}</view>
+			<uni-swipe-action>
+				<uni-swipe-action-item :options="options" @click="remove(appearance.id)">
+					<view class="container" @tap="jumpToDetail(appearance.id)">
+						<view>{{appearance.age}}岁</view>
+						<view class="title">{{appearance.title}}</view>
+						<view class="row">
+							<view>身高：{{appearance.height}}cm</view>
+							<view>T恤尺寸：{{appearance.tshirtSize}}</view>
+						</view>
+						<view class="row">
+							<view>体重：{{appearance.weight}}kg</view>
+							<view>衬衫尺寸：{{appearance.shirtSize}}M</view>
+						</view>
+						<view class="row">
+							<view>脸型：{{appearance.faceShape}}</view>
+							<view>衣服尺寸：{{appearance.clothSize}}</view>
+						</view>
+						<view class="row">
+							<view>个性特点：{{appearance.characteristics}}</view>
+							<view>裤子尺寸：{{appearance.trousersSize}}</view>
+						</view>
+						<view class="row">
+							<view>鞋尺寸：{{appearance.shoeSize}}码</view>
+							<view></view>
+						</view>
+						<view class="row">
+							<view style="font-size: 25upx;color: #56D282;">{{appearance.tags}}</view>
+							<view style="font-size: 25upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
+						</view>
 					</view>
-					<view class="row">
-						<view>体重：{{appearance.weight}}kg</view>
-						<view>衬衫尺寸：{{appearance.shirtSize}}M</view>
-					</view>
-					<view class="row">
-						<view>脸型：{{appearance.faceShape}}</view>
-						<view>衣服尺寸：{{appearance.clothSize}}</view>
-					</view>
-					<view class="row">
-						<view>个性特点：{{appearance.characteristics}}</view>
-						<view>裤子尺寸：{{appearance.trousersSize}}</view>
-					</view>
-					<view class="row">
-						<view>鞋尺寸：{{appearance.shoeSize}}码</view>
-						<view></view>
-					</view>
-					<view class="row">
-						<view style="font-size: 25upx;color: #56D282;">{{appearance.tags}}</view>
-						<view style="font-size: 25upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
-					</view>
-				</view>
+				</uni-swipe-action-item>
 			</uni-swipe-action>
 		</view>
 	</view>
@@ -39,6 +41,7 @@
 
 <script>
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import dataJson from '@/static/appData.json';
 	import util from '@/common/util.js'
 	export default {
@@ -61,7 +64,8 @@
 			
 		},
 		components:{
-			uniSwipeAction
+			uniSwipeAction,
+			uniSwipeActionItem
 		},
 		filters: {
 			formatDate: function(value) {

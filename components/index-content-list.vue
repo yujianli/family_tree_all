@@ -2,21 +2,23 @@
 	<view class="card_list">
 		<view class="more" @tap="toMore">更多</view>
 		<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-			<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
-				<view class="card_item" @tap="jumpToDetail(contentInfo)">
-					<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-					<view class="card_inner">
-						<text class="card_title">{{contentInfo.content}}</text>
-						<view class="card_others">
-							<view class="tags">
-								<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-									{{tag}}
-								</text>
+			<uni-swipe-action>
+				<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)">
+					<view class="card_item" @tap="jumpToDetail(contentInfo)">
+						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
+						<view class="card_inner">
+							<text class="card_title">{{contentInfo.content}}</text>
+							<view class="card_others">
+								<view class="tags">
+									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+										{{tag}}
+									</text>
+								</view>
+								<text class="time">{{contentInfo.createDate | formatDate}}</text>
 							</view>
-							<text class="time">{{contentInfo.createDate | formatDate}}</text>
 						</view>
 					</view>
-				</view>
+				</uni-swipe-action-item>
 			</uni-swipe-action>
 		</view>
 	</view>
@@ -25,6 +27,7 @@
 <script>
 	import util from '@/common/util.js';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	export default {
 		name: 'index-content-list',
 		props: {
@@ -45,7 +48,8 @@
 			}
 		},
 		components: {
-			uniSwipeAction
+			uniSwipeAction,
+			uniSwipeActionItem
 		},
 		filters: {
 			formatDate: function(value) {

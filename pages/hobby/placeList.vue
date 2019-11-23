@@ -3,20 +3,22 @@
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
 			<view v-for="(place, index) in places" :key="index">
-				<uni-swipe-action :options="options" @tap="deleteContent(place.id)">
-					<view class="card_item" @tap="jumpToPage(place)">
-						<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<view class="card_title">{{ place.address }}</view>
-							<view class="time mt20">{{place.begintime | buyDesc}}</view>
-							<view class="card_others card_others_1">
-								<view class="inner_flex">
-									<text class="time">{{ place.endtime| saleDesc }}</text>
-									<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @tap="deleteContent(place.id)">
+						<view class="card_item" @tap="jumpToPage(place)">
+							<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
+							<view class="card_inner">
+								<view class="card_title">{{ place.address }}</view>
+								<view class="time mt20">{{place.begintime | buyDesc}}</view>
+								<view class="card_others card_others_1">
+									<view class="inner_flex">
+										<text class="time">{{ place.endtime| saleDesc }}</text>
+										<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+									</view>
 								</view>
 							</view>
 						</view>
-					</view>
+					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
 		</view>
@@ -26,6 +28,7 @@
 <script>
 	import util from '@/common/util.js';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	export default {
 		data() {
 			return {
@@ -67,7 +70,7 @@
 				if (curDt >= value) return '已售出'
 			}
 		},
-		components:{uniSwipeAction},
+		components:{uniSwipeAction,uniSwipeActionItem},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name

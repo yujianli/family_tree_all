@@ -84,7 +84,7 @@
 	import util from '@/common/util.js';
 	import moduleLink from '@/common/moduleLink.js';
 	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	//import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import indexContentList from '@/components/index-content-list.vue'
 	import funchead from '@/components/funchead.vue'
 	export default {
@@ -150,12 +150,12 @@
 						backgroundColor: '#ED4848',
 						width: '105px'
 					}
-				}]
+				}],
 			};
 		},
 		components: {
 			uniSwiperDot,
-			uniSwipeAction,
+			// uniSwipeAction,
 			indexContentList,
 			funchead
 		},
@@ -165,31 +165,16 @@
 				return util.dateFormat(value)
 			}
 		},
-		onLoad: function() {
-			console.log(JSON.stringify(this.personInfo))
-			// 提醒试用到期
-			// uni.showModal({
-			// 	title: '温馨提示',
-			// 	content: '试用期已到期，请支付年费后继续使用？',
-			// 	cancelText:'以后再说',
-			// 	confirmColor:'#4DC578',
-			// 	success: function (res) {
-			// 		if (res.confirm) { 
-			// 		  uni.navigateTo({
-			// 			url: '/pages/fee/fee'
-			// 		  });
-			// 		} else if (res.cancel) {
-			// 			console.log('用户点击取消');
-			// 		}
-			// 	}
-			// });
-		},
+		// onLoad: function() {
+		// 	console.log(JSON.stringify(this.personInfo))
+		// },
 		onShow: function() {
-			console.log(JSON.stringify(this.personInfo))
+			//console.log(JSON.stringify(this.personInfo))
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
 			this.loadModule();
 			this.loadUserInfo();
+			this.loadWhetherRemind();
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
 		},
@@ -287,6 +272,46 @@
 						}
 					});
 			},
+			// 获取用户试用期状态
+			loadWhetherRemind:function(){
+				this.$http
+				.post('content/whetherRemind',{
+					language: this.param.language,
+					userId: this.param.userId
+				})
+				.then(res => {
+					if(res.data.code == 200){
+						let whetherRemind = res.data.data.whetherRemind;
+						/*whetherRemind
+						值为0时代表未到预警时间，
+						值为1时代表软件试用期快结束了，
+						值为2时代表软件试用时间已到期*/
+						// 提醒试用到期
+						if(whetherRemind == 1){
+							uni.showModal({
+								title: '温馨提示',
+								content: '试用期快到期了，请支付年费后继续使用？',
+								cancelText:'以后再说',
+								confirmColor:'#4DC578',
+								success: function (res) {
+									if (res.confirm) { 
+									  uni.navigateTo({
+										url: '/pages/fee/fee'
+									  });
+									} else if (res.cancel) {
+										console.log('用户点击取消');
+									}
+								}
+							});
+						}
+					} else {
+						uni.showToast({
+							title: '用户试用期状态加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			}
 			// loadIndexContent:function(){
 			// 	this.$http.get('content/userCards',{
 			// 		userId:this.param.userId,

@@ -423,7 +423,11 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/test/test",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",

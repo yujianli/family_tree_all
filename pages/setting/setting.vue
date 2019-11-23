@@ -7,10 +7,10 @@
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
-		<view class="wrapper">
+		<view class="wrapper" @tap="toPay">
 			<text class="inner_title">支付年费</text>
 			<view>
-				<text class="inner_text_1">试用期2019年5月18日到期</text>
+				<text class="inner_text_1">试用期还有{{day}}到期</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
@@ -38,20 +38,52 @@
 	export default {
 		data() {
 			return {
-				
+				param: {
+					userId: null,
+					language: this.$common.language
+				},
+				whetherRemind:null,
+				day:null,
 			}
 		},
+		onShow: function() {
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.loadWhetherRemind();
+		},
+		
 		methods: {
 			bindLogin() {
-				
 				uni.removeStorageSync('USER');
 				uni.navigateTo({
 					url: '/pages/login/login'
 				})
-				
 			},
 			setLanguage(){
 				uni.navigateTo({url: '/pages/language/language'});
+			},
+			toPay(){
+				uni.navigateTo({
+					url:'/pages/fee/fee'
+				})
+			},
+			loadWhetherRemind:function(){
+				this.$http
+				.post('content/whetherRemind',{
+					language: this.param.language,
+					userId: this.param.userId
+				})
+				.then(res => {
+					if(res.data.code == 200){
+						 this.whetherRemind = res.data.data.whetherRemind;
+						 this.day = res.data.data.day;
+					} else {
+						uni.showToast({
+							title: '用户试用期状态加载失败',
+							icon: 'none'
+						});
+					}
+				})
 			}
 		}
 	}

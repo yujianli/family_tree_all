@@ -19,19 +19,21 @@
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action :options="options" @click="deleteContent(content.contentId)">
-					<view class="card_item" @tap="jumpToDetail(content)">
-						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<text class="card_title">{{ content.content }}</text>
-							<view class="card_others">
-								<view class="tags">
-									<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
+						<view class="card_item" @tap="jumpToDetail(content)">
+							<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
+							<view class="card_inner">
+								<text class="card_title">{{ content.content }}</text>
+								<view class="card_others">
+									<view class="tags">
+										<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+									</view>
+									<text class="time">{{ content.createDate | formatDate}}</text>
 								</view>
-								<text class="time">{{ content.createDate | formatDate}}</text>
 							</view>
 						</view>
-					</view>
+					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
 		</view>
@@ -41,6 +43,7 @@
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import myTab from '@/components/xyz-tab';
 	import util from '@/common/util.js';
 	import config from '@/common/componetConfig.js';
@@ -80,6 +83,7 @@
 		components: {
 			uniSearchBar,
 			uniSwipeAction,
+			uniSwipeActionItem,
 			myTab
 		},
 		filters: {
