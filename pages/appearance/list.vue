@@ -169,6 +169,7 @@
 <style lang="less" scoped>
 	.container{
 		padding: 48upx;
+		flex:1;
 	}
 	.row{
 		margin-top: 40upx;
