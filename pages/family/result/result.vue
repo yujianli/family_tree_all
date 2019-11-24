@@ -1,56 +1,75 @@
 <template>
 	<view class="container_pd">
-		<view class="clan_result_container" v-for="(clan,index) in clanList">
+		<view class="clan_result_container" v-for="(clan,index) in dataList">
 			<view class="clan_hd">
-				<image :src="clan.pic"></image>
+				<image :src="clan.headUrl"></image>
 				<text>{{clan.name}}</text>
 			</view>
 			<view class="clan_item">
-				<view>出生年月： {{clan.birth}}</view>
-				<view>职业： {{clan.career}}</view>
+				<view>出生年月： {{clan.birth | formatDate}}</view>
+				<view>职业： {{clan.createBy}}</view>
 			</view>
 			<view class="clan_item">
 				<view>出生地：{{clan.birthPlace}}</view>
-				<view>居住省市： {{clan.residencePlace}}</view>
+				<view>居住省市： {{clan.updateBy}}</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import util from '@/common/util.js';
 	export default {
 		data() {
 			return {
-				clanList:[{
-					id:1,
-					pic:'../../../static/images/avatar.png',
-					name:'1万家掌柜',
-					birth:'11992年11月',
-					career:'1开发程序员',
-					birthPlace:'1浙江杭州',
-					residencePlace:'1浙江温州'
-				},{
-					id:2,
-					pic:'../../../static/images/avatar.png',
-					name:'2万家掌柜',
-					birth:'21992年11月',
-					career:'2开发程序员',
-					birthPlace:'2浙江杭州',
-					residencePlace:'2浙江温州'
-				},{
-					id:3,
-					pic:'../../../static/images/avatar.png',
-					name:'3万家掌柜',
-					birth:'31992年11月',
-					career:'3开发程序员',
-					birthPlace:'3浙江杭州',
-					residencePlace:'3浙江温州'
-				}]
+				param:{
+					familyId:null,
+					language:null
+				},
+				clanList:[]
 
 			}
 		},
+		computed:{
+			dataList:function(){
+				if(!this.clanList.length)return [];
+				for(let i=0;i<this.clanList.length;i++){
+					if(this.clanList[i].headUrl){
+						this.clanList[i].headUrl=this.$common.picPrefix()+this.clanList[i].headUrl
+					}else{
+						this.clanList[i].headUrl='../../../static/images/avatar.png'
+					}
+				}
+				return this.clanList
+			}
+		},
+		filters: {
+			formatDate: function(value) {
+				if (!value) return '请选择'
+				return util.dateFormat(value,'yyyy年MM月dd日')
+			}
+		},
+		onLoad:function(options){
+			util.loadObj(this.param,options)
+			this.loadData()
+		},
 		methods: {
-
+			loadData:function(){
+				this.$http.post('familyUser/familyUserList',{
+					familyId:this.param.familyId,
+					language:this.param.language,
+					page:1,
+					rows:10
+				}).then(res=>{
+					if(res.data.code===200){
+						this.clanList=res.data.data.familyUserList
+					}else{
+						uni.showToast({
+							title:'加载失败',icon:'none'
+						})
+					}
+				})
+			}
 		}
 	}
 </script>

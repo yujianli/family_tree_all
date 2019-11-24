@@ -397,7 +397,7 @@
 				"navigationBarTitleText": "族人搜索"
 			}
 		}, {
-			"path": "pages/family/info/info",
+			"path": "pages/family/person/info",
 			"style": {
 				"navigationBarTitleText": "查看详情"
 			}

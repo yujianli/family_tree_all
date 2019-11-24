@@ -8,12 +8,6 @@
 			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">性别</text>
-			<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
-				<view class="input">{{ arr.sex[idx.sex].value }}</view>
-			</picker>
-		</view>
-		<view class="wrapper">
 			<text class="inner_title">民族</text>
 			<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
 				<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
@@ -32,12 +26,12 @@
 				<view class="input">{{baseInfo.birth | formatDate}}</view>
 			</picker>
 		</view>
-		<view class="wrapper">
+<!-- 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
 			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
 				<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
 			</picker>
-		</view>
+		</view> -->
 		<view class="wrapper">
 			<text class="inner_title">出生地</text>
 			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地" />
@@ -77,15 +71,21 @@
 	export default {
 		data() {
 			return {
-				 arr:{
-					sex:dataJson['sex'],
+				param:{
+					userId:null,
+					familyUserId:null,
+					language:null,
+					familyId:null,
+				},
+				arr:{
 					zodiac: dataJson['zodiac'],
+					birthTime: dataJson['birthTime'],
 					nationality: dataJson['nationality'],
 					corporeity: dataJson['corporeity']
 				},
 				idx:{
-					sex:0,
 					zodiac:0,
+					birthTime:0,
 					nationality: 0,
 					corporeity:0
 				},
@@ -93,16 +93,14 @@
 				passingAwayDate: '请选择',
 				startDate:util.getDate('start'),
 				endDate:util.getDate('end'),
-				isPassedAway: false,
 				baseInfo: {
 					familyUserId: null,
-					userId:null,
 					name: '',
-					sex: '',
+					sex:null,
 					birthPlace: '',
 					updateBy: '',
-					mobile: '',
-					headUrl: '.',
+					mobile: null,
+					headUrl: '',
 					birth: '',
 					fixedTelephone: '',
 					nationality: '',
@@ -111,9 +109,8 @@
 					brief: '',
 					language: null,
 					createBy: '',
-					isPassedAway: 0,
-					passingAway: '',
-					createBy: ''
+					passingAway:'',
+					isPassedAway:null
 				},
 				defaultAvatar:'../../../static/images/avatar.png'
 			}
@@ -135,18 +132,19 @@
 			}
 		},
 		onLoad: function (options) {
-			util.loadObj(this.baseInfo,options)
+			util.loadObj(this.param,options)
 			this.loadData()
 		},
 		methods: {
 			loadData: function(){
 				this.$http.post('familyUser/detilFamilyUser', {
-					familyUserId:this.baseInfo.familyUserId,
-					userId:this.baseInfo.userId,
-					language: this.baseInfo.language,
+					familyUserId:this.param.familyUserId,
+					userId:this.param.userId,
+					language: this.param.language,
 					}).then((res)=>{
 					if(res.data.code === 200){
 						let _info = res.data.data.familyUserInfo;
+						_info.birth=util.dateFormat(_info.birth)
 						util.loadObj(this.baseInfo, _info);
 						this.initProp('sex',_info.sex);
 						this.initProp('zodiac',_info.zodiac);
@@ -159,14 +157,11 @@
 						
 					}else{
 						uni.showToast({
-							title: res.data.message,
+							title: '加载失败',
 							icon: 'none'
 						});
 					}
 				})
-			},
-			sexBindPickerChange: function(e) {
-				this.selProp('sex', e.target.value)
 			},
 			nationalityBindPickerChange: function(e) {
 				this.selProp('nationality', e.target.value)
@@ -181,22 +176,6 @@
 				let _date = e.target.value
 				this.baseInfo.birth = _date;
 				this.birthDate=_date;
-			},
-			switchChange: function(e){
-				this.isPassedAway = e.target.value
-				this.baseInfo.isPassedAway = e.target.value?1:0
-			},
-			bindPassingAwayDateChange: function(e) {
-				console.log(e.target.value);
-				let _date = e.target.value
-				if(this.isPassedAway) {
-					this.baseInfo.passingAway=_date;
-					this.passingAwayDate=_date;
-				} else {
-					this.baseInfo.passingAway='';
-					this.passingAwayDate='请选择';
-				}
-				
 			},
 			corporeityBindPickerChange: function(e) {
 				this.selProp('corporeity', e.target.value)
@@ -292,23 +271,12 @@
 				})
 			},
 			save:function(){
-				let requestParam = this.baseInfo;
-				requestParam['dateOfBirth']=util.dateFormat(this.baseInfo.birth);
-				delete requestParam['birth'];
-				// this.baseInfo['dateOfBirth']= this.baseInfo.birth;
-				// delete this.baseInfo['birth'];
-				if(!this.isPassedAway){
-					this.baseInfo.passingAway='';
-					this.passingAwayDate='请选择';
-					delete requestParam['passingAway'];
-				}
 				if(this.baseInfo.headUrl == this.defaultAvatar){
 					this.baseInfo.headUrl = '';
 				}
-				if(this.baseInfo.signature == this.defaultSignature){
-					this.baseInfo.signature = '';
-				}
-				this.$http.post('base/editBase', requestParam).then((res)=>{
+				this.baseInfo.familyUserId=this.param.familyUserId
+				this.baseInfo.language=this.param.language
+				this.$http.post('familyUser/editFamilyUser', this.baseInfo).then((res)=>{
 					if(res.data.code===200){
 						uni.showToast({
 							title: '保存成功',icon:'none'
