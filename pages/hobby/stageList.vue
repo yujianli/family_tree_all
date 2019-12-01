@@ -3,31 +3,33 @@
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list">
 			<view v-for="(stage, index) in stages" :key="index">
-				<uni-swipe-action :options="options" @tap="deleteContent(stage.id)">
-					<view class="card_item" @tap="jumpToPage(stage)">
-						<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<!--同事朋友-->
-							<view class="inner_flex" v-if="param.moduleId=='27'">
-								<view class="card_title">{{stage.name}}</view>
-								<view class="card_title">{{stage.mobile}}</view>
-							</view>
-							<view class="card_title" v-else>{{ stage.name }}</view>
-							<!--婚礼时间-->
-							<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime}}</view>
-							<!--车辆日期-->
-							<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
-							<view class="time mt20" v-if="enableDateCtrl">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
-							<view class="card_others card_others_1">
-								<view class="inner_flex">
-									<!--车辆已出售-->
-									<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
-									<text class="time" v-else>{{ stage.description }}</text>
-									<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @tap="deleteContent(stage.id)">
+						<view class="card_item" @tap="jumpToPage(stage)">
+							<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
+							<view class="card_inner">
+								<!--同事朋友-->
+								<view class="inner_flex" v-if="param.moduleId=='27'">
+									<view class="card_title">{{stage.name}}</view>
+									<view class="card_title">{{stage.mobile}}</view>
+								</view>
+								<view class="card_title" v-else>{{ stage.name }}</view>
+								<!--婚礼时间-->
+								<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime}}</view>
+								<!--车辆日期-->
+								<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
+								<view class="time mt20" v-if="enableDateCtrl">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
+								<view class="card_others card_others_1">
+									<view class="inner_flex">
+										<!--车辆已出售-->
+										<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
+										<text class="time" v-else>{{ stage.description }}</text>
+										<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+									</view>
 								</view>
 							</view>
 						</view>
-					</view>
+					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
 		</view>
@@ -38,6 +40,7 @@
 	import util from '@/common/util.js';
 	import config from '@/common/componetConfig.js'
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';	
 	export default {
 		data() {
 			return {
@@ -61,7 +64,8 @@
 						backgroundColor: '#ED4848',
 						width: '105px'
 					}
-				}]
+				}],
+				suffixUrl: '&style=image/resize,m_fill,w_123,h_92'
 			};
 		},
 		computed: {
@@ -75,7 +79,7 @@
 						self.stageList[i].name = self.stageList[i].name.replace(',', '与').concat('的婚礼')
 						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
 					}
-					self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl
+					self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl + this.suffixUrl
 				}
 				return self.stageList
 			}
@@ -95,7 +99,7 @@
 				if (curDt >= value) return '已出售'
 			}
 		},
-		components:{uniSwipeAction},
+		components:{uniSwipeAction,uniSwipeActionItem},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name

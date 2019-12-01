@@ -96,10 +96,10 @@
 				baseInfo: {
 					familyUserId: null,
 					name: '',
-					sex:null,
+					sex: '',
 					birthPlace: '',
 					updateBy: '',
-					mobile: null,
+					mobile: '',
 					headUrl: '',
 					birth: '',
 					fixedTelephone: '',

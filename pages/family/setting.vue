@@ -3,29 +3,41 @@
 		<view class="clan_set_title">家族树名字</view>
 		<view class="clan_set_item">
 			<text class="label">名称</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="姓名" value="万氏家族树" disabled="!isEdit" />
+			<input class="input" type="text" placeholder-style="color:#999" placeholder="姓名" v-model="familyCreator.familyName" disabled="!isEdit" />
 		</view>
 		<view class="clan_set_title">发起人</view>
 		<view class="clan_set_item spec">
-			<image src="../../../static/images/avatar.png" class="avatar"></image>
-			<text>万少波</text>
+			<image :src="familyCreator.headUrl?(prefixUrl+familyCreator.headUrl):defaultHeadUrl" class="avatar"></image>
+			<text>{{familyCreator.familyCreatorName}}</text>
 		</view>
 		<view class="clan_set_title">家族树管理员</view>
-		<view class="clan_set_item" v-for="(admin,index) in adminList">
+		<view class="clan_set_item" v-for="(admin,index) in adminList" v-bind:key="index">
 			<view class="inner_set">
-				<image :src="admin.avatar" class="avatar"></image>
+				<image :src="admin.headUrl?(prefixUrl+admin.headUrl):defaultHeadUrl" class="avatar"></image>
 				<text>{{admin.name}}</text>
 			</view>
 			<image src="../../../static/images/clear.png" class="clear" :style="{'display': isEdit ? 'block': 'none'}"  @tap="clearAdmin(index)"></image>
 		</view>
-		<view class="add_admin_container"><image src="../../../static/images/add.png"></image>添加管理员</view>
+		<view class="add_admin_container" v-if="isEdit" @tap="addAdmin()"><image src="../../../static/images/add.png" ></image>添加管理员</view>
 	</view>
 </template>
 
 <script>
+	import util from '@/common/util.js'
 	export default {
 		data() {
 			return {
+				param:{
+					familyId:null,
+					language:null
+				},
+				familyCreator:{
+					familyName:'',
+					familyCreatorName:'',
+					headUrl:''
+				},
+				prefixUrl:this.$common.picPrefix(),
+				defaultHeadUrl:'../../../static/images/avatar.png',
 				isEdit:false,
 				adminList:[{
 					id:1,
@@ -42,7 +54,28 @@
 				}]
 			}
 		},
+		onLoad:function(options){
+			util.loadObj(this.param,options)
+		},
+		onShow:function(){
+			this.loadFamilyTree()
+		},
 		methods: {
+			loadFamilyTree:function(){
+				this.$http.get('familyAdmin/familyAdminIndex',{
+					familyId:this.param.familyId,
+					language:this.param.language
+				}).then(res=>{
+					if(res.data.code===200){
+						this.familyCreator=res.data.data.familyCreator
+						this.adminList=res.data.data.familyAdmin
+					}else{
+						uni.showToast({
+							title: '加载失败',icon:'none'
+						});
+					}
+				})
+			},
 			clearAdmin:function(idx){
 				let adminList = this.adminList;
 				uni.showModal({
@@ -56,35 +89,31 @@
 				        }
 				    }
 				});
-				
+			},
+			addAdmin:function(){
+				uni.navigateTo({
+					url:'selectAdmin'+util.jsonToQuery(this.param)
+				})
 			}
 		},
 		onNavigationBarButtonTap(event) {
-			console.log(event);
 			const buttonIndex = event.index;
-			
 			if (buttonIndex === 0) {
-				console.log(event.text);
-				this.edit = !this.edit;
-				
+				this.isEdit = !this.isEdit;
 				let pages = getCurrentPages();
 				let page = pages[pages.length - 1];
 				// #ifdef APP-PLUS
 				let currentWebview = page.$getAppWebview();
 				let titleObj = currentWebview.getStyle().titleNView;
-				console.log(1);
-				console.log(JSON.stringify(titleObj.buttons[0]));
 				if (!titleObj.buttons) {
 					return;
 				}
 				if(titleObj.buttons[0].text == '编辑'){
 					titleObj.buttons[0].text = "完成";
-					this.isEdit = true;
 				}else{
 					titleObj.buttons[0].text = "编辑";
-					// 这里保存编辑的内容
-					this.isEdit = false;
 				}
+				console.log(this.isEdit)
 				currentWebview.setStyle({
 					titleNView: titleObj
 				});

@@ -61,8 +61,6 @@
 				// #ifdef APP-PLUS
 				let currentWebview = page.$getAppWebview();
 				let titleObj = currentWebview.getStyle().titleNView;
-				console.log(1);
-				console.log(JSON.stringify(titleObj.buttons[0]));
 				if (!titleObj.buttons) {
 					return;
 				}

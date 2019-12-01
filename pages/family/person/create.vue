@@ -44,7 +44,9 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">与{{pname}}之间的关系</text>
-			<view>{{relationName}}</view>
+			<picker @change="relationBindPickerChange" :value="idx.relation" :range=" arr.relation" range-key="name">
+				<view class="input">{{ arr.relation[idx.relation].name }}</view>
+			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">同辈排行</text>
@@ -65,10 +67,12 @@
 		data() {
 			return {
 				arr: {
-					sex: dataJson['sex']
+					sex: dataJson['sex'],
+					relation:[{id:0,name:'请选择'}]
 				},
 				idx: {
-					sex: 0
+					sex: 0,
+					relation:0
 				},
 				pname:'',
 				relation:[],
@@ -86,7 +90,7 @@
 					relationId: null,
 					ranking: '',
 					mobile: '',
-					headUrl: '.',
+					headUrl: '',
 					birth: '',
 					createBy: '',
 					language: null,
@@ -128,21 +132,20 @@
 					language:this.baseInfo.language
 				}).then(res=>{
 					if(res.data.code===200){
-						this.relation = res.data.data.relationType
+						this.arr.relation = this.arr.relation.concat(res.data.data.relationType)
 					}
 				})
 			},
 			sexBindPickerChange: function(e) {
-				this.sexIndex = e.target.value
 				this.selProp('sex', e.target.value)
+			},
+			relationBindPickerChange: function(e) {
+				this.idx.relation=e.target.value
+				this.baseInfo.relationId=this.arr.relation[e.target.value].id
 			},
 			bindDateChange: function(e) {
 				let _date = e.target.value
-				console.log(e.target.value);
 				this.baseInfo.birth = _date;
-				console.log(_date);
-
-				// this.birthDate = _date.replace('-','年')+ '月'
 				this.birthDate = _date;
 			},
 			switchChange: function(e) {
@@ -254,13 +257,12 @@
 				}
 				this.$http.post('familyUser/createFamilyUser', requestParam).then((res) => {
 					if (res.data.code === 200) {
-						uni.showToast({
-							title: '保存成功',
-							icon: 'none'
-						});
+						uni.navigateBack({
+							delta:1
+						})
 					} else {
 						uni.showToast({
-							title: '保存失败',
+							title: res.data.message,
 							icon: 'none'
 						});
 					}

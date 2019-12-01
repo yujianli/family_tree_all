@@ -1,10 +1,14 @@
 export default {
 	language: 'zh_CN',
-	setZhCn(){
-		this.language='zh_CN';
+	getLanguage(){
+		return uni.getStorageSync('language')
 	},
-	setEnUs(){
-		this.language='en_US';
+	setLanguage(type){
+		if(type==='English'){
+			uni.setStorageSync('language', 'en_US')
+		}else{
+			uni.setStorageSync('language', 'zh_CN')
+		}
 	},
 	apiPrefix: 'http://47.99.133.113:8989/api/',
 	picPrefix(){

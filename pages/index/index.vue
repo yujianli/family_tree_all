@@ -35,47 +35,32 @@
 		</view> -->
 
 		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
-			<swiper style="height: 460upx;">
+			<swiper style="height: 560upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index">
-					<view class="person_intro">
-						<image :src="item.headUrl" style="width: 88upx;height: 88upx;"></image>
-						<text class="name">{{ item.name }}</text>
-					</view>
-					<view style="margin-bottom: 52upx;">
-						<view class="other_info_container">
-							<text class="other_info">出生：{{ item.birth }}</text>
-							<text class="other_info">出生地：浙江杭州</text>
+					<view style="padding: 34upx">
+						<view style="box-shadow: 2upx 0 10upx #ccc;border-radius: 15upx;padding: 30upx;">
+							<view class="person_intro">
+								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
+								<text class="name">{{ item.name }}</text>
+							</view>
+							<view style="margin-bottom: 52upx;">
+								<view class="other_info_container">
+									<text class="other_info">性别：{{item.sex}}</text>
+									<text class="other_info">出生日期：{{ item.birth | formatDate}}</text>
+								</view>
+								<view class="other_info_container">
+									<text class="other_info">民族：{{item.nationality}}</text>
+									<text class="other_info">生肖：{{item.zodiac}}</text>
+								</view>
+							</view>
 						</view>
-						<view class="other_info_container">
-							<text class="other_info">民族：汉族</text>
-							<text class="other_info">职业：程序员</text>
-						</view>
 					</view>
+					
+					
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
 		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
-		<!-- <view class="card_list">
-			<view class="more" @tap="toMore">更多</view>
-			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
-					<view class="card_item" @tap="jumpToDetail(contentInfo)">
-						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<text class="card_title">{{contentInfo.content}}</text>
-							<view class="card_others">
-								<view class="tags">
-									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-										{{tag}}
-									</text>
-								</view>
-								<text class="time">{{contentInfo.createDate | formatDate}}</text>
-							</view>
-						</view>
-					</view>
-				</uni-swipe-action>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -84,9 +69,9 @@
 	import util from '@/common/util.js';
 	import moduleLink from '@/common/moduleLink.js';
 	import uniSwiperDot from '@/components/uni-ui/uni-swiper-dot/uni-swiper-dot.vue';
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import indexContentList from '@/components/index-content-list.vue'
 	import funchead from '@/components/funchead.vue'
+	import dataJson from '@/static/appData.json'
 	export default {
 		data() {
 			return {
@@ -109,31 +94,7 @@
 					nationality: '',
 					career: ''
 				},
-				userCardList: [{
-						zodiac: 3,
-						sex: 1,
-						name: '张三',
-						headUrl: '../../static/images/icon_func_0.png',
-						birth: '1993-10-11',
-						familyUserId: '1'
-					},
-					{
-						zodiac: '',
-						sex: 1,
-						name: '李四',
-						headUrl: '../../static/images/icon_func_1.png',
-						birth: '',
-						familyUserId: '2'
-					},
-					{
-						zodiac: '',
-						sex: 2,
-						name: '王五',
-						headUrl: '../../static/images/icon_func_2.png',
-						birth: '',
-						familyUserId: '3'
-					}
-				],
+				userCardList: [],
 				current: 0,
 				mode: 'round',
 				dotsStyles: {
@@ -150,12 +111,12 @@
 						backgroundColor: '#ED4848',
 						width: '105px'
 					}
-				}]
+				}],
+				defaultUrl:'../../static/images/avatar.png'
 			};
 		},
 		components: {
 			uniSwiperDot,
-			uniSwipeAction,
 			indexContentList,
 			funchead
 		},
@@ -166,7 +127,7 @@
 			}
 		},
 		onLoad: function() {
-			console.log(JSON.stringify(this.personInfo))
+			//console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
 			// 	title: '温馨提示',
@@ -185,11 +146,13 @@
 			// });
 		},
 		onShow: function() {
-			console.log(JSON.stringify(this.personInfo))
+			//console.log(JSON.stringify(this.personInfo))
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
 			this.loadModule();
 			this.loadUserInfo();
+			this.loadWhetherRemind();
+			this.loadUserCardList()
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
 		},
@@ -287,6 +250,84 @@
 						}
 					});
 			},
+			loadUserCardList:function(){
+				this.$http.get('content/userBaseCards',{
+					userId:this.param.userId,
+					language:this.param.language
+				}).then(res=>{
+					if(res.data.code===200){
+						this.userCardList=res.data.data.userCardList
+						for(let i=0;i<this.userCardList.length;i++){
+							this.userCardList[i].sex=this.userCardList[i].sex===1?'男':'女'
+							if(this.userCardList[i].headUrl){
+								this.userCardList[i].headUrl=this.$common.picPrefix()+this.userCardList[i].headUrl
+							}else{
+								this.userCardList[i].headUrl=this.defaultUrl
+							}
+							if(this.userCardList[i].zodiac){
+								let item = dataJson['zodiac'].find(item=>item.key===this.userCardList[i].zodiac)
+								if(item){
+									this.userCardList[i].zodiac=item.value
+								}
+							}else{
+								this.userCardList[i].zodiac=''
+							}
+							if(this.userCardList[i].nationality){
+								let item = dataJson['nationality'].find(item=>item.key===this.userCardList[i].nationality)
+								if(item){
+									this.userCardList[i].nationality=item.value
+								}
+							}else{
+								this.userCardList[i].nationality=''
+							}
+						}
+					}else{
+						uni.showToast({
+							title: '首页卡片内容加载失败',icon:'none'
+						});
+					}
+				})
+			},
+			// 获取用户试用期状态
+			loadWhetherRemind:function(){
+				this.$http
+				.post('content/whetherRemind',{
+					language: this.param.language,
+					userId: this.param.userId
+				})
+				.then(res => {
+					if(res.data.code == 200){
+						let whetherRemind = res.data.data.whetherRemind;
+						/*whetherRemind
+						值为0时代表未到预警时间，
+						值为1时代表软件试用期快结束了，
+						值为2时代表软件试用时间已到期*/
+						// 提醒试用到期
+						if(whetherRemind == 1){
+							uni.showModal({
+								title: '温馨提示',
+								content: '试用期快到期了，请支付年费后继续使用？',
+								cancelText:'以后再说',
+								confirmColor:'#4DC578',
+								success: function (res) {
+									if (res.confirm) { 
+									  uni.navigateTo({
+										url: '/pages/fee/fee'
+									  });
+									} else if (res.cancel) {
+										console.log('用户点击取消');
+									}
+								}
+							});
+						}
+					} else {
+						uni.showToast({
+							title: '用户试用期状态加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			}
 			// loadIndexContent:function(){
 			// 	this.$http.get('content/userCards',{
 			// 		userId:this.param.userId,

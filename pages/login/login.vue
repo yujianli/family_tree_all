@@ -48,6 +48,11 @@ export default {
 			}
 		};
 	},
+	computed:{
+		languageData:function(){
+			return null
+		}
+	},
 	onLoad(){
 		//uni.removeStorageSync('launchFlag');
 		this.loadExecution();

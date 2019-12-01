@@ -7,14 +7,14 @@
 			  <view class="w-picker-btn" :style="{'color':themeColor}" @tap="pickerConfirm">确定</view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='linkage'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange"  @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column v-for="(col,colIndex) in data" :key="colIndex">
 						<view class="w-picker-item" v-for="(item,index) in col" :key="index">{{item.label}}</view>
 					</picker-view-column>
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='half'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange"  @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.years" :key="index">{{item}}年</view>
 					</picker-view-column>
@@ -30,7 +30,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='date'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.years" :key="index">{{item}}年</view>
 					</picker-view-column>
@@ -43,7 +43,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='yearMonth'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.years" :key="index">{{item}}年</view>
 					</picker-view-column>
@@ -53,7 +53,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='dateTime'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.years" :key="index">{{item}}年</view>
 					</picker-view-column>
@@ -75,7 +75,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='range'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.fyears" :key="index">{{item}}</view>
 					</picker-view-column>
@@ -100,7 +100,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='time'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.hours" :key="index">{{item}}时</view>
 					</picker-view-column>
@@ -113,7 +113,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='region'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.provinces" :key="index">{{item.label}}</view>
 					</picker-view-column>
@@ -126,14 +126,14 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='selector'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data" :key="index">{{item.label}}</view>
 					</picker-view-column>
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='limit'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.date" :key="index">{{item.label}}</view>
 					</picker-view-column>
@@ -146,7 +146,7 @@
 				</picker-view>
 			</view>
 			<view class="w-picker-view" v-if="mode=='limitHour'">
-				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange">
+				<picker-view :indicator-style="itemHeight" :value="pickVal" @change="bindChange" @touchstart="touchStart" @touchend="touchEnd">
 					<picker-view-column>
 						<view class="w-picker-item" v-for="(item,index) in data.date" :key="index">{{item.label}}</view>
 					</picker-view-column>
@@ -186,7 +186,8 @@
 				pickVal:[],
 				showPicker:false,
 				resultStr:"",
-				itemHeight:`height: ${uni.upx2px(88)}px;`
+				itemHeight:`height: ${uni.upx2px(88)}px;`,
+				confirmFlag:true
 			};
 		},
 		computed:{
@@ -291,6 +292,10 @@
 			level:{
 				type:[Number,String],
 				default:2
+			},
+			timeout:{
+				type:Boolean,
+				default:false
 			}
 		},
 		watch:{
@@ -305,6 +310,18 @@
 			}
 		},
 		methods:{
+			touchStart(){
+				if(this.timeout){
+					this.confirmFlag=false;
+				}
+			},
+			touchEnd(){
+				if(this.timeout){
+					setTimeout(()=>{
+						this.confirmFlag=true;
+					},500)
+				}
+			},
 			getLinkageVal(value,flag){
 				let dval=[];
 				let arr=value;
@@ -326,17 +343,27 @@
 				const getData=(obj,key,str)=>{
 					if(key<lev){
 						data.push(obj);
-						obj.map((v,j)=>{
-							if(flag?v.value==arr[key]:v.label==arr[key]){
-								dval[key]=j;
-								checkArr.push(v.label);
-								checkValue.push(v.value);
-								resultStr+=v.label;
-								if(v.children){
-									getData(v.children,key+=1);
-								}
+						if(arr.length==7){
+							let item=obj[0];
+							checkArr.push(item.label);
+							checkValue.push(item.value);
+							resultStr+=item.label;
+							if(item.children){
+								getData(item.children,key+=1);
 							}
-						});
+						}else{
+							obj.map((v,j)=>{
+								if(flag?v.value==arr[key]:v.label==arr[key]){
+									dval[key]=j;
+									checkArr.push(v.label);
+									checkValue.push(v.value);
+									resultStr+=v.label;
+									if(v.children){
+										getData(v.children,key+=1);
+									}
+								}
+							});
+						}
 						return {
 							data,
 							dval,
@@ -396,6 +423,10 @@
 				return num<10?'0'+num:num+'';
 			},
 			maskTap(){
+				this.$emit("cancel",{
+					checkArr:this.checkArr,
+					defaultVal:this.pickVal
+				});
 				this.showPicker = false;
 			},
 			show(){
@@ -412,6 +443,9 @@
 				this.showPicker = false;
 			},
 			pickerConfirm(e){
+				if(!this.confirmFlag){
+					return;
+				}
 				switch(this.mode){
 					case "range":
 						let checkArr=this.checkArr;
@@ -483,6 +517,7 @@
 				let months=[];
 				let mode=_this.mode;
 				let col1,col2,col3,d,a,h,m;
+				let xDate=new Date().getTime();
 				switch(mode){
 					case "limitHour":
 						col1=_this.data.date[arr[0]];
@@ -558,13 +593,21 @@
 						day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 						area=_this.data.areas[arr[3]]||_this.data.areas[_this.data.areas.length-1];
 						if(year!=checkArr[0]){
-							days=initPicker.date.initDays(year,month,_this.disabledAfter);
 							months=initPicker.date.initMonths(year,_this.disabledAfter);
+							days=initPicker.date.initDays(year,month,_this.disabledAfter);
+							if(_this.disabledAfter){
+								arr[1]=arr[1]>(months.length-1)?months.length-1:arr[1];
+								arr[2]=arr[2]>(days.length-1)?days.length-1:arr[2];
+								month=_this.data.months[arr[1]]||_this.data.months[_this.data.months.length-1];
+								day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
+							}
 							_this.data.days=days;
 							_this.data.months=months;
 						};
 						if(month!=checkArr[1]){
 							days=initPicker.date.initDays(year,month,_this.disabledAfter);
+							arr[2]=arr[2]>(days.length-1)?days.length-1:arr[2];
+							day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 							_this.data.days=days;
 						};
 						_this.checkArr=[year,month,day,area];
@@ -575,13 +618,21 @@
 						month=_this.data.months[arr[1]]||_this.data.months[_this.data.months.length-1];
 						day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 						if(year!=checkArr[0]){
-							days=initPicker.date.initDays(year,month,_this.disabledAfter);
 							months=initPicker.date.initMonths(year,_this.disabledAfter);
+							days=initPicker.date.initDays(year,month,_this.disabledAfter);
+							if(_this.disabledAfter){
+								arr[1]=arr[1]>(months.length-1)?months.length-1:arr[1];
+								arr[2]=arr[2]>(days.length-1)?days.length-1:arr[2];
+								month=_this.data.months[arr[1]]||_this.data.months[_this.data.months.length-1];
+								day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
+							}
 							_this.data.days=days;
 							_this.data.months=months;
 						};
 						if(month!=checkArr[1]){
 							days=initPicker.date.initDays(year,month,_this.disabledAfter);
+							arr[2]=arr[2]>(days.length-1)?days.length-1:arr[2];
+							day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 							_this.data.days=days;
 						};
 						_this.checkArr=[year,month,day];
@@ -591,6 +642,10 @@
 						year=_this.data.years[arr[0]]||_this.data.years[_this.data.years.length-1];
 						month=_this.data.months[arr[1]]||_this.data.months[_this.data.months.length-1];
 						if(year!=checkArr[0]){
+							if(_this.disabledAfter){
+								arr[1]=arr[1]>(months.length-1)?months.length-1:arr[1];
+								month=_this.data.months[arr[1]]||_this.data.months[_this.data.months.length-1];
+							}
 							months=initPicker.date.initMonths(year,_this.disabledAfter);
 							_this.data.months=months;
 						};
@@ -605,11 +660,15 @@
 						minute=_this.data.minutes[arr[4]]||_this.data.minutes[_this.data.minutes.length-1];
 						second=_this.data.seconds[arr[5]]||_this.data.seconds[_this.data.seconds.length-1];
 						if(year!=checkArr[0]){
+							arr[2]=0;
 							days=initPicker.date.initDays(year,month);
+							day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 							_this.data.days=days;
 						};
 						if(month!=checkArr[1]){
+							arr[2]=0;
 							days=initPicker.date.initDays(year,month);
+							day=_this.data.days[arr[2]]||_this.data.days[_this.data.days.length-1];
 							_this.data.days=days;
 						};
 						_this.checkArr=[year,month,day,hour,minute,second];
@@ -630,16 +689,16 @@
 						if(this.level==3){
 							c3=_this.data[2][arr[2]]||_this.data[2][0];
 							if(c1.label!=checkArr[0]){
-								_this.data[1]=list[arr[0]].children;
-								_this.data[2]=list[arr[0]].children[arr[1]].children;
 								arr[1] = 0;
 								arr[2] = 0;
+								_this.data[1]=list[arr[0]].children;
+								_this.data[2]=list[arr[0]].children[arr[1]].children;
 								c2=_this.data[1][arr[1]]||_this.data[1][0];
 								c3=_this.data[2][arr[2]]||_this.data[2][0];
 							};
 							if(c2.label!=checkArr[1]){
-								_this.data[2]=list[arr[0]].children[arr[1]].children;
 								arr[2] = 0;
+								_this.data[2]=list[arr[0]].children[arr[1]].children;
 								c3=_this.data[2][arr[2]]||_this.data[2][0];
 							};
 							_this.checkArr=[c1.label,c2.label,c3.label];
@@ -754,24 +813,30 @@
 						};
 						break;
 					case "selector":
+						let idx=0;
 						data=_this.selectList;
-						dVal=_this.defaultVal;
+						_this.selectList.map((v,k)=>{
+							if(v.label==this.defaultVal[0]){
+								idx=k;
+							}
+						})
+						dVal=[idx];
 						break;
 					case "limit":
-						data=initPicker.limit.init(_this.dayStep,_this.startHour,_this.endHour,_this.minuteStep,_this.afterStep);
-						dVal=(data.defaultVal&&_this.current)?data.defaultVal:_this.defaultVal
+						data=initPicker.limit.init(_this.dayStep,_this.startHour,_this.endHour,_this.minuteStep,_this.afterStep,this.defaultVal);
+						dVal=data.defaultVal||_this.defaultVal;
 						break;
 					case "limitHour":
-						data=initPicker.limitHour.init(_this.dayStep);
-						dVal=(data.defaultVal&&_this.current)?data.defaultVal:_this.defaultVal
+						data=initPicker.limitHour.init(_this.dayStep,this.defaultVal);
+						dVal=data.defaultVal||_this.defaultVal;
 						break;	
 					case "range":
 						data=initPicker.range.init(_this.startYear,_this.endYear,_this.useCurrent(),_this.current);
-						dVal=(data.defaultVal&&_this.current)?data.defaultVal:_this.defaultVal
+						dVal=data.defaultVal||_this.defaultVal;
 						break;
 					default:
 						data=initPicker.date.init(_this.startYear,_this.endYear,_this.mode,_this.step,_this.useCurrent(),_this.current,_this.disabledAfter);
-						dVal=(data.defaultVal&&_this.current)?data.defaultVal:_this.defaultVal
+						dVal=data.defaultVal||_this.defaultVal;
 						break;
 				}
 				_this.data=data;

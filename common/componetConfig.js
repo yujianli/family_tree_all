@@ -2,7 +2,7 @@
 export default {
 	edit: {
 		//类型控件
-		typeCtrl: [6, 7, 10, 12, 18,25, 26, 28, 29],
+		typeCtrl: [6, 10, 12, 18,25, 26, 28, 29],
 		//天气控件
 		weatherCtrl: [11,22],
 		//关系控件

@@ -19,19 +19,21 @@
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action :options="options" @click="deleteContent(content.contentId)">
-					<view class="card_item" @tap="jumpToDetail(content)">
-						<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<text class="card_title">{{ content.content }}</text>
-							<view class="card_others">
-								<view class="tags">
-									<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
+						<view class="card_item" @tap="jumpToDetail(content)">
+							<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
+							<view class="card_inner">
+								<text class="card_title">{{ content.content }}</text>
+								<view class="card_others">
+									<view class="tags">
+										<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+									</view>
+									<text class="time">{{ content.createDate | formatDate}}</text>
 								</view>
-								<text class="time">{{ content.createDate | formatDate}}</text>
 							</view>
 						</view>
-					</view>
+					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
 		</view>
@@ -41,6 +43,7 @@
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import myTab from '@/components/xyz-tab';
 	import util from '@/common/util.js';
 	import config from '@/common/componetConfig.js';
@@ -74,12 +77,14 @@
 						backgroundColor: '#ED4848',
 						width: '105px'
 					}
-				}]
+				}],
+				suffixUrl: '&style=image/resize,m_fill,w_123,h_92'
 			};
 		},
 		components: {
 			uniSearchBar,
 			uniSwipeAction,
+			uniSwipeActionItem,
 			myTab
 		},
 		filters: {
@@ -160,10 +165,11 @@
 			},
 			initCategory: function() {
 				this.$http.get('category/query', {
-						moduleId: this.param.moduleId,
-						language: this.param.language
-					})
-					.then(res => {
+					moduleId: this.param.moduleId,
+					language: this.param.language,
+					type:'1',
+					userId:this.param.userId
+				}).then(res => {
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentCategory;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
@@ -183,7 +189,9 @@
 				this.$http.get('contentPeriod/query', {
 						userId: this.param.userId,
 						moduleId: this.param.moduleId,
-						language: this.param.language
+						language: this.param.language,
+						type:'1',
+						userId:this.param.userId
 					})
 					.then((res) => {
 						if (res.data.code === 200) {
@@ -238,7 +246,7 @@
 								this.contentList[i].tags = [];
 							}
 							if (this.contentList[i].imageUrl) {
-								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl;
+								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl+this.suffixUrl;
 							}
 						}
 					} else {

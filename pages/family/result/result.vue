@@ -26,7 +26,8 @@
 					familyId:null,
 					language:null
 				},
-				clanList:[]
+				clanList:[],
+				suffixUrl: '&style=image/resize,m_fill,w_48,h_48'
 
 			}
 		},
@@ -35,7 +36,7 @@
 				if(!this.clanList.length)return [];
 				for(let i=0;i<this.clanList.length;i++){
 					if(this.clanList[i].headUrl){
-						this.clanList[i].headUrl=this.$common.picPrefix()+this.clanList[i].headUrl
+						this.clanList[i].headUrl=this.$common.picPrefix()+this.clanList[i].headUrl+this.suffixUrl;
 					}else{
 						this.clanList[i].headUrl='../../../static/images/avatar.png'
 					}

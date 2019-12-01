@@ -1,123 +1,195 @@
 <template>
 	<view class="container">
 		<view class="wrapper avatar_wrapper" style="position: relative;">
-			<image :src="imageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('avatar')"></image>
-<!-- 			<avatar selWidth="200px" selHeight="400upx" @upload="myUpload" :avatarSrc="imageUrl"
-			        avatarStyle="width: 200upx; height: 200upx; border-radius: 100%;">
-			</avatar> -->
-			<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx" @tap="openAlbum('signature')"></image>
+			<view v-if="isEdit">
+				<!-- #ifdef APP-PLUS -->
+				<avatar selWidth="200px" selHeight="400upx" @upload="headUpload" :avatarSrc="imageUrl"
+				        avatarStyle="width: 154upx; height: 154upx; border-radius: 100%;"> 
+				</avatar>
+				<avatar selWidth="200px" selHeight="400upx" @upload="signatureUpload" :avatarSrc="signatureUrl"
+				        avatarStyle="width: 86upx; height: 86upx; position: absolute;bottom:-22upx;right:46upx;border-radius: 100%;"> 
+				</avatar>
+				<!-- #endif -->
+				<!-- #ifdef H5 -->
+				<image :src="imageUrl" style="width: 154upx;height: 154upx;border-radius: 50%;" @tap="openAlbum('avatar')"></image>
+				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx" @tap="openAlbum('signature')"></image>
+				<!-- #endif -->
+			</view>
+			<view v-else>
+				<image :src="imageUrl" style="width: 154upx;height: 154upx;border-radius: 50%;"></image>
+				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx"></image>
+			</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">姓名</text>
-			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
+			</view>
+			<view v-else>{{baseInfo.name}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">身份证</text>
-			<input class="input" type="text" v-model="baseInfo.idCard" placeholder-style="color:#999" placeholder="身份证" @blur="regValid('idcard', baseInfo.idCard)" />
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.idCard" placeholder-style="color:#999" placeholder="身份证" />
+			</view>
+			<view v-else>{{baseInfo.idCard}}</view>
+			<!-- @blur="regValid('idcard', baseInfo.idCard)" -->
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">性别</text>
-			<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
-				<view class="input">{{ arr.sex[idx.sex].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
+					<view class="input">{{ arr.sex[idx.sex].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.sex[idx.sex].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">民族</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.nationality" placeholder-style="color:#999" placeholder="民族" /> -->
-			<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
-				<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
+					<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.nationality[idx.nationality].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">生肖</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.zodiac" placeholder-style="color:#999" placeholder="生肖" value="猴"/> -->
-			<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
-				<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
+					<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.zodiac[idx.zodiac].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生年月</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.birth" placeholder-style="color:#999" placeholder="出生年月"/> -->
-			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : '请选择'" :start="startDate" :end="endDate" @change="bindDateChange" :fields="'day'">
-				<view class="input">{{baseInfo.birth | formatDate}}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : '请选择'" :start="startDate" :end="endDate" @change="bindDateChange"
+				 :fields="'day'">
+					<view class="input">{{baseInfo.birth | formatDate}}</view>
+				</picker>
+			</view>
+			<view v-else>{{baseInfo.birth | formatDate}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生时辰</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.birthTime" placeholder-style="color:#999" placeholder="出生时辰"/> -->
-			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
-				<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
+					<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.birthTime[idx.birthTime].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出生地</text>
-			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地" />
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地" />
+			</view>
+			<view v-else>{{baseInfo.birthPlace}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">是否过世</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.isPassedAway" placeholder-style="color:#999" placeholder="是否在世"/> -->
-			<switch :checked="isPassedAway" @change="switchChange" class="input" />
+			<view v-if="isEdit">
+				<picker @change="birthIsPassedAwayBindPickerChange" :value="idx.yesOrNo" :range=" arr.yesOrNo" range-key="value">
+					<view class="input">{{ arr.yesOrNo[idx.yesOrNo].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.yesOrNo[idx.yesOrNo].value}}</view>
 		</view>
-		<view class="wrapper" :style="{display: isPassedAway ? 'flex' : 'none'}">
+		<view class="wrapper" :style="{display: baseInfo.isPassedAway ? 'flex' : 'none'}">
 			<text class="inner_title">过世年月</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.passingAway" placeholder-style="color:#999" placeholder="过世年月"/> -->
-			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : '请选择'" :start="startDate" :end="endDate" @change="bindPassingAwayDateChange" :fields="'day'">
-				<view class="input">{{baseInfo.passingAway | formatDate}}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : '请选择'" :start="startDate" :end="endDate"
+				 @change="bindPassingAwayDateChange" :fields="'day'">
+					<view class="input">{{baseInfo.passingAway | formatDate}}</view>
+				</picker>
+			</view>
+			<view v-else>{{baseInfo.passingAway | formatDate}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">居住地</text>
-			<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地"/>
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地" />
+			</view>
+			<view v-else>{{baseInfo.placeResidence}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">固定电话</text>
-			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话"/>
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话" />
+			</view>
+			<view v-else>{{baseInfo.fixedTelephone}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">手机号码</text>
-			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码"/>
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码" />
+			</view>
+			<view v-else>{{baseInfo.mobile}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">邮箱地址</text>
-			<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" placeholder="邮箱地址"/>
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" placeholder="邮箱地址" />
+			</view>
+			<view v-else>{{baseInfo.emailAddress}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业"/>
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业" />
+			</view>
+			<view v-else>{{baseInfo.career}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">体质</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.corporeity" placeholder-style="color:#999" placeholder="体质" value="湿热质"/> -->
-			<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
-				<view class="input">{{ arr.corporeity[idx.corporeity].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
+					<view class="input">{{ arr.corporeity[idx.corporeity].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.corporeity[idx.corporeity].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">血型</text>
-			<!-- <input class="input" type="text" v-model="baseInfo.bloodType" placeholder-style="color:#999" placeholder="血型" value="O型"/> -->
-			<picker @change="bloodTypeBindPickerChange" :value="idx.bloodType" :range=" arr.bloodType" range-key="value">
-				<view class="input">{{ arr.bloodType[idx.bloodType].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="bloodTypeBindPickerChange" :value="idx.bloodType" :range=" arr.bloodType" range-key="value">
+					<view class="input">{{ arr.bloodType[idx.bloodType].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.bloodType[idx.bloodType].value}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">基因</text>
-			<input class="input" type="text" v-model="baseInfo.gene" placeholder-style="color:#999" placeholder="基因" />
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.gene" placeholder-style="color:#999" placeholder="基因" />
+			</view>
+			<view v-else>{{baseInfo.gene}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">气质</text>
-			<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" placeholder="气质" />
+			<view v-if="isEdit">
+				<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" placeholder="气质" />
+			</view>
+			<view v-else>{{baseInfo.temperament}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">星座</text>
-			<picker @change="constellationBindPickerChange" :value="idx.constellation" :range=" arr.constellation" range-key="value">
-				<view class="input">{{ arr.constellation[idx.constellation].value }}</view>
-			</picker>
+			<view v-if="isEdit">
+				<picker @change="constellationBindPickerChange" :value="idx.constellation" :range=" arr.constellation" range-key="value">
+					<view class="input">{{ arr.constellation[idx.constellation].value }}</view>
+				</picker>
+			</view>
+			<view v-else>{{arr.constellation[idx.constellation].value}}</view>
 		</view>
 		<view class="mul_wrapper">
 			<text class="inner_title">个人简介</text>
-			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" />
-			</view>
-		<!-- <button type="primary"  class="login" @tap="save">保存</button> -->
+			<template v-if="isEdit">
+				<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" />
+				</template>
+			<view v-else class="mul_input" style="min-height: 200upx;">{{baseInfo.brief}}</view>
+		</view>
 	</view>
 
 </template>
@@ -132,6 +204,7 @@
 		data() {
 			return {
 				 arr:{
+					yesOrNo:dataJson['yesOrNo'],
 					sex:dataJson['sex'],
 					zodiac: dataJson['zodiac'],
 					nationality: dataJson['nationality'],
@@ -141,6 +214,7 @@
 					constellation: dataJson['constellation']
 				},
 				idx:{
+					yesOrNo:0,
 					sex:0,
 					zodiac:0,
 					nationality: 0,
@@ -182,7 +256,8 @@
 					idCard: ''
 				},
 				defaultAvatar:'../../static/images/avatar.png',
-				defaultSignature:'../../static/images/avatar.png'
+				defaultSignature:'../../static/images/avatar.png',
+				isEdit: false
 			}
 		},
 		components:{avatar},
@@ -212,6 +287,30 @@
 		onLoad: function (option) {
 			this.loadData(option.id)
 		},
+		onNavigationBarButtonTap(e) {
+			if(this.isEdit){
+				this.save()
+			}
+			this.isEdit = !this.isEdit;
+			const buttonIndex = e.index;
+			if (buttonIndex === 0) {
+				let pages = getCurrentPages();
+				let page = pages[pages.length - 1];
+				// #ifdef APP-PLUS
+				let currentWebview = page.$getAppWebview();
+				let titleObj = currentWebview.getStyle().titleNView;
+				if (!titleObj.buttons) return;
+				if (titleObj.buttons[0].text == '编辑') {
+					titleObj.buttons[0].text = "完成";
+				} else {
+					titleObj.buttons[0].text = "编辑";
+				}
+				currentWebview.setStyle({
+					titleNView: titleObj
+				});
+				// #endif
+			}
+		},
 		methods: {
 			loadData: function(id){
 				this.$http.get('base/detailBase', {'baseId':id, 'language':'zn_CH'}).then((res)=>{
@@ -226,7 +325,8 @@
 						this.initProp('bloodType',_info.bloodType);
 						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
-						this.isPassedAway=_info.isPassedAway==1;
+						let idx= dataJson['yesOrNo'].findIndex(item=>item.key===_info.isPassedAway)
+						this.idx['yesOrNo']=idx
 						
 					}else{
 						uni.showToast({
@@ -251,7 +351,6 @@
 			},
 			bindDateChange: function(e) {
 				let _date = e.target.value
-				console.log(e.target.value);
 				// if(_date.length<5){
 				// 	uni.showToast({
 				// 		title: '请选择日期', icon:'none'
@@ -259,22 +358,16 @@
 				// 	return false;
 				// }
 				this.baseInfo.birth = _date;
-				console.log(_date);
-
-				// this.birthDate = _date.replace('-','年')+ '月'
 				this.birthDate=_date;
 			},
-			switchChange: function(e){
-				this.isPassedAway = e.target.value
-				this.baseInfo.isPassedAway = e.target.value?1:0
-				console.log('是否在世，携带值为', this.baseInfo.isPassedAway)
+			birthIsPassedAwayBindPickerChange: function(e){
+				this.idx['yesOrNo']=e.target.value
+				this.baseInfo.isPassedAway=dataJson['yesOrNo'][e.target.value].key;
 			},
 			bindPassingAwayDateChange: function(e) {
-				console.log(e.target.value);
 				let _date = e.target.value
-				if(this.isPassedAway) {
+				if(this.baseInfo.isPassedAway=1) {
 					this.baseInfo.passingAway=_date;
-					// this.passingAwayDate = _date.replace('-','年')+ '月'
 					this.passingAwayDate=_date;
 				} else {
 					this.baseInfo.passingAway='';
@@ -296,7 +389,6 @@
 				this.baseInfo[prop]=dataJson[prop][index].key;
 			},
 			initProp:function(prop, val){
-				console.log(dataJson[prop])
 				for(var i=0;i<dataJson[prop].length;i++){
 					if(dataJson[prop][i].key===val){
 						this.idx[prop]=i;
@@ -307,9 +399,9 @@
 			regValid:function(type, value){
 				var _title = '';
 				switch(type){
-					case 'idcard':
-						_title = reg.idcard(value);
-						break;
+					// case 'idcard':
+					// 	_title = reg.idcard(value);
+					// 	break;
 					case 'email': 
 						_title=reg.email(value);
 						break;
@@ -326,13 +418,18 @@
 					});
 				}
 			},
-			myUpload(rsp) {
+			headUpload(rsp) {
 				console.log(rsp)
 				this.url = rsp.path; //更新头像方式一
-				
+				this.uploadFile('avatar',this.url)
+			},
+			signatureUpload(rsp) {
+				console.log(rsp)
+				this.url = rsp.path; //更新头像方式一
+				this.uploadFile('signature',this.url)
 			},
 			openAlbum:function(type){
-				let url = this.$common.uploadUrl(); 
+				
 				let self = this;
 				uni.chooseImage({
 					count:1,
@@ -341,33 +438,7 @@
 					success: function(res){
 						console.log(JSON.stringify(res.tempFilePaths));
 						const tempFilePaths = res.tempFilePaths;
-						let token=uni.getStorageSync('USER').token;
-						new Promise((resolve, reject)=>{
-							uni.uploadFile({
-							    url: url,
-								header: {'token':token},
-							    filePath: tempFilePaths[0],
-							    name: 'file',
-							    formData: null,
-							    success: (res) => {
-							        console.log(res.data);
-									resolve(JSON.parse(res.data).name)
-							    },
-								fail:(res)=>{
-									console.log('fail upload log'+ JSON.stringify(res))
-									reject(res)
-								}
-							})
-						}).then((res)=>{
-							console.log(type);
-							if(type =='avatar'){
-								self.baseInfo.headUrl=res
-							} else if(type == 'signature'){
-								self.baseInfo.signature=res
-							}
-							
-							console.log(res)
-						})
+						self.uploadFile(type, tempFilePaths[0])
 						        
 					},
 					fail:function(res){
@@ -378,13 +449,43 @@
 					}
 				})
 			},
+			uploadFile:function(type,path){
+				let url = this.$common.uploadUrl(); 
+				let token=uni.getStorageSync('USER').token;
+				new Promise((resolve, reject)=>{
+					uni.uploadFile({
+					    url: url,
+						header: {'token':token},
+					    filePath: path,
+					    name: 'file',
+					    formData: null,
+					    success: (res) => {
+					        console.log(res.data);
+							resolve(JSON.parse(res.data).name)
+					    },
+						fail:(res)=>{
+							console.log('fail upload log'+ JSON.stringify(res))
+							reject(res)
+						}
+					})
+				}).then((res)=>{
+					console.log(type);
+					if(type =='avatar'){
+						this.baseInfo.headUrl=res
+					} else if(type == 'signature'){
+						this.baseInfo.signature=res
+					}
+					
+					console.log(res)
+				})
+			},
 			save:function(){
 				let requestParam = this.baseInfo;
 				requestParam['dateOfBirth']=util.dateFormat(this.baseInfo.birth);
 				delete requestParam['birth'];
 				// this.baseInfo['dateOfBirth']= this.baseInfo.birth;
 				// delete this.baseInfo['birth'];
-				if(!this.isPassedAway){
+				if(!this.baseInfo.isPassedAway){
 					this.baseInfo.passingAway='';
 					this.passingAwayDate='请选择';
 					delete requestParam['passingAway'];
@@ -406,9 +507,6 @@
 						});
 					}
 				});
-			},
-			onNavigationBarButtonTap(e) {
-				this.save();
 			},
 		},
 	}
@@ -456,4 +554,3 @@
 		
 	}
 </style>
-

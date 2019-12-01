@@ -64,6 +64,7 @@
 					isFamily: 2
 				},
 				showSelect: false,
+				familyUserId:null,
 				familyTitle: '家族',
 				familyList:[],
 				instruction: '',
@@ -130,7 +131,21 @@
 							familyId: this.param.familyId
 						});
 						break;
+					case 20:
+						linkUrl=linkUrl+util.jsonToQuery({
+							familyUserId: this.familyUserId,
+							familyId: this.param.familyId,
+							userId: this.param.userId,
+							language: this.param.language
+						});
+						break;
 					case 21:
+						linkUrl = linkUrl + util.jsonToQuery({
+							familyId:this.param.familyId,
+							language: this.param.language
+						});
+						break;
+					case 23:
 						linkUrl = linkUrl + util.jsonToQuery({
 							familyId:this.param.familyId,
 							language: this.param.language
@@ -212,6 +227,7 @@
 					language:this.param.language
 				}).then(res=>{
 					if(res.data.code===200){
+						this.familyUserId=res.data.data.family.familyUserId
 						this.instruction=res.data.data.family.instruction
 					}else{
 						uni.showToast({

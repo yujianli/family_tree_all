@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="avatar_wrapper">
-			<image src="../../../static/images/avatar.png"></image>
+			<image :src="imgObj"></image>
 			<view>{{baseInfo.name}}</view>
 		</view>
 		<view class="tab_container">
@@ -67,16 +67,25 @@
 					corporeity: dataJson['corporeity']
 				},
 				baseInfo: {
-					name:null,
-					sex: null,
-					nationality: null,
-					zodiac: null,
-					birth: null,
-					birthPlace: null,
-					updateBy: null,
-					createBy: null,
-					brief: null
-				}
+					name: '',
+					sex: '',
+					nationality: '',
+					zodiac: '',
+					birth: '',
+					birthPlace: '',
+					updateBy: '',
+					createBy: '',
+					brief: '',
+					headUrl:''
+				},
+				defaultUrl:'../../../static/images/avatar.png',
+				prefixUrl:this.$common.picPrefix(),
+				suffixUrl:'&style=image/resize,m_fill,w_100'
+			}
+		},
+		computed:{
+			imgObj:function(){
+				return this.baseInfo.headUrl?(this.prefixUrl+this.baseInfo.headUrl+this.suffixUrl):this.defaultUrl
 			}
 		},
 		filters: {

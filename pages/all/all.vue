@@ -6,25 +6,25 @@
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-				<uni-swipe-action :options="options" @click="deleteContent(contentInfo.id)">
-					<view class="card_item" @tap="jumpToDetail(contentInfo)">
-						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-						<view class="card_inner">
-							<text class="card_title">{{contentInfo.content}}</text>
-							<view class="card_others">
-								<view class="tags">
-									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-										{{tag}}
-									</text>
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)">
+						<view class="card_item" @tap="jumpToDetail(contentInfo)">
+							<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
+							<view class="card_inner">
+								<text class="card_title">{{contentInfo.content}}</text>
+								<view class="card_others">
+									<view class="tags">
+										<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+											{{tag}}
+										</text>
+									</view>
+									<text class="time">{{contentInfo.createDate | formatDate}}</text>
 								</view>
-								<text class="time">{{contentInfo.createDate | formatDate}}</text>
 							</view>
 						</view>
-					</view>
+					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
-
-			<!-- 	</uni-swipe-action> -->
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
 			<view>
@@ -53,6 +53,7 @@
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';	
 	import uniDrawer from '@/components/uni-ui/uni-drawer/uni-drawer.vue'
 	import util from '@/common/util.js'
 	export default {
@@ -93,12 +94,14 @@
 					name: '健康状况',
 					hasActive: false
 				}],
-				contentList: []
+				contentList: [],
+				suffixUrl: '&style=image/resize,m_fill,w_123,h_92',
 			}
 		},
 		components: {
 			uniSearchBar,
 			uniSwipeAction,
+			uniSwipeActionItem,
 			uniDrawer
 		},
 		filters: {
@@ -141,7 +144,7 @@
 								this.contentList[i].tags = this.contentList[i].tags.split(',')
 							}
 							if (this.contentList[i].imageUrl) {
-								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl
+								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl+this.suffixUrl
 							}
 						}
 					} else {

@@ -1,13 +1,14 @@
 <template>
 	<view>
 		<view class="fee_info fee_pd" style="margin-top: 18px;">会员类型：VIP年费会员</view>
-		<view class="fee_info fee_pd">2019年1月20日-2020年1月19日</view>
-		<view class="fee_tips">有效期还有256天过期</view>
+		<view class="fee_info fee_pd">{{startTime}}-{{endTime}}</view>
+		<view class="fee_tips">有效期还有{{day}}过期</view>
 		<view class="more_tips fee_pd">直接购买更多年限有更多优惠</view>
 		<view class="fee_wrapper">
 			<view v-for="(fee,index) in feeList">
-				<view @tap="setActive(fee.title,fee.price)" :class="['fee_item',{active : activeTitle == fee.title}]">
-					<text class="fee_title">{{fee.title}}</text>
+				<view @tap="setActive(fee.name,fee.price,fee.startTime,fee.endTime,fee.year)" 
+				:class="['fee_item',{active : activeTitle == fee.name}]">
+					<text class="fee_title">{{fee.name}}</text>
 					<view class="fee_inner">
 						<text class="fee_unit">￥</text>
 						<text class="fee_price">{{fee.price}}</text>
@@ -26,8 +27,8 @@
 					<text class="f15" @click="closePopup">取消</text>
 				</view>
 				<view class="fee_type">类型：{{activeTitle}}{{activePrice}}</view>
-				<view v-for="(pay,index) in payList" class="pay_item">
-					<view>
+				<view v-for="(pay,index) in providerList" class="pay_item" :key="index">
+					<view @click="requestPayment(pay,index)">
 						<image :src="pay.pic"></image>
 						<text>{{pay.name}}</text>
 					</view>
@@ -38,55 +39,214 @@
 </template>
 
 <script>
+	import util from '@/common/util.js';
 	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue'
 	export default {
 		data() {
 			return {
-				feeList: [{
-						title: '1年VIP年费',
-						price: '360',
-					},
-					{
-						title: '2年VIP年费',
-						price: '700',
-					},
-					{
-						title: '3年VIP年费',
-						price: '1280',
-					},
-				],
-				activeTitle: "1年VIP年费",
-				activePrice:'360',
-				payList: [{
-					id: 1,
-					name: '支付宝',
-					pic: '../../static/images/icon_zfb.png'
-				}, {
-					id: 2,
-					name: '微信支付',
-					pic: '../../static/images/icon_wx.png'
+				param: {
+					userId: null,
+					language: this.$common.language
+				},
+				feeList: null,
+				activeTitle: null,
+				activePrice:null,
+				activeYear:null,
+				startTime:null,
+				endTime:null,
+				day:null,
+				providerList: null,
+				// payList: [{
+				// 	id: 1,
+				// 	name: '支付宝',
+				// 	pic: '../../static/images/icon_zfb.png'
+				// }, {
+				// 	id: 2,
+				// 	name: '微信支付',
+				// 	pic: '../../static/images/icon_wx.png'
 
-				}, {
-					id: 3,
-					name: '苹果支付',
-					pic: '../../static/images/icon_pg.png'
+				// }, {
+				// 	id: 3,
+				// 	name: '苹果支付',
+				// 	pic: '../../static/images/icon_pg.png'
 
-				}]
+				// }]
 			}
 		},
 		components: {
 			uniPopup
 		},
+		onShow: function() {
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.loadWhetherRemind();
+			this.loadAnnualFeeList();
+		},
+		onLoad: function() {
+		    // #ifdef APP-PLUS
+		    uni.getProvider({
+		        service: "payment",
+		        success: (e) => {
+		            console.log("payment success:" + JSON.stringify(e));
+		            let providerList = [];
+		            e.provider.map((value) => {
+		                switch (value) {
+		                    case 'alipay':
+		                        providerList.push({
+		                            name: '支付宝',
+		                            id: value,
+									pic:'../../static/images/icon_zfb.png',
+		                        });
+		                        break;
+		                    case 'wxpay':
+		                        providerList.push({
+		                            name: '微信',
+		                            id: value,
+									pic:'../../static/images/icon_wx.png'
+		                        });
+		                        break;
+		                    default:
+		                        break;
+		                }
+		            })
+		            this.providerList = providerList;
+		        },
+		        fail: (e) => {
+		            console.log("获取支付通道失败：", e);
+		        }
+		    });
+		    // #endif
+		},
 		methods: {
-			setActive: function(name,price) {
+			setActive: function(name,price,startTime,endTime,year) {
 				this.activeTitle = name;
 				this.activePrice = price;
+				this.activeYear = year;
+				this.startTime = util.dateFormat(startTime,"yyyy年MM月dd日");
+				this.endTime = util.dateFormat(endTime,"yyyy年MM月dd日");
 			},
 			openPopup: function() {
-				this.$refs.fee_popup.open()
+				this.$refs.fee_popup.open();
 			},
 			closePopup: function() {
 				this.$refs.fee_popup.close();
+			},
+			// 获取年费类型列表
+			loadAnnualFeeList:function(){
+				this.$http
+				.get('annualFee/query',{
+					language: this.param.language,
+					userId: this.param.userId
+				})
+				.then(res => {
+					if(res.data.code == 200){
+						 let list = res.data.data.annualFeeList;
+						 if(list.length > 0) {
+							 let firstAnnualFee = list[0];
+							 this.feeList = list;
+							 this.activeTitle = firstAnnualFee.name;
+							 this.activePrice = firstAnnualFee.price;
+							 this.activeYear = firstAnnualFee.year;
+							 this.startTime = util.dateFormat(firstAnnualFee.startTime,"yyyy年MM月dd日");
+							 this.endTime = util.dateFormat(firstAnnualFee.endTime,"yyyy年MM月dd日");
+						 }
+						 
+					} else {
+						uni.showToast({
+							title: '年费费类型列表加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			},
+			//获取用户试用状态
+			loadWhetherRemind:function(){
+				this.$http
+				.post('content/whetherRemind',{
+					language: this.param.language,
+					userId: this.param.userId
+				})
+				.then(res => {
+					if(res.data.code == 200){
+						 this.day = res.data.data.day;
+					} else {
+						uni.showToast({
+							title: '用户试用期状态加载失败',
+							icon: 'none'
+						});
+					}
+				})
+			},
+			
+			async requestPayment(e, index) {
+			   await this.getOrderInfo(e).then(res => {
+					if(res.data.code == 200){
+						console.log('---------------------------------')
+						console.log(res.data)
+						uni.requestPayment({
+						    provider: e.id,
+						    orderInfo: res.data.data[e.id],
+						    success: (e) => {
+						        console.log("success", e);
+						        uni.showToast({
+						            title: "支付成功"
+						        })
+						    },
+						    fail: (e) => {
+						        console.log("fail", e);
+						        uni.showModal({
+						            content: "支付失败",
+						            showCancel: false
+						        })
+						    },
+						    complete: () => {
+						        //支付完成
+						    }
+						})
+					} else {
+						uni.showToast({
+							title: '订单创建失败',
+							icon: 'none'
+						});
+					}
+				});
+				
+			   
+			
+			    
+			},
+			getOrderInfo(e) {
+				console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+				console.log(e)
+				//创建订单
+				return this.$http.post('order/createOrder',{
+					userCode: this.param.userId,
+					pay_type: e.name,
+					amount:this.activePrice,
+					language: this.param.language,
+					upgradeDay: this.activeYear,
+					unit:1,
+					type:2
+				})
+				
+				
+				
+			    // let appid = "";
+			    // // #ifdef APP-PLUS
+			    // appid = plus.runtime.appid;
+			    // // #endif
+			    // let url = 'https://demo.dcloud.net.cn/payment/?payid=' + e + '&appid=' + appid + '&total=' + this.price;
+			    // return new Promise((res) => {
+			    //     uni.request({
+			    //         url: url,
+			    //         success: (result) => {
+			    //             res(result);
+			    //         },
+			    //         fail: (e) => {
+			    //             res(e);
+			    //         }
+			    //     })
+			    // })
 			}
 		}
 	}

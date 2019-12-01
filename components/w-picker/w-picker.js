@@ -22,22 +22,40 @@ const initPicker={
 			let dMonth=aToday.getMonth()+1;
 			let dDate=aToday.getDate();
 			let totalDays=new Date(startYear,curMonth,0).getDate();
-			for(let s=startYear;s<=endYear;s++){
-				years.push(s+'');
-			};
-			let curYear=years[value[0]];
+			let dvalObj={};
 			switch(mode){
 				case "half":
 				case "date":
 				case "yearMonth":
-					if(disabled&&curYear==dYear){
-						for(let m=1;m<=dMonth;m++){
-							months.push(forMatNum(m));
+					let curYear=value[0];
+					let curMonth=value[1];
+					if(disabled){
+						for(let s=startYear;s<=dYear;s++){
+							years.push(s+'');
 						};
-						for(let d=1;d<=dDate;d++){
-							days.push(forMatNum(d));
+						if(curYear==dYear){
+							for(let m=1;m<=dMonth;m++){
+								months.push(forMatNum(m));
+							};
+						}else{
+							for(let m=1;m<=12;m++){
+								months.push(forMatNum(m));
+							};
 						}
+						if(curMonth==dMonth){
+							for(let d=1;d<=dDate;d++){
+								days.push(forMatNum(d));
+							}
+						}else{
+							for(let d=1;d<=totalDays;d++){
+								days.push(forMatNum(d));
+							}
+						}
+						
 					}else{
+						for(let s=startYear;s<=endYear;s++){
+							years.push(s+'');
+						};
 						for(let m=1;m<=12;m++){
 							months.push(forMatNum(m));
 						};
@@ -47,6 +65,9 @@ const initPicker={
 					};
 					break;
 				default:
+					for(let s=startYear;s<=endYear;s++){
+						years.push(s+'');
+					};
 					for(let m=1;m<=12;m++){
 						months.push(forMatNum(m));
 					};
@@ -73,7 +94,7 @@ const initPicker={
 					minutes.indexOf(value[4])==-1?0:minutes.indexOf(value[4]),
 					seconds.indexOf(value[5])
 				]
-			};
+			}
 			switch(mode){
 				case "range":
 					if(flag){
@@ -88,7 +109,12 @@ const initPicker={
 						defaultVal=[returnArr[0],returnArr[1],returnArr[2]];
 						return {years,months,days,defaultVal}
 					}else{
-						return {years,months,days}
+						defaultVal=[
+							years.indexOf(value[0])==-1?0:years.indexOf(value[0]),
+							months.indexOf(value[1])==-1?0:months.indexOf(value[1]),
+							days.indexOf(value[2])==-1?0:days.indexOf(value[2])
+						];
+						return {years,months,days,defaultVal}
 					}
 					break;
 				case "half":
@@ -103,7 +129,19 @@ const initPicker={
 						defaultVal=[returnArr[0],returnArr[1],returnArr[2],returnArr[3]];
 						return {years,months,days,areas,defaultVal}
 					}else{
-						return {years,months,days,areas}
+						let idx=0;
+						areas.map((v,k)=>{
+							if(v.label==value[3]){
+								idx=v.value;
+							}
+						})
+						defaultVal=[
+							years.indexOf(value[0])==-1?0:years.indexOf(value[0]),
+							months.indexOf(value[1])==-1?0:months.indexOf(value[1]),
+							days.indexOf(value[2])==-1?0:days.indexOf(value[2]),
+							idx
+						];
+						return {years,months,days,areas,defaultVal}
 					}
 					break;	
 				case "yearMonth":
@@ -111,24 +149,39 @@ const initPicker={
 						defaultVal=[returnArr[0],returnArr[1]];
 						return {years,months,defaultVal}
 					}else{
-						return {years,months}
+						defaultVal=[
+							years.indexOf(value[0])==-1?0:years.indexOf(value[0]),
+							months.indexOf(value[1])==-1?0:months.indexOf(value[1])
+						];
+						return {years,months,defaultVal}
 					}
 					break;
 				case "dateTime":
 					if(flag){
 						defaultVal=returnArr;
-						return {years,months,days,hours,minutes,seconds,defaultVal}
 					}else{
-						return {years,months,days,hours,minutes,seconds}
+						defaultVal=[
+							years.indexOf(value[0])==-1?0:years.indexOf(value[0]),
+							months.indexOf(value[1])==-1?0:months.indexOf(value[1]),
+							days.indexOf(value[2])==-1?0:days.indexOf(value[2]),
+							hours.indexOf(value[3])==-1?0:hours.indexOf(value[3]),
+							minutes.indexOf(value[4])==-1?0:minutes.indexOf(value[4]),
+							seconds.indexOf(value[5])==-1?0:seconds.indexOf(value[5])
+						];
 					}
+					return {years,months,days,hours,minutes,seconds,defaultVal}
 					break;
 				case "time":
 					if(flag){
 						defaultVal=[returnArr[3],returnArr[4],returnArr[5]];
-						return {hours,minutes,seconds,defaultVal}
 					}else{
-						return {hours,minutes,seconds}
+						defaultVal=[
+							hours.indexOf(value[0])==-1?0:hours.indexOf(value[0]),
+							minutes.indexOf(value[1])==-1?0:minutes.indexOf(value[1]),
+							seconds.indexOf(value[2])==-1?0:seconds.indexOf(value[2])
+						];
 					}
+					return {hours,minutes,seconds,defaultVal}
 					break;			
 			}
 		},
@@ -139,10 +192,16 @@ const initPicker={
 			let dDate=aDate.getDate();
 			let flag=dYear==year?true:false;
 			let months=[];
-			if(flag&&disabled){
-				for(let m=1;m<=dMonth;m++){
-					months.push(forMatNum(m));
-				};			
+			if(disabled){
+				if(flag){
+					for(let m=1;m<=dMonth;m++){
+						months.push(forMatNum(m));
+					};	
+				}else{
+					for(let m=1;m<=12;m++){
+						months.push(forMatNum(m));
+					};	
+				}
 			}else{
 				for(let m=1;m<=12;m++){
 					months.push(forMatNum(m));
@@ -172,12 +231,14 @@ const initPicker={
 	},
 	//短期日期上下午
 	limitHour:{
-		init(dayStep=7){
+		init(dayStep=7,dVal){
 			let startDate=new Date();
 			let date=[],areas=[],hours=[];
 			let hour=new Date().getHours();
 			let weeks=["周日","周一","周二","周三","周四","周五","周六"];
 			let arrs=[];
+			let defaultVal=[];
+			let d=0,a=0,h=0;
 			for(let i=0;i<dayStep;i++){
 				let year,month,day,weekday;
 				year=startDate.getFullYear();
@@ -226,7 +287,27 @@ const initPicker={
 					value:forMatNum(hour>12?k+12:k)
 				})
 			};
-			return {date,areas,hours};
+			date.map((v,k)=>{
+				if(v.label==dVal[0]){
+					d=k
+				}
+			})
+			if(d!=0){
+				areas=this.initAreas(date[d]);
+				hours=this.initHours(date[d],areas[a]);
+			}
+			areas.map((v,k)=>{
+				if(v.label==dVal[1]){
+					a=k
+				}
+			})
+			hours.map((v,k)=>{
+				if(v.label==dVal[2]){
+					h=k
+				}
+			});
+			defaultVal=[d,a,h]
+			return {date,areas,hours,defaultVal};
 		},
 		initAreas(date){
 			let areas=[];
@@ -255,13 +336,7 @@ const initPicker={
 					value:1
 				}]
 			}
-			return areas;areas=[{
-					label:"上午",
-					value:0
-				},{
-					label:"下午",
-					value:1
-				}]
+			return areas;
 		},
 		initHours(dateCol,hourCol){
 			let hours=[];
@@ -296,13 +371,15 @@ const initPicker={
 	},
 	//短期日期时间初始化
 	limit:{
-		init(dayStep=7,startHour=8,endHour=20,minuteStep=1,afterStep=30){
+		init(dayStep=7,startHour=8,endHour=20,minuteStep=1,afterStep=30,dVal){
 			let startDate=new Date();
 			let bsDate=new Date(new Date().getTime()+afterStep*60*1000);
 			let date=[],hours=[],minutes=[];
 			let hour=bsDate.getHours();
 			let minute=Math.floor(bsDate.getMinutes()/minuteStep)*minuteStep;
 			let weeks=["周日","周一","周二","周三","周四","周五","周六"];
+			let d=0,h=0,m=0;
+			let defaultVal=[];
 			for(let i=0;i<dayStep;i++){
 				let year,month,day,weekday;
 				year=startDate.getFullYear();
@@ -350,7 +427,26 @@ const initPicker={
 					value:forMatNum(j)
 				});
 			}
-			return {date,hours,minutes};
+			date.map((v,k)=>{
+				if(v.label==dVal[0]){
+					d=k
+				}
+			})
+			if(d!=0){
+				hours=this.initHours(startHour=8,endHour=20,minuteStep=1,afterStep=30,date[d].value);
+			}
+			hours.map((v,k)=>{
+				if(v.label==dVal[1]){
+					h=k
+				}
+			})
+			minutes.map((v,k)=>{
+				if(v.label==dVal[2]){
+					m=k
+				}
+			})
+			defaultVal=[d,h,m];
+			return {date,hours,minutes,defaultVal};
 		},
 		initHours(startHour=8,endHour=20,minuteStep=1,afterStep=30,date){
 			let hours=[];
@@ -458,34 +554,23 @@ const initPicker={
 			for(let d=1;d<=totalDays;d++){
 				tdays.push(forMatNum(d));
 			};
-			if(flag){
-				defaultVal=[
-					fyears.indexOf(value[0]),
-					fmonths.indexOf(value[1]),
-					fdays.indexOf(value[2]),
-					0,
-					tyears.indexOf(value[0]),
-					tmonths.indexOf(value[1]),
-					tdays.indexOf(value[2])
-				];
-				return {
-					fyears,
-					fmonths,
-					fdays,
-					tyears,
-					tmonths,
-					tdays,
-					defaultVal
-				}
-			}else{
-				return {
-					fyears,
-					fmonths,
-					fdays,
-					tyears,
-					tmonths,
-					tdays,
-				}
+			defaultVal=[
+				fyears.indexOf(value[0])==-1?0:fyears.indexOf(value[0]),
+				fmonths.indexOf(value[1])==-1?0:fmonths.indexOf(value[1]),
+				fdays.indexOf(value[2])==-1?0:fdays.indexOf(value[2]),
+				0,
+				tyears.indexOf(value[4])==-1?0:tyears.indexOf(value[4]),
+				tmonths.indexOf(value[5])==-1?0:tmonths.indexOf(value[5]),
+				tdays.indexOf(value[6])==-1?0:tdays.indexOf(value[6])
+			];
+			return {
+				fyears,
+				fmonths,
+				fdays,
+				tyears,
+				tmonths,
+				tdays,
+				defaultVal
 			}
 		},
 		initDays(year,month){

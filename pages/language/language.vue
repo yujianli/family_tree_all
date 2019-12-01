@@ -28,6 +28,17 @@
 					current: 0
 			}
 		},
+		onNavigationBarButtonTap(e) {
+			for(let i=0;i<this.items.length;i++){
+				if(this.items[i]['checked']){
+					this.$common.setLanguage(this.items[i].value)
+					break
+				}
+			}
+			uni.showToast({
+				title: '设置成功',icon:'none'
+			});
+		},
 		methods: {
 			radioChange: function(evt) {
 				for (let i = 0; i < this.items.length; i++) {

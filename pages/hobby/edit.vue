@@ -18,6 +18,12 @@
 				<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
 			</picker>
 		</view>
+		<!-- 爱好二级分类 -->
+		<view class="wrapper" v-if="param.moduleId==='7'">
+			<text class="inner_title">类型：</text>
+			<view @tap="open" class="input">{{contentInfo.categoryName}}</view>
+			<w-picker mode="linkage"    @confirm="selVal" ref="linkage" themeColor="#f00" :linkList="linkList"></w-picker>
+		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
@@ -39,7 +45,9 @@
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
 			<text class="inner_title">天气：</text>
-			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.weather" placeholder="天气" />
+			<picker @change="weatherBindPickerChange" :value="weatherIdx" :range="weatherList" >
+				<view class="input">{{ weatherList[weatherIdx] }}</view>
+			</picker>
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
@@ -120,6 +128,8 @@
 				placeIdx:0,
 				placeList:[{id:-1,address:'请选择'}],
 				fesIdx:[0,0],
+				weatherList:dataJson['weather'],
+				weatherIdx:0,
 				festivalStr:'',
 				typeEnable: false,
 				contentInfo:{
@@ -129,7 +139,7 @@
 					placeId: null,
 					videoUrls: null,
 					userId: null,
-					categoryName: null,
+					categoryName: '',
 					content: '',
 					tags: '',
 					associatedPerson: null,
@@ -157,12 +167,17 @@
 					showUploadProgerss:false,
 					limitNumber: 8,
 				},
+				linkList:[],
+				defaultText:'请选择',
+				defaultVal:['请选择',''],
+				val:['0','0'],
+				selectedType:null,
 				tagList:[],
 				relationList:[],
 				imageList:[],
 				relation:'',
 				tag:'',
-				
+				suffixUrl:'&style=image/resize,m_fill,w_100'
 			}
 		},
 		computed:{
@@ -277,6 +292,10 @@
 							this.fesIdx[0]=idx1
 							this.fesIdx[1]=idx2
 						}
+						if(_data.weather){
+							let idx=this.weatherList.findIndex(item=>item===_data.weather)
+							this.weatherIdx=idx
+						}
 						let id=null;
 						switch(this.param.flag){
 							case 'category':
@@ -307,6 +326,9 @@
 				})
 			},
 			loadCategory: function() {
+				if(this.param.moduleId==='7'){
+					this.loadFirstType()
+				}else{
 				this.$http.get('category/query', {
 						moduleId: this.param.moduleId,
 						language: this.param.language
@@ -323,6 +345,7 @@
 							});
 						}
 					})
+					}
 			},
 			loadPeriod: function() {
 				this.$http.get('contentPeriod/query', {
@@ -362,10 +385,67 @@
 						}
 					})
 			},
+			loadFirstType:function(){
+				this.$http.get('category/query', {
+						moduleId: this.param.moduleId,
+						language: this.param.language
+					}).then((res) => {
+						if (res.data.code === 200) {
+							let _list = res.data.data.contentCategory
+							for(let i=0;i<_list.length;i++){
+								_list[i].label=_list[i].name
+								_list[i].value=_list[i].id
+							}
+							this.loadSecondType(_list[0].id, _list, 0)
+							
+						} else {
+							uni.showToast({
+								title: '类型信息加载失败',
+								icon: 'none'
+							});
+						}
+					})
+			},
+			loadSecondType: function(parentId, list, idx){
+				let array=[]
+				if(idx>=list.length) {
+					this.linkList=this.linkList.concat(list)
+					if(this.param.contentId){
+						this.loadContent()
+					}
+				}else{
+				this.$http.get('category/query', {
+						parentId: parentId,
+						language: this.param.language
+					}).then((res) => {
+						if (res.data.code === 200) {
+							let data= res.data.data.contentCategory
+							for(let i=0;i<data.length;i++){
+								array.push({label:data[i].name,value:data[i].id})
+							}
+							list[idx].children=array
+							idx++
+							let _id=null
+							if(idx<list.length){
+								_id=list[idx].id
+							}
+							this.loadSecondType(_id, list, idx)
+						}
+					})
+				}
+			},
+			open:function(){
+				this.$refs.linkage.show()
+			},
 			bindMultiPickerColumnChange:function(e){
 				console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value)
 				this.fesIdx[e.detail.column]=e.detail.value
 				this.$forceUpdate()
+			},
+			selVal:function(e){
+				console.log(e)
+				this.contentInfo.categoryName=e.checkArr[1];
+				this.contentInfo.categoryId=e.checkValue[1]
 			},
 			bindDateChange:function(e){
 				this.contentInfo.time=e.target.value
@@ -384,6 +464,11 @@
 				let id = this.placeList[e.target.value].id
 				this.contentInfo.placeId=id;
 				this.placeIdx=e.target.value
+			},
+			weatherBindPickerChange:function(e){
+				let id = this.weatherList[e.target.value]
+				this.contentInfo.weather=id;
+				this.weatherIdx=e.target.value
 			},
 			save:function(){
 				let postParam={
@@ -523,7 +608,7 @@
 		flex:1;
 		text-align:left;
 		&.smallipt{
-			padding:6upx 10upx;font-size: 20upx;flex:none;width:100upx;color: #EE9C36;
+			padding:6upx 10upx;font-size: 30upx;flex:none;width:120upx;color: #EE9C36;
 		}
 	}
 	.mul_input{
@@ -562,6 +647,7 @@
 	.mul_tags{
 		margin-right: 29upx;
 		color: #56D282;
+		font-size: 30upx;
 	}
 	.edit_other_opts{
 		font-size: 25upx;color: #EE9C36;

@@ -285,7 +285,7 @@
 		text-align: right;
 		&.smallipt{
 			text-align: left;
-			padding:6upx 10upx;font-size: 20upx;flex:none;width:100upx;color: #EE9C36;
+			padding:6upx 10upx;font-size: 30upx;flex:none;width:120upx;color: #EE9C36;
 		}
 	}
 
@@ -308,5 +308,6 @@
 	.mul_tags{
 		margin-right: 29upx;
 		color: #56D282;
+		font-size: 30upx;
 	}
 </style>

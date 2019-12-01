@@ -195,7 +195,7 @@
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
-							"text": "保存",
+							"text": "编辑",
 							"fontSize": "32upx",
 							"color": "#333333"
 						}]
@@ -248,16 +248,16 @@
 		{
 			"path": "pages/family/genealogy",
 			"style": {
-				"navigationBarTitleText": "族谱",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "搜索",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
+				"navigationBarTitleText": "族谱"
+				// "app-plus": {
+				// 	"titleNView": {
+				// 		"buttons": [{
+				// 			"text": "搜索",
+				// 			"fontSize": "32upx",
+				// 			"color": "#333333"
+				// 		}]
+				// 	}
+				// }
 			}
 		}, 
 		{
@@ -391,7 +391,8 @@
 			"style": {
 				"navigationBarTitleText": "族人搜索"
 			}
-		}, {
+		}, 
+		{
 			"path": "pages/family/result/result",
 			"style": {
 				"navigationBarTitleText": "族人搜索"
@@ -401,8 +402,9 @@
 			"style": {
 				"navigationBarTitleText": "查看详情"
 			}
-		}, {
-			"path": "pages/family/setting/setting",
+		}, 
+		{
+			"path": "pages/family/setting",
 			"style": {
 				"navigationBarTitleText": "家族设置",
 				"app-plus": {
@@ -415,7 +417,23 @@
 					}
 				}
 			}
-		}, {
+		},
+		{
+			"path": "pages/family/selectAdmin",
+			"style": {
+				"navigationBarTitleText": "家族设置",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "完成",
+							"fontSize": "32upx",
+							"color": "#333333"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/404/404",
 			"style": {
 				"app-plus": {
@@ -423,13 +441,16 @@
 				}
 			}
 		}
-	],
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
 		// "navigationStyle":"custom",
 		"navigationBarBackgroundColor": "#ffffff",
-		"backgroundColor": "#ffffff"
+		"backgroundColor": "#ffffff",
+		"usingComponents":{
+		   "tree-chart":"/components/tree-chart/tree-chart"
+		  }
 	},
 	"tabBar": {
 		"color": "#CCCCCC",
