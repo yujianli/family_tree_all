@@ -41,7 +41,7 @@
 
 <script>
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';	
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import dataJson from '@/static/appData.json';
 	import util from '@/common/util.js'
 	export default {

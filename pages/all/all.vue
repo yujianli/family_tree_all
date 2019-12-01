@@ -53,7 +53,7 @@
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';	
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import uniDrawer from '@/components/uni-ui/uni-drawer/uni-drawer.vue'
 	import util from '@/common/util.js'
 	export default {

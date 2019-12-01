@@ -216,23 +216,23 @@
 			// 		url: url
 			// 	});
 			// },
-			loadModule: function() {
-				this.$http.get('module/user/all', this.param).then(res => {
-					if (res.data.code === 200) {
-						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: '更多',
-							icon: '../../static/images/icon_func_0.png'
-						});
-					} else {
-						uni.showToast({
-							title: '模块信息加载失败',
-							icon: 'none'
-						});
-					}
-				});
-			},
+			// loadModule: function() {
+			// 	this.$http.get('module/user/all', this.param).then(res => {
+			// 		if (res.data.code === 200) {
+			// 			this.basicFuncList = res.data.data.module;
+			// 			this.basicFuncList.push({
+			// 				id: 0,
+			// 				name: '更多',
+			// 				icon: '../../static/images/icon_func_0.png'
+			// 			});
+			// 		} else {
+			// 			uni.showToast({
+			// 				title: '模块信息加载失败',
+			// 				icon: 'none'
+			// 			});
+			// 		}
+			// 	});
+			// },
 			loadUserInfo: function() {
 				this.$http
 					.get('base/selectBase', {

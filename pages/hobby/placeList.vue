@@ -28,7 +28,7 @@
 <script>
 	import util from '@/common/util.js';
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';	
+	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	export default {
 		data() {
 			return {

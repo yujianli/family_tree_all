@@ -62,9 +62,7 @@
 				</view>
 			</view>
 		</view>
-
 	</view>
-
 </template>
 
 <script>
@@ -79,14 +77,14 @@
 				prefixUrl: this.$common.picPrefix(),
 				womanUrl: '../../static/images/icon_default_woman.png',
 				manUrl: '../../static/images/icon_default_man.png',
-				targetData: null
+				targetData: null,
 			}
 		},
 		methods: {
 			itemClick: function(target) {
 				// #ifdef APP-PLUS
-				if(target.id){
-					uni.setStorageSync('selNode',target)
+				if (target.id) {
+					uni.setStorageSync('selNode', target)
 				}
 				// #endif
 				this.$emit('openBtn', target)
@@ -177,11 +175,11 @@
 		background-color: #c69b2f;
 	}
 
-	.user-selected {
+	<<<<<<< HEAD .user-selected {
 		border: 2px solid #FF0000;
 	}
 
-	.vertical-line {
+	=======>>>>>>>5981e9e41ccad66692d2ee8ea0befce753d462d5 .vertical-line {
 		height: 25upx;
 		width: 4upx;
 		background-color: #999;

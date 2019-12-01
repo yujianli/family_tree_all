@@ -1,7 +1,7 @@
 <template>
 	<view class="card_list">
 		<view class="more" @tap="toMore">更多</view>
-		<view v-for="(contentInfo,i) in contentList" v-bind:key="i">
+		<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 			<uni-swipe-action>
 				<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)">
 					<view class="card_item" @tap="jumpToDetail(contentInfo)">
@@ -10,7 +10,7 @@
 							<text class="card_title">{{contentInfo.content}}</text>
 							<view class="card_others">
 								<view class="tags">
-									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="i">
+									<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
 										{{tag}}
 									</text>
 								</view>
