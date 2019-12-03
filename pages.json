@@ -187,11 +187,10 @@
 				}
 			}
 		},
-
 		{
 			"path": "pages/personalInfo/personalInfo",
 			"style": {
-				"navigationBarTitleText": "个人信息",
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -212,13 +211,13 @@
 		{
 			"path": "pages/appearance/list",
 			"style": {
-				"navigationBarTitleText": "体貌特征"
+				"navigationBarTitleText": ""
 			}
 		},
 		{
 			"path": "pages/appearance/edit",
 			"style": {
-				"navigationBarTitleText": "体貌特征",
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -233,7 +232,7 @@
 		{
 			"path": "pages/appearance/detail",
 			"style": {
-				"navigationBarTitleText": "新体貌特征",
+				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -395,7 +394,7 @@
 		{
 			"path": "pages/family/result/result",
 			"style": {
-				"navigationBarTitleText": "族人搜索"
+				"navigationBarTitleText": "家族成员"
 			}
 		}, {
 			"path": "pages/family/person/info",

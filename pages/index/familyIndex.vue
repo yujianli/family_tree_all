@@ -21,12 +21,15 @@
 			</view>
 		</view> -->
 		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
-		<view class="family_training_container">
-			<view class="title">家训</view>
-			<view class="content">
-				{{instruction}}
+		<view style="padding: 34upx;">
+			<view class="family_training_container">
+				<view class="title">家训</view>
+				<view class="content">
+					{{instruction}}
+				</view>
 			</view>
 		</view>
+		
  		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
 			<!-- <view class="card_list">
 			<view class="more" @tap="jumpToAll">更多</view>
@@ -148,7 +151,8 @@
 					case 23:
 						linkUrl = linkUrl + util.jsonToQuery({
 							familyId:this.param.familyId,
-							language: this.param.language
+							language: this.param.language,
+							userId:this.param.userId
 						});
 						break;
 					case 33:
@@ -404,6 +408,8 @@
 
 	.family_training_container {
 		padding: 56upx 49upx;
+		box-shadow: 2upx 0 18upx #E5E5E5;
+		border-radius: 15upx;
 
 		.title {
 			font-size: 42upx;

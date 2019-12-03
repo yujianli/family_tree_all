@@ -268,6 +268,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid #e5e5e5;
 	}
 	.mul_wrapper{
 		display: flex;
@@ -298,5 +299,10 @@
 		background-color: #4dc578;
 		height: 92upx;
 		line-height: 92upx;
+	}
+	.inner_title{
+		font-size: 34upx;
+		color: #333;
+		margin-right: 40upx;
 	}
 </style>

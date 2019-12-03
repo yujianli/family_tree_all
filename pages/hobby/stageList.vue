@@ -6,7 +6,7 @@
 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @tap="deleteContent(stage.id)">
 						<view class="card_item" @tap="jumpToPage(stage)">
-							<image :style="{ display: stage.imageUrl == '' ? 'none' : 'block' }" :src="stage.imageUrl" class="card_pic"></image>
+							<image v-if="stage.imageUrl != null" :src="stage.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
 								<!--同事朋友-->
 								<view class="inner_flex" v-if="param.moduleId=='27'">
@@ -79,7 +79,10 @@
 						self.stageList[i].name = self.stageList[i].name.replace(',', '与').concat('的婚礼')
 						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
 					}
-					self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl + this.suffixUrl
+					if(self.stageList[i].imageUrl != null) {
+						self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl + this.suffixUrl
+					}
+					
 				}
 				return self.stageList
 			}
@@ -243,5 +246,6 @@
 		text-align: center;
 		color: #fff;
 		z-index: 999999;
+		box-shadow: 2upx 0 18upx #25A754;
 	}
 </style>

@@ -128,7 +128,9 @@
 			loadModule: function() {
 				this.$http.get('module/all', {
 						isFamily: this.param.isFamily,
-						language: this.param.language
+						language: this.param.language,
+						type:'1',
+						userId:this.param.userId
 					})
 					.then(res => {
 						if (res.data.code === 200) {

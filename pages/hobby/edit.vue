@@ -3,7 +3,7 @@
 		<view class="wrapper">
 			<text class="inner_title">时间：</text>
 			<picker class="input" mode="date" :value="contentInfo.time" :start="startDate" :end="endDate" @change="bindDateChange"
-			 :fields="'day'">
+			 :fields="'day'" style="flex:1;">
 				<view>{{contentInfo.time}}</view>
 			</picker>
 		</view>
@@ -14,7 +14,7 @@
 		<!-- 节日纪事 -->
 		<view class="wrapper" v-if="param.moduleId==='30'">
 			<text class="inner_title">节日：</text>
-			<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="fesIdx" :range="festivalList">
+			<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="fesIdx" :range="festivalList" style="flex:1;">
 				<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
 			</picker>
 		</view>
@@ -26,26 +26,26 @@
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
-			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
+			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name" style="flex:1;">
 				<view class="input">{{ typeList[idx].name }}</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.stageCtrl">
 			<text class="inner_title">{{stageCtrlName}}：</text>
-			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stages" range-key="name">
+			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stages" range-key="name" style="flex:1;">
 				<view class="input" v-if="['27','31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
 				<view class="input" v-else>{{stages[stageIdx].startTime| formatDate}}-{{stages[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.placeCtrl">
 			<text class="inner_title">居室：</text>
-			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address">
+			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address" style="flex:1;">
 				<view class="input">{{ placeList[placeIdx].address }}</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
 			<text class="inner_title">天气：</text>
-			<picker @change="weatherBindPickerChange" :value="weatherIdx" :range="weatherList" >
+			<picker @change="weatherBindPickerChange" :value="weatherIdx" :range="weatherList" style="flex:1;">
 				<view class="input">{{ weatherList[weatherIdx] }}</view>
 			</picker>
 		</view>
@@ -65,24 +65,24 @@
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
 				<!-- #ifdef H5 -->
-				<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+				<view class="tags_text" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}" v-for="(tag,index) in tagList">{{tag}}</view>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
-				<view class="mul_tags" >{{tagList | formatWords}}</view>
+				<view class="tags_text" v-for="(tag,index) in tagList">{{tag}}</view>
 				<!-- #endif -->
-				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
+				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" style="width: 120upx;" class="input smallipt" @blur="setTags" placeholder="编辑标签" />
 			</view>
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
 			<view class="tags_wrapper">
 				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
 				<!-- #ifdef H5 -->
-				<view class="mul_tags" :style="{display: relationList.length > 0 ? 'inline-block': 'none'}">{{relationList | formatWords}}</view>
+				<view class="tags_text" :style="{display: relationList.length > 0 ? 'inline-block': 'none'}" v-for="(relation,index) in relationList">{{relation}}</view>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
-				<view class="mul_tags" >{{relationList | formatWords}}</view>
+				<view class="tags_text" v-for="(relation,index) in relationList">{{relation}}</view>
 				<!-- #endif -->
-				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" placeholder="添加关联" />
+				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" placeholder="+添加关联" />
 			</view>
 		</view>	
 		<view class="opt_container" v-if="removeEnable">
@@ -608,7 +608,10 @@
 		flex:1;
 		text-align:left;
 		&.smallipt{
-			padding:6upx 10upx;font-size: 30upx;flex:none;width:120upx;color: #EE9C36;
+			text-align: left;
+			padding:6upx 30upx;font-size: 30upx;flex:none;width:150upx;color: #EE9C36;
+			border-radius: 20upx;
+			background: #F8F8F8;
 		}
 	}
 	.mul_input{
@@ -664,6 +667,15 @@
 	}
 	.select_tag{
 		font-size: 30upx;color: #999;margin-right: 29upx;
+	}
+	.tags_text{
+		font-size: 30upx;
+		color: #56D282;
+		background:#F8F8F8;
+		border-radius: 20upx;
+		padding:8upx 20upx;
+		vertical-align: middle;
+		margin-right: 14upx;
 	}
 	.relation_wrapper {
 		padding: 34upx;

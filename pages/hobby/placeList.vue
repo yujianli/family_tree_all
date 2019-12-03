@@ -209,5 +209,6 @@
 		text-align: center;
 		color: #fff;
 		z-index: 999999;
+		box-shadow: 2upx 0 18upx #25A754;
 	}
 </style>

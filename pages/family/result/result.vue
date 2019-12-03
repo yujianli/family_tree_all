@@ -1,30 +1,33 @@
 <template>
 	<view class="container_pd">
-		<view class="clan_result_container" v-for="(clan,index) in dataList">
+		<!-- <uni-search-bar :radius="100" class="search_info" @confirm="search" /> -->
+		<view class="clan_result_container" v-for="(clan,index) in dataList" @tap="viewDetail(clan)">
 			<view class="clan_hd">
 				<image :src="clan.headUrl"></image>
 				<text>{{clan.name}}</text>
 			</view>
 			<view class="clan_item">
 				<view>出生年月： {{clan.birth | formatDate}}</view>
-				<view>职业： {{clan.createBy}}</view>
+				<view>职业： {{clan.createBy | nullFilter}}</view>
 			</view>
 			<view class="clan_item">
-				<view>出生地：{{clan.birthPlace}}</view>
-				<view>居住省市： {{clan.updateBy}}</view>
+				<view>出生地：{{clan.birthPlace | nullFilter}}</view>
+				<view>居住省市： {{clan.updateBy | nullFilter}}</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
 	import util from '@/common/util.js';
 	export default {
 		data() {
 			return {
 				param:{
 					familyId:null,
-					language:null
+					language:null,
+					userId:null
 				},
 				clanList:[],
 				suffixUrl: '&style=image/resize,m_fill,w_48,h_48'
@@ -48,8 +51,13 @@
 			formatDate: function(value) {
 				if (!value) return '请选择'
 				return util.dateFormat(value,'yyyy年MM月dd日')
+			},
+			nullFilter:function(value){
+				if(!value) return ''
+				return value
 			}
 		},
+		components:{uniSearchBar},
 		onLoad:function(options){
 			util.loadObj(this.param,options)
 			this.loadData()
@@ -70,6 +78,32 @@
 						})
 					}
 				})
+			},
+			search:function(e){
+				
+				this.$http.get('familyAdmin/familyUserLikeList',{
+					familyId:this.param.familyId,
+					flag:'clan',
+					language:this.param.language,
+					name:e.value
+				}).then(res=>{
+					if(res.data.code===200){
+						this.clanList=res.data.data.familyUserList
+					}else{
+						uni.showToast({
+							title:'查询失败',icon:'none'
+						})
+					}
+				})
+			},
+			viewDetail:function(item){
+				uni.navigateTo({
+					url:'../person/info'+util.jsonToQuery({
+						familyUserId:item.id,
+						userId:this.param.userId,
+						language:this.param.language
+					})
+				})
 			}
 		}
 	}
@@ -77,14 +111,15 @@
 
 <style lang="less" scoped>
 	.container_pd {
-		padding: 34upx
+		padding: 34upx;
+		padding-top: 0;
 	}
 
 	.clan_result_container {
 		border-radius: 15upx;
 		padding: 30upx;
-		box-shadow: 2upx 0 10upx #ccc;
-		margin-top: 20upx;
+		box-shadow: 2upx 0 18upx #E5E5E5;
+		margin-top: 40upx;
 
 		.clan_hd {
 			display: flex;
@@ -94,6 +129,7 @@
 			image {
 				width: 92upx;
 				height: 92upx;
+				border-radius: 50%;
 			}
 
 			text {

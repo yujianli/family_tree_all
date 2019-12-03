@@ -66,6 +66,9 @@
 </script>
 
 <style>
+	page{
+		background: #fafafa;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -87,5 +90,9 @@
 		justify-content: space-between;
 		align-items: flex-start;
 		margin-top: 20upx;
+		background-color: #fff;
+		box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;
+		padding: 6upx;
+		
 	}
 </style>

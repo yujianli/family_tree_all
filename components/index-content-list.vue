@@ -1,9 +1,9 @@
 <template>
-	<view class="card_list">
-		<view class="more" @tap="toMore">更多</view>
+	<view class="card_list" v-if="contentList.length>0">
+		<view class="more" @tap="toMore">{{this.language==='zh_CN'?'更多':'More'}}</view>
 		<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-			<uni-swipe-action>
-				<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)">
+<!-- 			<uni-swipe-action>
+				<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)"> -->
 					<view class="card_item" @tap="jumpToDetail(contentInfo)">
 						<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
 						<view class="card_inner">
@@ -18,10 +18,14 @@
 							</view>
 						</view>
 					</view>
-				</uni-swipe-action-item>
-			</uni-swipe-action>
+<!-- 				</uni-swipe-action-item>
+			</uni-swipe-action> -->
 		</view>
 		<!-- <uni-load-more :status="more"></uni-load-more> -->
+	</view>
+	<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+		<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
+		<view style="font-size: 36upx;color: #999;">暂无数据</view>
 	</view>
 </template>
 

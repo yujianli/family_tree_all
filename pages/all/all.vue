@@ -6,8 +6,8 @@
 		<uni-search-bar :radius="200" class="search_info" />
 		<view class="card_list">
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)">
+<!-- 				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)"> -->
 						<view class="card_item" @tap="jumpToDetail(contentInfo)">
 							<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
@@ -22,8 +22,8 @@
 								</view>
 							</view>
 						</view>
-					</uni-swipe-action-item>
-				</uni-swipe-action>
+<!-- 					</uni-swipe-action-item>
+				</uni-swipe-action> -->
 			</view>
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">

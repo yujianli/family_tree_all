@@ -16,15 +16,20 @@
 			<text class="inner_title">居室地址</text>
 			<input class="input" type="text" placeholder-style="color:#999" placeholder="居室地址" v-model="placeInfo.address" />
 		</view>
-		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" placeholder="内容" />
-			</view>
+		
 		<robby-image-upload v-model="uploadConfig.imageData"
 		@delete="deleteImage" @add="addImage" 
 		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
 		:server-url="uploadConfig.serverUrl" 
 		:header="uploadConfig.header">
 		</robby-image-upload>
+		<view  style="margin-top: 40upx;">
+			<text class="inner_title">描述</text>
+		</view>
+		
+		<view class="mul_wrapper">
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" placeholder="内容" />
+		</view>
 	</view>
 
 </template>
@@ -177,6 +182,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid #e5e5e5;
 	}
 	.mul_wrapper{
 		display: flex;

@@ -336,4 +336,10 @@
 		
 		
 	}
+	.input {
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		text-align: right;
+	}
 </style>

@@ -77,7 +77,7 @@
 				prefixUrl: this.$common.picPrefix(),
 				womanUrl: '../../static/images/icon_default_woman.png',
 				manUrl: '../../static/images/icon_default_man.png',
-				targetData: null,
+				targetData: null
 			}
 		},
 		methods: {
@@ -175,11 +175,11 @@
 		background-color: #c69b2f;
 	}
 
-	<<<<<<< HEAD .user-selected {
+	.user-selected {
 		border: 2px solid #FF0000;
 	}
 
-	=======>>>>>>>5981e9e41ccad66692d2ee8ea0befce753d462d5 .vertical-line {
+	.vertical-line {
 		height: 25upx;
 		width: 4upx;
 		background-color: #999;

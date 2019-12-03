@@ -1,36 +1,57 @@
 <template>
-	<view class="container">
-		<view class="wrapper" @tap="setLanguage">
-			<text class="inner_title">语言选择</text>
-			<view>
-				<text class="inner_text_1">中文</text>
+	<view>
+		<view class="container">
+			<view class="wrapper" @tap="setLanguage">
+				<text class="inner_title">语言选择</text>
+				<view>
+					<text class="inner_text_1">中文</text>
+					<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
+				</view>
+			</view>
+		</view>
+		
+		<view class="container">
+			<view class="wrapper" @tap="toPay">
+				<text class="inner_title">支付年费</text>
+				<view>
+					<text class="inner_text_1">试用期还有{{day}}到期</text>
+					<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
+				</view>
+			</view>
+		</view>
+		
+		<view class="container">
+			<view class="wrapper" style="margin-top: 19upx;">
+				<text class="inner_title">关于我们</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
-		<view class="wrapper" @tap="toPay">
-			<text class="inner_title">支付年费</text>
-			<view>
-				<text class="inner_text_1">试用期还有{{day}}到期</text>
+		
+		<view class="container">
+			<view class="wrapper">
+				<text class="inner_title">隐私政策</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
-		<view class="wrapper">
-			<text class="inner_title">关于我们</text>
-			<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
+		
+		<view class="container">
+			<view class="wrapper" style="margin-top: 19upx;">
+				<text class="inner_title">当前版本</text>
+				<text class="inner_text_2">1.2.0</text>
+			</view>
 		</view>
-		<view class="wrapper">
-			<text class="inner_title">隐私政策</text>
-			<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
+		
+		<view class="container">
+			<view class="wrapper">
+				<text class="inner_title">清除缓存</text>
+				<text class="inner_text_2">3.32MB</text>
+			</view>
 		</view>
-		<view class="wrapper">
-			<text class="inner_title">当前版本</text>
-			<text class="inner_text_2">1.2.0</text>
+		
+		<view style="margin-left:30upx;margin-right:30upx;">
+			<button type="primary" @click="bindLogin" class="logout">退出登录</button>
 		</view>
-		<view class="wrapper">
-			<text class="inner_title">清除缓存</text>
-			<text class="inner_text_2">3.32MB</text>
-		</view>
-		<button type="primary" @click="bindLogin" class="logout">系统登出</button>
+		
 	</view>
 </template>
 
@@ -89,10 +110,13 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
+	page{
+		background: #fafafa;
+	}
 	.container{
-		padding-left:30upx;
-		padding-right:30upx;
+		padding-left:30upx;padding-right:30upx;
+		background: #ffffff;
 	}
 	.wrapper{
 		height: 110upx;
@@ -100,6 +124,10 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid #F0F4F7;
+		// padding-left:30upx;
+		// padding-right:30upx;
+		background: #fff;
 	}
 	.inner_title{
 		font-size: 32upx;
@@ -117,10 +145,14 @@
 	.logout{
 		margin-top: 100upx;;
 		font-size: 32upx;
-		color: #e5e5e5;
-		background-color: #4DC578;
+		color: #4DC578;
+		background-color: #ffffff;
 		height: 92upx;
 		line-height: 92upx;
+		&:after{
+			border-color: #ffffff;
+		}
+		
 	}
 	.arrow{
 		width: 18upx;

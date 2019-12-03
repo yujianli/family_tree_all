@@ -2,51 +2,51 @@
 	<view>
 		<view class="container">
 			<view class="wrapper">
-				<text class="inner_title">年龄</text>
-				<view>{{appearanceInfo.age}}岁</view>
+				<text class="inner_title">{{langData.common.age}}</text>
+				<view class="input">{{appearanceInfo.age}}{{langData.common.years}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">身高</text>
-				<view>{{appearanceInfo.height}}cm</view>
+				<text class="inner_title">{{langData.common.height}}</text>
+				<view class="input">{{appearanceInfo.height}}cm</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">体重</text>
-				<view>{{appearanceInfo.weight}}kg</view>
+				<text class="inner_title">{{langData.common.weight}}</text>
+				<view class="input">{{appearanceInfo.weight}}kg</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">脸型</text>
-				<view>{{appearanceInfo.faceShape}}</view>
+				<text class="inner_title">{{langData.common.faceShape}}</text>
+				<view class="input">{{appearanceInfo.faceShape}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">个性特点</text>
-				<view>{{appearanceInfo.characteristics}}</view>
+				<text class="inner_title">{{langData.common.characteristics}}</text>
+				<view class="input">{{appearanceInfo.characteristics}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">T恤尺寸</text>
-				<view>{{appearanceInfo.tshirtSize}}</view>
+				<text class="inner_title">{{langData.common.tshirtSize}}</text>
+				<view class="input">{{appearanceInfo.tshirtSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">衬衫尺寸</text>
-				<view>{{appearanceInfo.shirtSize}}</view>
+				<text class="inner_title">{{langData.common.shirtSize}}</text>
+				<view class="input">{{appearanceInfo.shirtSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">衣服尺寸</text>
-				<view>{{appearanceInfo.clothSize}}</view>
+				<text class="inner_title">{{langData.common.clothSize}}</text>
+				<view class="input">{{appearanceInfo.clothSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">裤子尺寸</text>
-				<view>{{appearanceInfo.trousersSize}}</view>
+				<text class="inner_title">{{langData.common.trousersSize}}</text>
+				<view class="input">{{appearanceInfo.trousersSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">鞋尺寸</text>
-				<view>{{appearanceInfo.shoeSize}}</view>
+				<text class="inner_title">{{langData.common.shoeSize}}</text>
+				<view class="input">{{appearanceInfo.shoeSize}}</view>
 			</view>
 			<view class="detail_tag">
-				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
-				<view>{{tags}}</view>
+				<image v-if="tags.length" src="../../static/images/icon_tag.png" class="icon_tags"></image>
+				<view class="tags_text" v-for="(tag, index) in tags">{{tag}}</view>
 			</view>
 
-			<view class="opt_container"><button class="btn_delete" @tap="remove">删除</button></view>
+			<view class="opt_container"><button class="btn_delete" @tap="remove">{{langData.button.delete}}</button></view>
 		</view>
 	</view>
 </template>
@@ -80,12 +80,18 @@ export default {
 		};
 	},
 	computed:{
+		langData:function(){
+			let lang=this.$common.getLanguage()
+			return this.$common.getLanguageData(lang)
+		},
 		tags:function(){
-			if(!this.appearanceInfo.tags) return ''
-			return this.appearanceInfo.tags.replace(/,/g,' ')
+			if(!this.appearanceInfo.tags) return []
+			return this.appearanceInfo.tags.split(',')
 		}
 	},
 	onLoad: function(options) {
+		let _name=this.langData.appearance.title			
+		uni.setNavigationBarTitle({title: _name});
 		util.loadObj(this.param,options)
 	},
 	onShow:function(){
@@ -175,6 +181,7 @@ export default {
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid #e5e5e5;
 	}
 
 	.mul_wrapper {
@@ -252,5 +259,14 @@ export default {
 		width: 38upx;
 		height: 38upx;
 		margin-right: 21upx;
+	}
+	
+	.tags_text{
+		font-size: 30upx;
+		color: #56D282;
+		background:#F8F8F8;
+		border-radius: 20upx;
+		padding:8upx 20upx;
+		vertical-align: middle;
 	}
 </style>

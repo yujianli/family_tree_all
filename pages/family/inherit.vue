@@ -111,4 +111,15 @@
 		align-items: flex-start;
 		margin-top: 20upx;
 	}
+	.inner_title{
+		font-size: 33upx;
+		color: #333;
+		margin-right: 40upx;
+	}
+	.input {
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		text-align: right;
+	}
 </style>

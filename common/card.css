@@ -3,11 +3,15 @@
 	padding-right: 18px;
 }
 
+.card_list{
+	padding-bottom: 100upx;
+}
+
 .more {
 	text-align: right;
-	margin-bottom: 44upx;
 	padding-right: 36upx;
 	font-size: 32upx;
+	margin-bottom: 22upx;
 	color: #999;
 }
 
@@ -15,6 +19,8 @@
 	width: 246upx;
 	height: 184upx;
 	margin-right: 24upx;
+	border-radius: 8upx;
+	/* margin-top: 40upx; */
 }
 
 .card_item {
@@ -22,10 +28,13 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 60upx;
-	padding-left: 30upx;
-	padding-right: 30upx;
+	
+	margin-left: 30upx;
+	margin-right: 30upx;
 	flex:1;
+	border-top: 1px solid #E5E5E5;
+	padding-top:40upx;
+	padding-bottom:40upx;
 
 }
 
@@ -33,6 +42,8 @@
 	flex:1;
 	flex-direction: column;
 	justify-content: space-between;
+	/* padding-top: 40upx; */
+	
 }
 
 .card_title {
@@ -63,7 +74,11 @@
 }
 
 .tags_text {
-	margin-right: 8px;
+	margin-right: 14px;
+	background:#F8F8F8;
+	border-radius: 20upx;
+	padding:8upx 20upx;
+	vertical-align: middle;
 }
 
 .time {

@@ -3,35 +3,41 @@
 	<view>
 		<view class="float_btn" @tap="add">+</view>
 		<view v-for="appearance in appearanceList" v-bind:key="appearance.id">
-			<uni-swipe-action>
+			<uni-swipe-action style="margin-top: 40upx;">
 				<uni-swipe-action-item :options="options" @click="remove(appearance.id)">
 					<view class="container" @tap="jumpToDetail(appearance.id)">
-						<view>{{appearance.age}}岁</view>
-						<view class="title">{{appearance.title}}</view>
-						<view class="row">
-							<view>身高：{{appearance.height}}cm</view>
-							<view>T恤尺寸：{{appearance.tshirtSize}}</view>
+						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;background-color: #fff;">
+							<view>{{appearance.age}}岁</view>
+							<view class="title">{{appearance.title}}</view>
+							<view class="row">
+								<view>{{langData.common.height}}：{{appearance.height}}cm</view>
+								<view>T{{langData.common.tshirtSize}}：{{appearance.tshirtSize}}</view>
+							</view>
+							<view class="row">
+								<view>{{langData.common.weight}}：{{appearance.weight}}kg</view>
+								<view>{{langData.common.shirtSize}}：{{appearance.shirtSize}}M</view>
+							</view>
+							<view class="row">
+								<view>{{langData.common.faceShape}}：{{appearance.faceShape}}</view>
+								<view>{{langData.common.clothSize}}：{{appearance.clothSize}}</view>
+							</view>
+							<view class="row">
+								<view>{{langData.common.characteristics}}：{{appearance.characteristics}}</view>
+								<view>{{langData.common.trousersSize}}：{{appearance.trousersSize}}</view>
+							</view>
+							<view class="row">
+								<view>{{langData.common.shoeSize}}：{{appearance.shoeSize}}码</view>
+								<view></view>
+							</view>
+							<view class="row">
+								<view style="flex-direction: row;display: flex;">
+									<view class="tags_text" v-for="(tag,index) in appearance.tags">{{tag}}</view>
+								</view>
+								
+								<view style="font-size: 30upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
+							</view>
 						</view>
-						<view class="row">
-							<view>体重：{{appearance.weight}}kg</view>
-							<view>衬衫尺寸：{{appearance.shirtSize}}M</view>
-						</view>
-						<view class="row">
-							<view>脸型：{{appearance.faceShape}}</view>
-							<view>衣服尺寸：{{appearance.clothSize}}</view>
-						</view>
-						<view class="row">
-							<view>个性特点：{{appearance.characteristics}}</view>
-							<view>裤子尺寸：{{appearance.trousersSize}}</view>
-						</view>
-						<view class="row">
-							<view>鞋尺寸：{{appearance.shoeSize}}码</view>
-							<view></view>
-						</view>
-						<view class="row">
-							<view style="font-size: 30upx;color: #56D282;">{{appearance.tags}}</view>
-							<view style="font-size: 30upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
-						</view>
+						
 					</view>
 				</uni-swipe-action-item>
 			</uni-swipe-action>
@@ -67,6 +73,12 @@
 			uniSwipeAction,
 			uniSwipeActionItem
 		},
+		computed:{
+			langData:function(){
+				let lang=this.$common.getLanguage()
+				return this.$common.getLanguageData(lang)
+			},
+		},
 		filters: {
 			formatDate: function(value) {
 				if (!value) return ''
@@ -74,6 +86,8 @@
 			}
 		},
 		onLoad:function(options){
+			let _name=this.langData.appearance.title
+			uni.setNavigationBarTitle({title: _name});
 			util.loadObj(this.param,options)
 		},
 		onShow:function(){
@@ -108,9 +122,9 @@
 							_list[i].trousersSize= this.bindProp('size',_list[i].trousersSize);
 							_list[i].shoeSize= this.bindProp('size',_list[i].shoeSize);
 							if(_list[i].tags){
-								_list[i].tags=_list[i].tags.replace(/,/g,' ')
+								_list[i].tags=_list[i].tags.split(',')
 							}else{
-								_list[i].tags=' '
+								_list[i].tags=[]
 							}
 						}
 						this.appearanceList=_list
@@ -167,9 +181,15 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		background: #fafafa;
+	}
 	.container{
-		padding: 48upx;
+		
 		flex: 1;
+		padding-left: 30upx;
+		padding-right: 30upx;
+		background: #fafafa;
 	}
 	.row{
 		margin-top: 40upx;
@@ -196,6 +216,16 @@
 		text-align: center;
 		color: #fff;
 		z-index: 999999;
+		box-shadow: 2upx 0 18upx #25A754;
+	}
+	.tags_text{
+		font-size: 30upx;
+		color: #56D282;
+		background:#F8F8F8;
+		border-radius: 20upx;
+		padding:8upx 20upx;
+		vertical-align: middle;
+		margin-right: 10upx;
 	}
 </style>
 

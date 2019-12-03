@@ -1,53 +1,53 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">年龄(岁)</text>
-			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" placeholder="年龄(岁)" />
+			<text class="inner_title">{{langData.common.age}}({{langData.common.years}})</text>
+			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" :placeholder="ageTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">身高(cm)</text>
-			<input class="input" type="text" v-model="appearance.height" placeholder-style="color:#999" placeholder="身高(cm)" />
+			<text class="inner_title">{{langData.common.height}}(cm)</text>
+			<input class="input" type="text" v-model="appearance.height" placeholder-style="color:#999" :placeholder="heightTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">体重(kg)</text>
-			<input class="input" type="text" v-model="appearance.weight" placeholder-style="color:#999" placeholder="体重(kg)" />
+			<text class="inner_title">{{langData.common.weight}}(kg)</text>
+			<input class="input" type="text" v-model="appearance.weight" placeholder-style="color:#999" :placeholder="weightTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">脸型</text>
+			<text class="inner_title">{{langData.common.faceShape}}</text>
 			<picker @change="faceShapeBindPickerChange" :value="idx.faceShape" :range="arr.faceShape" range-key="value">
 				<view class="input">{{ arr.faceShape[idx.faceShape].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">个性特点</text>
-			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" placeholder="个性特点" />
+			<text class="inner_title">{{langData.common.characteristics}}</text>
+			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" :placeholder="langData.common.characteristics" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">T恤衫尺寸</text>
+			<text class="inner_title">{{langData.common.tshirtSize}}</text>
 			<picker @change="tshirtSizeBindPickerChange" :value="idx.tshirtSize" :range="arr.tshirtSize" range-key="value">
 				<view class="input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">衬衫尺寸</text>
+			<text class="inner_title">{{langData.common.shirtSize}}</text>
 			<picker @change="shirtSizeBindPickerChange" :value="idx.shirtSize" :range="arr.shirtSize" range-key="value">
 				<view class="input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">衣服尺寸</text>
+			<text class="inner_title">{{langData.common.clothSize}}</text>
 			<picker @change="clothSizeBindPickerChange" :value="idx.clothSize" :range="arr.clothSize" range-key="value">
 				<view class="input">{{ arr.clothSize[idx.clothSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">裤子尺寸</text>
+			<text class="inner_title">{{langData.common.trousersSize}}</text>
 			<picker @change="trousersSizeBindPickerChange" :value="idx.trousersSize" :range="arr.trousersSize" range-key="value">
 				<view class="input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">鞋子尺寸</text>
+			<text class="inner_title">{{langData.common.shoeSize}}</text>
 			<picker @change="shoeSizeBindPickerChange" :value="idx.shoeSize" :range="arr.shoeSize" range-key="value">
 				<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
 			</picker>
@@ -56,12 +56,12 @@
 		<view class="tags_wrapper">
 			<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
 			<!-- #ifdef H5 -->
-			<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}">{{tagList | formatWords}}</view>
+			<view class="mul_tags" :style="{display: tagList.length > 0 ? 'inline-block': 'none'}" v-for="(tag,index) in tagList">{{tag}}</view>
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
-			<view class="mul_tags">{{tagList | formatWords}}</view>
+			<view class="mul_tags" v-for="(tag, index) in tagList">{{tag}}</view>
 			<!-- #endif -->
-			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" placeholder="添加标签" />
+			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" :placeholder="langData.button.editTag" />
 		</view>
 		
 		
@@ -118,6 +118,21 @@
 				tag:''
 			};
 		},
+		computed:{
+			langData:function(){
+				let lang=this.$common.getLanguage()
+				return this.$common.getLanguageData(lang)
+			},
+			ageTitle:function(){
+				return this.langData.common.age+'('+this.langData.common.years+')'
+			},
+			heightTitle:function(){
+				return this.langData.common.height+'(cm)'
+			},
+			weightTitle:function(){
+				return this.langData.common.weight+'(kg)'
+			}
+		},
 		filters:{
 			formatWords:function(value){
 				if(!value) return []
@@ -125,6 +140,8 @@
 			}
 		},
 		onLoad: function(options) {
+			let _name=this.langData.appearance.title
+			uni.setNavigationBarTitle({title: _name});
 			util.loadObj(this.param, options)
 			if (options.id) {
 				this.isEdit = true;
@@ -257,6 +274,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid #e5e5e5;
 	}
 
 	.mul_wrapper {
@@ -264,6 +282,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: flex-start;
+		border-bottom: 1px solid #e5e5e5;
 	}
 
 	.avatar_wrapper {
@@ -285,7 +304,9 @@
 		text-align: right;
 		&.smallipt{
 			text-align: left;
-			padding:6upx 10upx;font-size: 30upx;flex:none;width:120upx;color: #EE9C36;
+			padding:6upx 30upx;font-size: 30upx;flex:none;width:120upx;color: #EE9C36;
+			border-radius: 20upx;
+			background: #F8F8F8;
 		}
 	}
 
@@ -306,8 +327,13 @@
 		width: 38upx;height: 38upx;margin-right: 21upx;
 	}
 	.mul_tags{
-		margin-right: 29upx;
+		margin-right: 10upx;
 		color: #56D282;
 		font-size: 30upx;
+		background:#F8F8F8;
+		border-radius: 20upx;
+		padding:8upx 20upx;
+		vertical-align: middle;
 	}
+	
 </style>

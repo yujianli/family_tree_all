@@ -91,8 +91,8 @@
 		width: 100%;
 		height: 64rpx;
 		color: #c8c7cc;
-		background: #fff;
-		border: solid 1px #c8c7cc;
+		background: #F0F0F0;
+		/* border: solid 1px #c8c7cc; */
 		border-radius: 10rpx
 	}
 
@@ -125,10 +125,12 @@
 		line-height: 64rpx;
 		text-align: center;
 		color: #c8c7cc;
-		background: #fff;
-		border: solid 1px #c8c7cc;
+		background: #F0F0F0;
+		/* border: solid 1px #c8c7cc; */
 		border-radius: 10rpx;
-		display: none
+		display: none;
+		text-align: left;
+		padding-left: 6px;
 	}
 
 	.uni-searchbar-form__text .icon-search {
@@ -147,6 +149,7 @@
 		padding-left: 20rpx;
 		line-height: 64rpx;
 		color: #333;
+		font-size: 34rpx;
 		white-space: nowrap
 	}
 

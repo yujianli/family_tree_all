@@ -35,27 +35,26 @@
 		</view> -->
 
 		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
-			<swiper style="height: 560upx;">
-				<swiper-item v-for="(item, index) in userCardList" :key="index">
+			<swiper style="height: 460upx;">
+				<swiper-item v-for="(item, index) in userCardList" :key="index"  @tap="viewDetail(item)">
 					<view style="padding: 34upx">
-						<view style="box-shadow: 2upx 0 10upx #ccc;border-radius: 15upx;padding: 30upx;">
+						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;">
 							<view class="person_intro">
 								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
 							</view>
-							<view style="margin-bottom: 52upx;">
+							<view style="margin-bottom: 30upx;">
 								<view class="other_info_container">
-									<text class="other_info">性别：{{item.sex}}</text>
-									<text class="other_info">出生日期：{{ item.birth | formatDate}}</text>
+									<text class="other_info">{{langData.common.gender}}：{{item.sex | nullFilter}}</text>
+									<text class="other_info">{{langData.common.birth}}：{{ item.birth | formatDate}}</text>
 								</view>
 								<view class="other_info_container">
-									<text class="other_info">民族：{{item.nationality}}</text>
-									<text class="other_info">生肖：{{item.zodiac}}</text>
+									<text class="other_info">{{langData.common.nationality}}：{{item.nationality | nullFilter}}</text>
+									<text class="other_info">{{langData.common.career}}：{{item.career | nullFilter}}</text>
 								</view>
 							</view>
 						</view>
 					</view>
-					
 					
 				</swiper-item>
 			</swiper>
@@ -78,8 +77,9 @@
 				param: {
 					userId: null,
 					isFamily: 1,
-					language: this.$common.language
+					language: this.$common.getLanguage()
 				},
+				// langData:this.$common.getLanguageData(this.param.language),
 				basicFuncList: [{
 					id: -1,
 					name: '更多',
@@ -120,10 +120,20 @@
 			indexContentList,
 			funchead
 		},
+		computed:{
+			langData:function(){
+				let lang=this.$common.getLanguage()
+				return this.$common.getLanguageData(this.param.language)
+			}
+		},
 		filters: {
 			formatDate: function(value) {
 				if (!value) return ''
 				return util.dateFormat(value)
+			},
+			nullFilter:function(value){
+				if (!value) return ''
+				return value
 			}
 		},
 		onLoad: function() {
@@ -167,7 +177,7 @@
 						this.basicFuncList = res.data.data.module;
 						this.basicFuncList.push({
 							id: 0,
-							name: '更多',
+							name: this.param.language==='zh_CN'?'更多':'More',
 							icon: '../../static/images/icon_func_0.png'
 						});
 					} else {
@@ -187,7 +197,10 @@
 						linkUrl = linkUrl + util.jsonToQuery(_param);
 						break;
 					case 1:
-						linkUrl = linkUrl + '?id=' + this.personInfo.id;
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId:this.param.userId,
+							language:this.param.language
+						})
 						break;
 					default:
 						linkUrl = linkUrl + util.jsonToQuery({
@@ -326,6 +339,15 @@
 							icon: 'none'
 						});
 					}
+				})
+			},
+			viewDetail:function(item){
+				uni.navigateTo({
+					url:'../family/person/info'+util.jsonToQuery({
+						familyUserId:item.familyUserId,
+						userId:this.param.userId,
+						language:this.param.language
+					})
 				})
 			}
 			// loadIndexContent:function(){
@@ -485,7 +507,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: center;
-		margin-top: 52upx;
+		margin-top: 10upx;
 	}
 
 	.name {

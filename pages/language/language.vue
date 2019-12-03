@@ -18,14 +18,25 @@
 				items: [{
 							value: 'Chinese',
 							name: '简体中文',
-							checked: 'true'
+							checked: true
 						},
 						{
 							value: 'English',
 							name: 'English',
+							checked: false
 						},
 					],
 					current: 0
+			}
+		},
+		onLoad:function(){
+			let lang=this.$common.getLanguage()
+			if(lang==='zh_CN'){
+				this.$forceUpdate();
+				this.$set(this.items[0], 'checked', true)
+			}else{
+				this.$forceUpdate();
+				this.$set(this.items[1], 'checked', true)
 			}
 		},
 		onNavigationBarButtonTap(e) {
@@ -44,7 +55,9 @@
 				for (let i = 0; i < this.items.length; i++) {
 					if (this.items[i].value === evt.target.value) {
 						this.current = i;
-						break;
+						this.items[i].checked=true
+					}else{
+						this.items[i].checked=false
 					}
 				}
 			}

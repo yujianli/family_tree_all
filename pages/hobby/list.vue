@@ -11,13 +11,11 @@
 			</view>
 			<view class="intro_detail">{{ selfDesc }}</view>
 		</view>
-		<uni-search-bar :radius="100" class="search_info" @confirm="search" />
-		
-		
-		
-		
+		<view v-if="['4','14','15','16'].indexOf(param.moduleId)===-1">
+			<uni-search-bar :radius="100" class="search_info" @confirm="search" />
+		</view>
 		<!-- <contentList :param="param"></contentList> -->
-		<view class="card_list">
+		<view class="card_list" v-if="contentList.length>0">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
@@ -36,6 +34,10 @@
 					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
+		</view>
+		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
+			<view style="font-size: 36upx;color: #999;">暂无数据</view>
 		</view>
 	</view>
 </template>
@@ -173,7 +175,7 @@
 						if (res.data.code === 200) {
 							let _list = res.data.data.contentCategory;
 							this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
-							if (!this.seledFlagId) {
+							if (!this.seledFlagId && this.moduleList.length) {
 								this.seledFlagId = this.moduleList[0].id
 							}
 							this.loadContent(this.seledFlagId);
@@ -396,5 +398,6 @@
 		text-align: center;
 		color: #fff;
 		z-index: 9999999;
+		box-shadow: 2upx 0 18upx #25A754;
 	}
 </style>

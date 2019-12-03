@@ -19,12 +19,12 @@
 				</view>
 			</view>
 			<view class="detail_tag">
-				<image src="../../static/images/icon_tag.png" class="icon_tags"></image>
-				{{tagInfo}}
+				<image v-if="tagList.length" src="../../static/images/icon_tag.png" class="icon_tags"></image>
+				<view class="tags_text" v-for="(tag,index) in tagList">{{tag}}</view>
 			</view>
 			<view class="detail_tag">
-				<image src="../../static/images/icon_relation.png" class="icon_tags"></image>
-				{{associateInfo}}
+				<image v-if="associateList.length" src="../../static/images/icon_relation.png" class="icon_tags"></image>
+				<view class="tags_text" v-for="(associate,index) in associateList">{{associate}}</view>
 			</view>
 		</view>
 		<view class="detail_opt_container">
@@ -84,13 +84,13 @@
 			}
 		},
 		computed: {
-			tagInfo:function(){
-				if(!this.content.tags)return ''
-				return this.content.tags.replace(/,/g,' ')
+			tagList:function(){
+				if(!this.content.tags)return []
+				return this.content.tags.split(',')
 			},
-			associateInfo:function(){
-				if(!this.content.associatedPerson)return ''
-				return this.content.associatedPerson.replace(/,/g,' ')
+			associateList:function(){
+				if(!this.content.associatedPerson)return []
+				return this.content.associatedPerson.split(',')
 			},
 			images: function() {
 				if (!this.content.imageUrls) return [];
@@ -200,6 +200,7 @@
 	.detail_pic {
 		width: 100%;
 		margin-top: 20upx;
+		border-radius: 8upx;
 	}
 
 	.detail_opt_container {
@@ -249,5 +250,14 @@
 		width: 38upx;
 		height: 38upx;
 		margin-right: 21upx;
+	}
+	.tags_text{
+		font-size: 30upx;
+		color: #56D282;
+		background:#F8F8F8;
+		border-radius: 20upx;
+		padding:8upx 20upx;
+		vertical-align: middle;
+		margin-right: 14upx;
 	}
 </style>

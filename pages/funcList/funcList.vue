@@ -141,7 +141,10 @@
 				}
 				switch (module.id) {
 					case 1:
-						linkUrl = linkUrl + '?id=' + this.personId;
+						linkUrl = linkUrl + util.jsonToQuery({
+							userId:this.param.userId,
+							language:this.param.language
+						});
 						break;
 					case 21:
 						linkUrl = linkUrl + util.jsonToQuery({
@@ -213,7 +216,7 @@
 	.wrapper {
 		display: flex;
 		flex-direction: column;
-		width: 20%;
+		width: 19.5%;
 		height: 180upx;
 		justify-content: center;
 		align-items: center;
