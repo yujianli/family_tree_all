@@ -64,7 +64,7 @@
 			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" :placeholder="langData.button.editTag" />
 		</view>
 		
-		
+		<view class="opt_container" v-if="param.id"><button class="btn_delete" @tap="remove">删除</button></view>
 	</view>
 </template>
 
@@ -257,6 +257,36 @@
 					tagList.push(e.detail.value);
 					this.tag = '';
 				}
+			},
+			remove: function() {
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: res => {
+						if (res.confirm) {
+						  this.$http.post('appearance/deleteAppearance', {
+						  		appearanceId: this.param.id,
+						  		language: this.param.language
+						  	})
+						  	.then(res => {
+						  		if (res.data.code === 200) {
+						  			uni.navigateBack({
+						  				delta:2
+						  			})
+						  		} else {
+						  			uni.showToast({
+						  				title: '删除失败',
+						  				icon: 'none'
+						  			});
+						  		}
+						  	});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+						
+					}
+				});
 			}
 		}
 	};
@@ -335,5 +365,28 @@
 		padding:8upx 20upx;
 		vertical-align: middle;
 	}
+	.opt_container {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 104upx;
 	
+	}
+	
+	.btn_delete {
+		flex: 1;
+		font-size: 38upx;
+		color: #ffffff;
+		background-color: #FB4F4F;
+		border-radius: 0;
+	}
+	
+	.btn_delete:after {
+		border: 0px;
+	}
 </style>

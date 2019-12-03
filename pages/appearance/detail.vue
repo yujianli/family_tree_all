@@ -45,8 +45,6 @@
 				<image v-if="tags.length" src="../../static/images/icon_tag.png" class="icon_tags"></image>
 				<view class="tags_text" v-for="(tag, index) in tags">{{tag}}</view>
 			</view>
-
-			<view class="opt_container"><button class="btn_delete" @tap="remove">{{langData.button.delete}}</button></view>
 		</view>
 	</view>
 </template>
@@ -133,37 +131,8 @@ export default {
 					return dataJson[key][i].value;
 				}
 			}
-		},
-		remove: function() {
-			uni.showModal({
-				title: '删除',
-				content: '确认删除该记录？',
-				confirmText: '确认',
-				success: res => {
-					if (res.confirm) {
-					  this.$http.post('appearance/deleteAppearance', {
-					  		appearanceId: this.param.id,
-					  		language: this.param.language
-					  	})
-					  	.then(res => {
-					  		if (res.data.code === 200) {
-					  			uni.navigateBack({
-					  				delta:1
-					  			})
-					  		} else {
-					  			uni.showToast({
-					  				title: '删除失败',
-					  				icon: 'none'
-					  			});
-					  		}
-					  	});
-					} else if (res.cancel) {
-						console.log('用户点击取消');
-					}
-					
-				}
-			});
 		}
+		
 	}
 };
 </script>
@@ -216,30 +185,7 @@ export default {
 		flex: 1;
 	}
 
-	.opt_container {
-		position: fixed;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		height: 104upx;
-
-	}
-
-	.btn_delete {
-		flex: 1;
-		font-size: 38upx;
-		color: #ffffff;
-		background-color: #FB4F4F;
-		border-radius: 0;
-	}
-
-	.btn_delete:after {
-		border: 0px;
-	}
+	
 	
 	.detail_tag {
 		display: flex;
