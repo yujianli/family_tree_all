@@ -10,7 +10,9 @@
 
 			<view class="inner_select" :style="{'display': showSelect ? 'block' : 'none'}">
 				<!-- <view class="active">万少波的家族树</view> -->
+
 				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
+				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
 			</view>
 		</view>
 
@@ -123,7 +125,7 @@
 				});
 			},
 			jumpToList: function(json) {
-				console.log(JSON.stringify(json))
+				// console.log(JSON.stringify(json))
 				let linkUrl= json.url
 				switch (json.moduleId) {
 					case 0:
@@ -204,27 +206,6 @@
 					}
 				})
 			},
-			loadModule: function(userId) {
-				this.$http.get('module/user/all', {
-						isFamily: this.param.isFamily,
-						language: this.param.language,
-						userId: this.param.userId
-					}).then(res => {
-						if (res.data.code === 200) {
-							this.basicFuncList = res.data.data.module;
-							this.basicFuncList.push({
-								id: 0,
-								name: '更多',
-								icon: '../../static/images/icon_func_0.png'
-							});
-						} else {
-							uni.showToast({
-								title: '模块信息加载失败',
-								icon: 'none'
-							});
-						}
-					});
-			},
 			loadFamilyInfo:function(){
 				this.$http.get('family/detail',{
 					familyId:this.param.familyId,
@@ -246,7 +227,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -267,7 +250,7 @@
 
 	.person_name_active {
 		color: #333;
-		font-weight: 600;
+		font-weight: 700;
 	}
 
 	.tab_line {
@@ -339,7 +322,7 @@
 	.name {
 		font-size: 42upx;
 		color: #333;
-		font-weight: 600;
+		font-weight: 700;
 		margin-top: 10upx;
 	}
 
@@ -372,6 +355,7 @@
 		justify-content: center;
 		margin-top: 43upx;
 		position: relative;
+		
 
 		text {
 			font-size: 33upx;
@@ -392,6 +376,11 @@
 			top: 80upx;
 			z-index: 9999;
 			text-align: center;
+			box-shadow: 2upx 0 18upx #E5E5E5;
+			
+			border: 1px #fff solid;
+            border-radius: 10upx;
+            background-color: #fff;
 
 			view {
 				height: 65upx;
@@ -415,7 +404,7 @@
 			font-size: 42upx;
 			color: #333;
 			text-align: center;
-			font-weight: 600;
+			font-weight: 700;
 		}
 
 		.content {

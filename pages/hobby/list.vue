@@ -357,7 +357,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.category_container {
 		display: flex;
 		flex-direction: row;
@@ -400,4 +402,5 @@
 		z-index: 9999999;
 		box-shadow: 2upx 0 18upx #25A754;
 	}
+	
 </style>

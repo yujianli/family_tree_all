@@ -254,7 +254,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.pd18 {
 		padding: 18upx;
 	}

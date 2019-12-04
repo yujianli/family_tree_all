@@ -35,7 +35,7 @@
 		</view> -->
 
 		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
-			<swiper style="height: 460upx;">
+			<swiper style="height: 490upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index"  @tap="viewDetail(item)">
 					<view style="padding: 34upx">
 						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;">
@@ -45,8 +45,8 @@
 							</view>
 							<view style="margin-bottom: 30upx;">
 								<view class="other_info_container">
-									<text class="other_info">{{langData.common.gender}}：{{item.sex | nullFilter}}</text>
-									<text class="other_info">{{langData.common.birth}}：{{ item.birth | formatDate}}</text>
+									<text class="other_info">{{langData.common.birth2}}：{{ item.birth | formatDate}}</text>
+									<text class="other_info">{{langData.common.birthPlace}}：{{item.birthPlace | nullFilter}}</text>
 								</view>
 								<view class="other_info_container">
 									<text class="other_info">{{langData.common.nationality}}：{{item.nationality | nullFilter}}</text>
@@ -420,7 +420,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -441,7 +443,7 @@
 
 	.person_name_active {
 		color: #333;
-		font-weight: 600;
+		font-weight: 700;
 	}
 
 	.tab_line {
@@ -513,7 +515,7 @@
 	.name {
 		font-size: 42upx;
 		color: #333;
-		font-weight: 600;
+		font-weight: 700;
 		margin-top: 10upx;
 	}
 

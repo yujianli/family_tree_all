@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" style="padding-bottom: 160upx;">
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.age}}({{langData.common.years}})</text>
 			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" :placeholder="ageTitle" />
@@ -15,7 +15,10 @@
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.faceShape}}</text>
 			<picker @change="faceShapeBindPickerChange" :value="idx.faceShape" :range="arr.faceShape" range-key="value">
-				<view class="input">{{ arr.faceShape[idx.faceShape].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.faceShape[idx.faceShape].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -25,31 +28,46 @@
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.tshirtSize}}</text>
 			<picker @change="tshirtSizeBindPickerChange" :value="idx.tshirtSize" :range="arr.tshirtSize" range-key="value">
-				<view class="input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.shirtSize}}</text>
 			<picker @change="shirtSizeBindPickerChange" :value="idx.shirtSize" :range="arr.shirtSize" range-key="value">
-				<view class="input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.clothSize}}</text>
 			<picker @change="clothSizeBindPickerChange" :value="idx.clothSize" :range="arr.clothSize" range-key="value">
-				<view class="input">{{ arr.clothSize[idx.clothSize].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.clothSize[idx.clothSize].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.trousersSize}}</text>
 			<picker @change="trousersSizeBindPickerChange" :value="idx.trousersSize" :range="arr.trousersSize" range-key="value">
-				<view class="input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.shoeSize}}</text>
 			<picker @change="shoeSizeBindPickerChange" :value="idx.shoeSize" :range="arr.shoeSize" range-key="value">
-				<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 	
@@ -293,6 +311,9 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container {
 		padding-left: 30upx;
 		padding-right: 30upx;
@@ -304,7 +325,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border-bottom: 1px solid #e5e5e5;
+		border-bottom: 1px solid #F0F4F7;
 	}
 
 	.mul_wrapper {
@@ -375,6 +396,7 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 104upx;
+		z-index: 999;
 	
 	}
 	
@@ -388,5 +410,17 @@
 	
 	.btn_delete:after {
 		border: 0px;
+	}
+	
+	.picker_inner{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+		
+	.picker_arrow{
+		height: 20upx;
+		width: 24upx;
+		margin-left: 10upx;
 	}
 </style>

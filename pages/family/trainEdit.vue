@@ -68,6 +68,7 @@
 <style>
 	page{
 		background: #fafafa;
+		border-top: 1px solid #e5e5e5;
 	}
 	.container{
 		padding-left:30upx;
@@ -92,7 +93,12 @@
 		margin-top: 20upx;
 		background-color: #fff;
 		box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;
-		padding: 6upx;
 		
+	}
+	.mul_input{
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		padding: 12upx;
 	}
 </style>

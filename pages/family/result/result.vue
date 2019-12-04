@@ -99,6 +99,7 @@
 			viewDetail:function(item){
 				uni.navigateTo({
 					url:'../person/info'+util.jsonToQuery({
+						familyId:this.param.familyId,
 						familyUserId:item.id,
 						userId:this.param.userId,
 						language:this.param.language
@@ -110,6 +111,9 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container_pd {
 		padding: 34upx;
 		padding-top: 0;
@@ -135,7 +139,7 @@
 			text {
 				font-size: 35upx;
 				color: #333;
-				font-weight: 600;
+				font-weight: 700;
 				margin-left: 24upx;
 			}
 		}

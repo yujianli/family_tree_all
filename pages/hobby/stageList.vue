@@ -1,10 +1,11 @@
 <template>
 	<view>
 		<view class="float_btn" @tap="add">+</view>
-		<view class="card_list">
+		
+		<view class="card_list" v-if="stages.length>0">
 			<view v-for="(stage, index) in stages" :key="index">
 				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @tap="deleteContent(stage.id)">
+					<uni-swipe-action-item :options="options" @click="deleteContent(stage.id)">
 						<view class="card_item" @tap="jumpToPage(stage)">
 							<image v-if="stage.imageUrl != null" :src="stage.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
@@ -32,6 +33,10 @@
 					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
+		</view>
+		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
+			<view style="font-size: 36upx;color: #999;">暂无数据</view>
 		</view>
 	</view>
 </template>
@@ -226,7 +231,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.search_info {
 		margin-top: 40upx;
 		margin-bottom: 40upx;

@@ -113,7 +113,9 @@
 <style scoped lang="less">
 	page{
 		background: #fafafa;
+		border-top: 1px solid #e5e5e5;
 	}
+
 	.container{
 		padding-left:30upx;padding-right:30upx;
 		background: #ffffff;

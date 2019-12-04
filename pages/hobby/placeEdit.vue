@@ -2,14 +2,20 @@
 	<view class="container">
 		<view class="wrapper">
 			<text class="inner_title">购买年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="startTime">
-				<view>{{startTime}}</view>
+			<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="startTime">
+				<view class="picker_inner">
+					<view class="input">{{startTime}}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">出售年月</text>
-			<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="endTime">
-				<view>{{endTime}}</view>
+			<picker mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="endTime">
+				<view class="picker_inner">
+					<view class="input">{{endTime}}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -172,6 +178,9 @@
 </script>
 
 <style scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -213,5 +222,17 @@
 		background-color: #4dc578;
 		height: 92upx;
 		line-height: 92upx;
+	}
+			
+	.picker_inner{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+		
+	.picker_arrow{
+		height: 20upx;
+		width: 24upx;
+		margin-left: 10upx;
 	}
 </style>

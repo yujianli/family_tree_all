@@ -138,6 +138,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container {
 		padding-left: 30upx;
 		padding-right: 30upx;
@@ -150,7 +153,7 @@ export default {
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border-bottom: 1px solid #e5e5e5;
+		border-bottom: 1px solid #f0f4f7;
 	}
 
 	.mul_wrapper {

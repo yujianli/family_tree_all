@@ -205,6 +205,9 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container {
 		display: flex;
 		flex-direction: row;

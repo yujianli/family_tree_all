@@ -3,9 +3,12 @@
 		<view v-if="param.moduleId==='32'">
 			<view class="wrapper">
 				<text class="inner_title">婚礼时间</text>
-				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
+				<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
 				 :value="startTime">
-					<view>{{startTime}}</view>
+					<view class="picker_inner">
+						<view class="input">{{startTime}}</view>
+						<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+					</view>
 				</picker>
 			</view>
 			<view class="wrapper">
@@ -21,17 +24,23 @@
 			<view class="wrapper" v-if="param.moduleId!=='27'">
 				<text class="inner_title" v-if="param.moduleId==='31'">购买年月</text>
 				<text class="inner_title" v-else>起始年月</text>
-				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
+				<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
 				 :value="startTime">
-					<view>{{startTime}}</view>
+					<view class="picker_inner">
+						<view class="input" >{{startTime}}</view>
+						<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+					</view>
 				</picker>
 			</view>
 			<view class="wrapper" v-if="param.moduleId!=='27'">
 				<text class="inner_title" v-if="param.moduleId==='31'">出售年月</text>
 				<text class="inner_title" v-else>结束年月</text>
-				<picker class="input" mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'"
+				<picker mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'"
 				 :value="endTime">
-					<view>{{endTime}}</view>
+					<view class="picker_inner">
+						<view class="input">{{endTime}}</view>
+						<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+					</view>
 				</picker>
 			</view>
 			<view class="wrapper">
@@ -45,7 +54,10 @@
 			<view class="wrapper" v-if="param.moduleId==='27'">
 				<text class="inner_title">类型</text>
 				<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
-					<view class="input">{{ typeList[idx].name }}</view>
+					<view class="picker_inner">
+						<view class="input">{{ typeList[idx].name }}</view>
+						<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+					</view>
 				</picker>
 			</view>
 		</view>
@@ -258,6 +270,9 @@
 </script>
 
 <style scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -268,7 +283,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border-bottom: 1px solid #e5e5e5;
+		border-bottom: 1px solid #F0F4F7;
 	}
 	.mul_wrapper{
 		display: flex;
@@ -304,5 +319,17 @@
 		font-size: 34upx;
 		color: #333;
 		margin-right: 40upx;
+	}
+	
+	.picker_inner{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+		
+	.picker_arrow{
+		height: 20upx;
+		width: 24upx;
+		margin-left: 10upx;
 	}
 </style>

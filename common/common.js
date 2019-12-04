@@ -3,6 +3,7 @@ import enUS from '@/common/language/en_US.js'
 export default {
 	language: 'zh_CN',
 	getLanguage(){
+		uni.setStorageSync('language', 'zh_CN')
 		return uni.getStorageSync('language')
 	},
 	setLanguage(type){

@@ -166,6 +166,9 @@
 </script>
 
 <style>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	movable-area {
 		overflow: hidden;
 		width: 100vh;

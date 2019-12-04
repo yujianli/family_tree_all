@@ -253,6 +253,9 @@
 </script>
 
 <style lang='less' scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.fee_pd {
 		padding-left: 30upx;
 		padding-bottom: 30upx;
@@ -309,12 +312,12 @@
 			.fee_unit {
 				font-size: 32upx;
 				color: #ED9D3A;
-				font-weight: 600;
+				font-weight: 700;
 			}
 			.fee_price {
 				font-size: 60upx;
 				color: #ED9D3A;
-				font-weight: 600;
+				font-weight: 700;
 			}
 		}
 		.fee_year {

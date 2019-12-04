@@ -4,7 +4,10 @@
 			<text class="inner_title">时间：</text>
 			<picker class="input" mode="date" :value="contentInfo.time" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'" style="flex:1;">
-				<view>{{contentInfo.time}}</view>
+				<view class="picker_inner">
+					<view>{{contentInfo.time}}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -15,38 +18,58 @@
 		<view class="wrapper" v-if="param.moduleId==='30'">
 			<text class="inner_title">节日：</text>
 			<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="fesIdx" :range="festivalList" style="flex:1;">
-				<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
+				<view class="picker_inner">
+					<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<!-- 爱好二级分类 -->
 		<view class="wrapper" v-if="param.moduleId==='7'">
 			<text class="inner_title">类型：</text>
-			<view @tap="open" class="input">{{contentInfo.categoryName}}</view>
-			<w-picker mode="linkage"    @confirm="selVal" ref="linkage" themeColor="#f00" :linkList="linkList"></w-picker>
+			<view class="picker_inner"  @tap="open" style="flex: 1;">
+				<view class="input">{{categoryName}}</view>
+				<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+			</view>
+			
+			<w-picker mode="linkage" @confirm="selVal" ref="linkage" themeColor="#f00" :linkList="linkList"></w-picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
 			<text class="inner_title">类型：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name" style="flex:1;">
-				<view class="input">{{ typeList[idx].name }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ typeList[idx].name }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
+				
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.stageCtrl">
 			<text class="inner_title">{{stageCtrlName}}：</text>
 			<picker @change="stageBindPickerChange" :value="stageIdx" :range="stages" range-key="name" style="flex:1;">
-				<view class="input" v-if="['27','31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
-				<view class="input" v-else>{{stages[stageIdx].startTime| formatDate}}-{{stages[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
+				<view class="picker_inner">
+					<view class="input" v-if="['27','31','32'].indexOf(param.moduleId)>=0">{{ stageList[stageIdx].name }}</view>
+					<view class="input" v-else>{{stages[stageIdx].startTime| formatDate}}-{{stages[stageIdx].endTime| formatDate}} {{ stageList[stageIdx].name }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.placeCtrl">
 			<text class="inner_title">居室：</text>
 			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address" style="flex:1;">
-				<view class="input">{{ placeList[placeIdx].address }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ placeList[placeIdx].address }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
 			<text class="inner_title">天气：</text>
 			<picker @change="weatherBindPickerChange" :value="weatherIdx" :range="weatherList" style="flex:1;">
-				<view class="input">{{ weatherList[weatherIdx] }}</view>
+				<view class="picker_inner">
+					<view class="input">{{ weatherList[weatherIdx] }}</view>
+					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
+				</view>
 			</picker>
 		</view>
 		<view class="mul_wrapper">
@@ -217,6 +240,10 @@
 					}
 				}
 				return _list
+			},
+			categoryName:function(){
+				if(!this.contentInfo.categoryName) return '请选择'
+				return this.contentInfo.categoryName
 			}
 		},
 		filters:{
@@ -575,6 +602,9 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -588,7 +618,7 @@
 		align-items: center;
 		border-bottom-width: 1px;
 		border-bottom-style: solid;
-		border-bottom-color: #E5E5E5;
+		border-bottom-color: #F0F4F7;
 	}
 	.mul_wrapper{
 		display: flex;
@@ -633,7 +663,7 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 114upx;
-	
+		z-index: 999;
 	}
 	
 	.btn_delete {
@@ -714,5 +744,17 @@
 				color: #333;
 			}
 		}
+	}
+	
+	.picker_inner{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+		
+	.picker_arrow{
+		height: 20upx;
+		width: 24upx;
 	}
 </style>

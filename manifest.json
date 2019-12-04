@@ -88,6 +88,13 @@
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "static/images/splash.png",
+                    "xhdpi" : "static/images/splash.png",
+                    "xxhdpi" : "static/images/splash.png"
+                }
             }
         }
     },

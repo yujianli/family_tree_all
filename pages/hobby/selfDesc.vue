@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="selfDesc" placeholder="内容" />
-			</view>
+		</view>
 	</view>
 </template>
 
@@ -75,16 +75,29 @@
 </script>
 
 <style>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
 		padding-bottom: 120upx;
 	}
+
 	.mul_wrapper{
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: flex-start;
 		margin-top: 20upx;
+		background-color: #fff;
+		box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;
+		
+	}
+	.mul_input{
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		padding: 12upx;
 	}
 </style>

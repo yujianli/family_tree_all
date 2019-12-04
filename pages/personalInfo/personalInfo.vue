@@ -3,19 +3,19 @@
 		<view class="wrapper avatar_wrapper" style="position: relative;border-top: none;">
 			<view v-if="isEdit">
 				<!-- #ifdef APP-PLUS -->
-				<avatar selWidth="200px" selHeight="400upx" @upload="headUpload" :avatarSrc="imageUrl" avatarStyle="width: 154upx; height: 154upx; border-radius: 100%;">
+				<avatar selWidth="200px" selHeight="400upx" @upload="headUpload" :avatarSrc="imageUrl" avatarStyle="width: 154upx; height: 154upx; border-radius:100%;">
 				</avatar>
-				<avatar selWidth="200px" selHeight="400upx" @upload="signatureUpload" :avatarSrc="signatureUrl" avatarStyle="width: 86upx; height: 86upx; position: absolute;bottom:-22upx;right:46upx;border-radius: 100%;">
+				<avatar selWidth="200px" selHeight="400upx" @upload="signatureUpload" :avatarSrc="signatureUrl" avatarStyle="width: 86upx; height: 86upx; position: absolute;bottom:-22upx;right:46upx;border-radius: 20upx;border:2px solid #e5e5e5;">
 				</avatar>
 				<!-- #endif -->
 				<!-- #ifdef H5 -->
 				<image :src="imageUrl" style="width: 154upx;height: 154upx;border-radius: 50%;" @tap="openAlbum('avatar')"></image>
-				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx" @tap="openAlbum('signature')"></image>
+				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx;border-radius: 20upx;border:2px solid #e5e5e5" @tap="openAlbum('signature')"></image>
 				<!-- #endif -->
 			</view>
 			<view v-else>
 				<image :src="imageUrl" style="width: 154upx;height: 154upx;border-radius: 50%;"></image>
-				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx"></image>
+				<image :src="signatureUrl" style="width: 86upx;height: 86upx;position: absolute;bottom:-22upx;right:46upx;border-radius: 20upx;border:2px solid #e5e5e5"></image>
 			</view>
 		</view>
 		<view class="wrapper" style="margin-top: 60upx;">
@@ -467,7 +467,7 @@
 				let self = this;
 				uni.chooseImage({
 					count:1,
-					sizeType:['original', 'compressed'],
+					sizeType:['original'],
 					sourceType:['album'],
 					success: function(res){
 						console.log(JSON.stringify(res.tempFilePaths));
@@ -543,6 +543,9 @@
 </script>
 
 <style scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -553,7 +556,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		border-top: 1px solid #e5e5e5;
+		border-top: 1px solid #F0F4F7;
 	}
 	.mul_wrapper{
 		display: flex;
@@ -561,7 +564,7 @@
 		justify-content: space-between;
 		align-items: flex-start;
 		padding-top: 40upx;
-		border-top: 1px solid #e5e5e5;
+		border-top: 1px solid #F0F4F7;
 	}
 	.avatar_wrapper{
 		margin-top: 58upx;
@@ -595,6 +598,6 @@
 	.picker_arrow{
 		height: 20upx;
 		width: 24upx;
-		margin-left: 28upx;
+		margin-left: 10upx;
 	}
 </style>

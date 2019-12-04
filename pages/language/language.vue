@@ -66,6 +66,9 @@
 </script>
 
 <style scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;

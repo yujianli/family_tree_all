@@ -14,7 +14,7 @@
 		</view>
 		<view class="mul_wrapper">
 			<textarea class="mul_input" placeholder-style="color:#999" v-model="inheritInfo.content" placeholder="传承内容" />
-		</view>
+			</view>
 	</view>
 	
 </template>
@@ -49,8 +49,10 @@
 				this.$http.post('inherit/detilInherit',this.param).then((res)=>{
 					if(res.data.code===200){
 						let _data =res.data.data.inheritInfo
-						util.loadObj(this.inheritInfo,_data)
-						this.id=_data.id
+						if(_data){
+							util.loadObj(this.inheritInfo,_data)
+							this.id=_data.id
+						}
 					}else{
 						uni.showToast({
 							title: '加载失败',
@@ -89,6 +91,9 @@
 </script>
 
 <style>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
@@ -120,6 +125,15 @@
 		font-size: 34upx;
 		color: #303641;
 		flex: 1;
-		text-align: right;
+		text-align: left;
+	}
+	.mul_input{
+		height: 492upx;
+		font-size: 34upx;
+		color: #303641;
+		flex: 1;
+		border:1px solid #E5E5E5;
+		border-radius: 8upx;
+		padding: 18upx;
 	}
 </style>

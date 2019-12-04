@@ -205,7 +205,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;

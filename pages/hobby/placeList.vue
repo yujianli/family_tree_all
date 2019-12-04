@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<view class="float_btn" @tap="add">+</view>
-		<view class="card_list">
+		<view class="card_list" v-if="places.length>0">
 			<view v-for="(place, index) in places" :key="index">
 				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @tap="deleteContent(place.id)">
+					<uni-swipe-action-item :options="options" @click="deleteContent(place.id)">
 						<view class="card_item" @tap="jumpToPage(place)">
-							<image :style="{ display: place.imageUrl == '' ? 'none' : 'block' }" :src="place.imageUrl" class="card_pic"></image>
+							<image v-if="place.imageUrl != null" :src="place.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
 								<view class="card_title">{{ place.address }}</view>
 								<view class="time mt20">{{place.begintime | buyDesc}}</view>
@@ -21,6 +21,10 @@
 					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
+		</view>
+		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
+			<view style="font-size: 36upx;color: #999;">暂无数据</view>
 		</view>
 	</view>
 </template>
@@ -55,7 +59,9 @@
 			places: function() {
 				let self = this
 				for (let i = 0; i < this.placeList.length; i++) {
+					if(self.placeList[i].imageUrl){
 					self.placeList[i].imageUrl = this.$common.picPrefix() + self.placeList[i].imageUrl + this.suffixUrl;
+					}
 				}
 				return self.placeList
 			}
@@ -189,7 +195,9 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.search_info {
 		margin-top: 40upx;
 		margin-bottom: 40upx;

@@ -80,7 +80,8 @@
 					periodName: null,
 					address:null,
 					time: null
-				}
+				},
+				suffixUrl: '&style=image/resize,m_fill,w_355,h_240'
 			}
 		},
 		computed: {
@@ -96,7 +97,7 @@
 				if (!this.content.imageUrls) return [];
 				let imgs = this.content.imageUrls.split(',')
 				for (let i = 0; i < imgs.length; i++) {
-					imgs[i]=this.$common.picPrefix()+imgs[i]
+					imgs[i]=this.$common.picPrefix()+imgs[i]+this.suffixUrl
 				}
 				return imgs;
 			}
@@ -175,6 +176,9 @@
 </script>
 
 <style lang="less" scoped>
+	page{
+		border-top: 1px solid #e5e5e5;
+	}
 	.detail_container {
 		padding-left: 22upx;
 		padding-right: 22upx;
