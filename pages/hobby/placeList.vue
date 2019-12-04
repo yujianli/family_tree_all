@@ -13,7 +13,9 @@
 								<view class="card_others card_others_1">
 									<view class="inner_flex">
 										<text class="time">{{ place.endtime| saleDesc }}</text>
-										<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+										<view v-if="!isEdit">
+											<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
+										</view>
 									</view>
 								</view>
 							</view>
@@ -60,7 +62,7 @@
 				let self = this
 				for (let i = 0; i < this.placeList.length; i++) {
 					if(self.placeList[i].imageUrl){
-					self.placeList[i].imageUrl = this.$common.picPrefix() + self.placeList[i].imageUrl + this.suffixUrl;
+						self.placeList[i].imageUrl = this.$common.picPrefix() + self.placeList[i].imageUrl + this.suffixUrl;
 					}
 				}
 				return self.placeList

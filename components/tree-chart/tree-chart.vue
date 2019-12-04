@@ -9,7 +9,7 @@
 					<view v-if="!isRoot" class="vertical-line" />
 					<!-- 用户信息 -->
 					<view class="user-info" :class="{'user-selected':dataSource.isself}" @tap="itemClick(dataSource)">
-						<image class="user-avatar" :src="dataSource.headUrl ? (prefixUrl+dataSource.headUrl) : (dataSource.sex == 1 ? manUrl : womanUrl)" />
+						<image class="user-avatar" :src="dataSource.headUrl ? (prefixUrl+dataSource.headUrl+suffixUrl) : (dataSource.sex == 1 ? manUrl : womanUrl)" />
 						<view class='user-name'>
 							<view class="user-name-text">{{dataSource.name}}</view>
 						</view>
@@ -28,7 +28,7 @@
 					<view v-if="!isRoot" class="vertical-line" style="background-color:rgba(0,0,0,0)" />
 					<!-- 用户信息 -->
 					<view class="user-info" :class="{'user-selected':dataSource.isself}" @tap="itemClick(dataSource.spouseTreeDto)">
-						<image class="user-avatar" :src="dataSource.headUrl ? (prefixUrl+dataSource.headUrl) : (dataSource.spouseTreeDto.sex == 1 ? manUrl : womanUrl)" />
+						<image class="user-avatar" :src="dataSource.headUrl ? (prefixUrl+dataSource.headUrl+suffixUrl) : (dataSource.spouseTreeDto.sex == 1 ? manUrl : womanUrl)" />
 
 						<view class="user-name">
 							<view class="user-name-text">{{dataSource.spouseTreeDto.name}}</view>
@@ -75,6 +75,7 @@
 		data() {
 			return {
 				prefixUrl: this.$common.picPrefix(),
+				suffixUrl: '&style=image/resize,m_fill,w_48,h_48',
 				womanUrl: '../../static/images/icon_default_woman.png',
 				manUrl: '../../static/images/icon_default_man.png',
 				targetData: null

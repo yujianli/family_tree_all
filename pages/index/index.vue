@@ -4,7 +4,7 @@
 		<view class="person_tabs">
 			<view>
 				<text class="person_name person_name_active">{{personInfo.name}}（本人）</text>
-				<view class="tab_line"></view>
+				<!-- <view class="tab_line"></view> -->
 			</view>
 			<!-- 			<view>
 				<text class="person_name">杨林艳（配偶）</text>
@@ -40,7 +40,7 @@
 					<view style="padding: 34upx">
 						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;">
 							<view class="person_intro">
-								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
+								<image :src="item.headUrl + suffixUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
 							</view>
 							<view style="margin-bottom: 30upx;">
@@ -112,7 +112,8 @@
 						width: '105px'
 					}
 				}],
-				defaultUrl:'../../static/images/avatar.png'
+				defaultUrl:'../../static/images/avatar.png',
+				suffixUrl: '&style=image/resize,m_fill,w_44,h_44'
 			};
 		},
 		components: {
@@ -177,7 +178,7 @@
 						this.basicFuncList = res.data.data.module;
 						this.basicFuncList.push({
 							id: 0,
-							name: this.param.language==='zh_CN'?'更多':'More',
+							name: '更多',
 							icon: '../../static/images/icon_func_0.png'
 						});
 					} else {
@@ -444,6 +445,8 @@
 	.person_name_active {
 		color: #333;
 		font-weight: 700;
+		padding-bottom: 28upx;
+		border-bottom: 1px solid #4DC578;
 	}
 
 	.tab_line {

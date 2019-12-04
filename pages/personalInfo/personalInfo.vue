@@ -290,21 +290,22 @@
 				},
 				defaultAvatar:'../../static/images/avatar.png',
 				defaultSignature:'../../static/images/avatar.png',
-				isEdit: false
+				isEdit: false,
+				suffixUrl: '&style=image/resize,m_fill,w_77,h_77'
 			}
 		},
 		components:{avatar},
 		computed:{
 			imageUrl:function(){
 				if(this.baseInfo.headUrl){
-					return this.$common.picPrefix()+this.baseInfo.headUrl
+					return this.$common.picPrefix()+this.baseInfo.headUrl + this.suffixUrl
 				} else {
 					return this.defaultAvatar
 				}
 			},
 			signatureUrl:function(){
 				if(this.baseInfo.signature){
-					return this.$common.picPrefix()+this.baseInfo.signature
+					return this.$common.picPrefix()+this.baseInfo.signature + this.suffixUrl
 				} else {
 					return this.defaultSignature
 				}

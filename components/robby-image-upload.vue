@@ -32,10 +32,12 @@
 				dragIndex: null,
 				targetImageIndex: null,
 				imageList: [],
-				isDestroyed: false
+				isDestroyed: false,
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100'
 			}
 		}, 
 		mounted: function(){
+			this.value=[]
 			this.imageList = this.value
 			
 			if(this.showUploadProgress === false){
@@ -52,7 +54,7 @@
 				if(this.value){
 					let imgs=[];
 					for(let i=0;i<this.value.length;i++){
-						imgs.push(this.$common.picPrefix()+this.value[i])
+						imgs.push(this.$common.picPrefix()+this.value[i] + this.suffixUrl)
 					}
 					return imgs;
 				}

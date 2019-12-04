@@ -25,7 +25,12 @@
 								<text class="card_title">{{ content.content }}</text>
 								<view class="card_others">
 									<view class="tags">
-										<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{ tag }}</text>
+										<view v-if="content.tags.length>2">
+											<text class="tags_text" v-for="(tag, i) in content.tags.splice(0,2)" v-bind:key="tag">{{tag}}</text>
+										</view>
+										<view v-else>
+											<text class="tags_text" v-for="(tag, i) in content.tags" v-bind:key="tag">{{tag}}</text>
+										</view>
 									</view>
 									<text class="time">{{ content.createDate | formatDate}}</text>
 								</view>

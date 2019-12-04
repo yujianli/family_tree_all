@@ -14,7 +14,7 @@
 					src="https://dcloud-img.oss-cn-hangzhou.aliyuncs.com/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20181126.mp4"
 					                   @tap="setFullScreen"
 										></video> -->
-					<image :src="item.resourceUrl" @tap="previewImage(index1,index2)"></image>
+					<image :src="item.resourceUrl + suffixUrl" @tap="previewImage(index1,index2)"></image>
 					<image class="del" src="../../static/images/icon_delete.png" :style="{display:edit?'block':'none'}" @tap="delItem(item,index1,index2)"></image>
 				</view>
 			</view>
@@ -38,7 +38,8 @@
 				tabActiveIdx: 0,
 				modId: 0,
 				mediaList: [],
-				edit: false
+				edit: false,
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100'
 			}
 		},
 		components: {

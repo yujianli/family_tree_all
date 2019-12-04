@@ -22,7 +22,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"app-plus": {
-					"titleNView": false //禁用原生导航栏
+					"titleNView": false
 				}
 				// "enablePullDownRefresh": false, // 不开启下拉刷新, 默认就是false
 				// "disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
@@ -276,16 +276,16 @@
 		}, {
 			"path": "pages/fee/fee",
 			"style": {
-				"navigationBarTitleText": "支付年费",
-				"app-plus": {
-					"titleNView": {
-						"buttons": [{
-							"text": "完成",
-							"fontSize": "32upx",
-							"color": "#333333"
-						}]
-					}
-				}
+				"navigationBarTitleText": "支付年费"
+				// "app-plus": {
+				// 	"titleNView": {
+				// 		"buttons": [{
+				// 			"text": "完成",
+				// 			"fontSize": "32upx",
+				// 			"color": "#333333"
+				// 		}]
+				// 	}
+				// }
 			}
 		},
 		{

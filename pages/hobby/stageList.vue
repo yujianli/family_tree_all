@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="float_btn" @tap="add">+</view>
-		
+
 		<view class="card_list" v-if="stages.length>0">
 			<view v-for="(stage, index) in stages" :key="index">
 				<uni-swipe-action>
@@ -25,7 +25,9 @@
 										<!--车辆已出售-->
 										<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
 										<text class="time" v-else>{{ stage.description }}</text>
-										<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+										<view v-if="!isEdit">
+											<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
+										</view>
 									</view>
 								</view>
 							</view>
@@ -55,7 +57,7 @@
 					name: null,
 					flag: null,
 					language: null,
-					isFamily:null
+					isFamily: null
 				},
 				stageList: [],
 				isEdit: false,
@@ -70,7 +72,7 @@
 						width: '105px'
 					}
 				}],
-				suffixUrl: '&style=image/resize,m_fill,w_123,h_92'
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100'
 			};
 		},
 		computed: {
@@ -84,10 +86,10 @@
 						self.stageList[i].name = self.stageList[i].name.replace(',', '与').concat('的婚礼')
 						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
 					}
-					if(self.stageList[i].imageUrl != null) {
+					if (self.stageList[i].imageUrl != null) {
 						self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl + this.suffixUrl
 					}
-					
+
 				}
 				return self.stageList
 			}
@@ -107,7 +109,10 @@
 				if (curDt >= value) return '已出售'
 			}
 		},
-		components:{uniSwipeAction,uniSwipeActionItem},
+		components: {
+			uniSwipeAction,
+			uniSwipeActionItem
+		},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name
@@ -198,7 +203,7 @@
 					})
 				});
 			},
-			deleteContent:function(id){
+			deleteContent: function(id) {
 				var self = this
 				uni.showModal({
 					title: '删除',
@@ -207,18 +212,18 @@
 					success: function(res) {
 						if (res.confirm) {
 							self.$http.post('contentPeriod/deletePeriod', {
-									language: self.param.language,
-									contentPeriodId: id
-								}).then(res => {
-									if (res.data.code === 200) {
-										self.loadData();
-									} else {
-										uni.showToast({
-											title: '内容删除失败',
-											icon: 'none'
-										});
-									}
-								});
+								language: self.param.language,
+								contentPeriodId: id
+							}).then(res => {
+								if (res.data.code === 200) {
+									self.loadData();
+								} else {
+									uni.showToast({
+										title: '内容删除失败',
+										icon: 'none'
+									});
+								}
+							});
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -231,9 +236,11 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-	page{
+
+	page {
 		border-top: 1px solid #e5e5e5;
 	}
+
 	.search_info {
 		margin-top: 40upx;
 		margin-bottom: 40upx;

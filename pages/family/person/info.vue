@@ -104,7 +104,7 @@
 				},
 				defaultUrl: '../../../static/images/avatar.png',
 				prefixUrl: this.$common.picPrefix(),
-				suffixUrl: '&style=image/resize,m_fill,w_100',
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100',
 				basicFuncList: [{
 						"name": "主要大事",
 						"icon": "https://lgzs.oss-cn-hangzhou.aliyuncs.com/%E4%B8%BB%E8%A6%81%E5%A4%A7%E4%BA%8B%20%403x.png",
