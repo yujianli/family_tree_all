@@ -14,7 +14,7 @@
 <script>
 	export default {
 		name:'robby-image-upload',
-		props: ['value','enableDel','enableAdd','enableDrag','serverUrl','formData','header', 'limit','fileKeyName','showUploadProgress','serverUrlDeleteImage'],
+		props: ['value','enableDel','enableAdd','enableDrag','serverUrl','formData','header', 'limit','fileKeyName','showUploadProgress','serverUrlDeleteImage','isEdit'],
 		data() {
 			return {
 				imageBasePos:{
@@ -37,7 +37,9 @@
 			}
 		}, 
 		mounted: function(){
-			this.value=[]
+			if(!this.isEdit){
+				this.value=[]
+			}
 			this.imageList = this.value
 			
 			if(this.showUploadProgress === false){

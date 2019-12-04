@@ -80,7 +80,8 @@
 		@delete="deleteImage" @add="addImage" 
 		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
 		:server-url="uploadConfig.serverUrl" 
-		:header="uploadConfig.header">
+		:header="uploadConfig.header"
+		:is-edit="uploadConfig.isEdit">
 		</robby-image-upload>
 <!-- 		<hUpload :uploadUrl="uploadConfig.serverUrl" :header="uploadConfig.header"
 		@schange="schange" @upload="setAttachData"></hUpload> -->
@@ -189,6 +190,7 @@
 					fileKeyName: 'file',
 					showUploadProgerss:false,
 					limitNumber: 8,
+					isEdit: false
 				},
 				linkList:[],
 				defaultText:'请选择',
@@ -283,7 +285,9 @@
 					this.loadContent()
 				}
 			}
-			
+			if(this.param.contentId){
+				this.uploadConfig.isEdit=true
+			}
 			let token=uni.getStorageSync('USER').token;
 			this.uploadConfig.header={'token':token};
 		},

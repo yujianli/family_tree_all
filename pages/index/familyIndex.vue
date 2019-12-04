@@ -32,7 +32,7 @@
 			</view>
 		</view>
 		
- 		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
+ 		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
 			<!-- <view class="card_list">
 			<view class="more" @tap="jumpToAll">更多</view>
 			<view class="card_item" v-for="(item ,index) in testInfoList" :key="index">
@@ -101,6 +101,7 @@
 			this.loadModule();
 			this.loadFamilyList()
 			// this.$refs.indexcontentlist.loadIndexContent()
+			this.$refs['indexContent'].loadIndexContent()
 		},
 		methods: {
 			loadModule: function() {

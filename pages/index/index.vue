@@ -59,7 +59,7 @@
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
-		<indexContentList :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
+		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
 	</view>
 </template>
 
@@ -166,6 +166,7 @@
 			this.loadUserCardList()
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
+			this.$refs['indexContent'].loadIndexContent()
 		},
 		methods: {
 			loadModule: function() {

@@ -1,6 +1,6 @@
 <template>
 	<view class="card_list" v-if="contentList.length>0">
-		<view class="more" @tap="toMore">{{this.language==='zh_CN'?'更多':'More'}}</view>
+		<view class="more" @tap="toMore">更多</view>
 		<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 <!-- 			<uni-swipe-action>
 				<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)"> -->
