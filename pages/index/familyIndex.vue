@@ -92,7 +92,6 @@
 		components: {funchead,indexContentList},
 		onLoad: function() {
 			
-			// this.loadFamilyInfo()
 		},
 		onShow:function(){
 			let user = uni.getStorageSync("USER");
@@ -101,7 +100,7 @@
 			this.loadModule();
 			this.loadFamilyList()
 			// this.$refs.indexcontentlist.loadIndexContent()
-			this.$refs['indexContent'].loadIndexContent()
+			this.$nextTick(()=>this.$refs['indexContent'].loadIndexContent())
 		},
 		methods: {
 			loadModule: function() {

@@ -166,7 +166,7 @@
 			this.loadUserCardList()
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
-			this.$refs['indexContent'].loadIndexContent()
+			this.$nextTick(()=>this.$refs['indexContent'].loadIndexContent())
 		},
 		methods: {
 			loadModule: function() {
