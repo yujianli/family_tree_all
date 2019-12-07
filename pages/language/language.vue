@@ -79,6 +79,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		
 	}
 	.inner_title{
 		font-size: 32upx;
@@ -87,8 +88,8 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		height: 440upx;
 		height: 110upx;
+		border-bottom: 1px solid #F0F4F7;
 	}
 	.inner_text_2{
 		font-size:28upx;

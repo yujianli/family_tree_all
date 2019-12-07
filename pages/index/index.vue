@@ -45,12 +45,24 @@
 							</view>
 							<view style="margin-bottom: 30upx;">
 								<view class="other_info_container">
-									<text class="other_info">{{langData.common.birth2}}：{{ item.birth | formatDate}}</text>
-									<text class="other_info">{{langData.common.birthPlace}}：{{item.birthPlace | nullFilter}}</text>
+									<view  style="flex: 1;"  class="other_info">
+										<text>{{langData.common.birth2}}：</text>
+										<text>{{ item.birth | formatDate}}</text>
+									</view>
+									<view  style="flex: 1;margin-left: 65upx;" class="other_info">
+										<text>{{langData.common.birthPlace}}：</text>
+										<text>{{item.birthPlace | nullFilter}}</text>
+									</view>
 								</view>
 								<view class="other_info_container">
-									<text class="other_info">{{langData.common.nationality}}：{{item.nationality | nullFilter}}</text>
-									<text class="other_info">{{langData.common.career}}：{{item.career | nullFilter}}</text>
+									<view  style="flex: 1;"  class="other_info">
+										<text>{{langData.common.nationality}}：</text>
+										<text>{{item.nationality | nullFilter}}</text>
+									</view>
+									<view  style="flex: 1;margin-left: 65upx;" class="other_info">
+										<text>{{langData.common.career}}：</text>
+										<text>{{item.career | nullFilter}}</text>
+									</view>
 								</view>
 							</view>
 						</view>

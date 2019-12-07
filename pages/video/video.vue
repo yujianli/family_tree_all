@@ -89,7 +89,9 @@
 				let imgs = _mediaList.list.map((item) => item.resourceUrl);
 				uni.previewImage({
 					urls: imgs,
-					current: imgs[index2]
+					current: imgs[index2],
+					indicator:'default',
+					loop:true
 				});
 			},
 			setFullScreen(e) {

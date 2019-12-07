@@ -21,9 +21,9 @@
 		<view class="wrapper" style="margin-top: 60upx;">
 			<text class="inner_title">{{langData.common.name}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
+				<input disabled class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
 			</view>
-			<view class="input" v-else>{{baseInfo.name}}</view>
+			<view class="input"  v-else>{{baseInfo.name}}</view>
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{langData.common.idcard}}</text>
