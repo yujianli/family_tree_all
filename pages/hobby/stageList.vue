@@ -35,6 +35,7 @@
 					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
+			<view @tap="loadMore"><uni-load-more :status="status" style="height: 100upx;"></uni-load-more></view>
 		</view>
 		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
 			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
@@ -48,6 +49,7 @@
 	import config from '@/common/componetConfig.js'
 	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
 	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		data() {
 			return {
@@ -111,7 +113,8 @@
 		},
 		components: {
 			uniSwipeAction,
-			uniSwipeActionItem
+			uniSwipeActionItem,
+			uniLoadMore
 		},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
