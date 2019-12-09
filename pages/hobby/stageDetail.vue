@@ -1,11 +1,11 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">起始年月</text>
+			<text class="inner_title">{{i18n.begintime}}</text>
 			<view>{{stageInfo.begintime}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">结束年月</text>
+			<text class="inner_title">{{i18n.endtime}}</text>
 			<view>{{stageInfo.endtime}}</view>
 		</view>
 		<view class="wrapper">
@@ -13,11 +13,11 @@
 			<view>{{stageInfo.name}}</view>
 		</view>
 		<view class="mul_wrapper">
-			<text class="inner_title">内容</text>
+			<text class="inner_title">{{i18n.content}}</text>
 			<view>{{stageInfo.description}}</view>
 		</view>
 		<view class="opt_container">
-			<button class="btn_delete" @tap="remove">删除记录</button>
+			<button class="btn_delete" @tap="remove">{{btnText.remove}}</button>
 		</view>
 	</view>
 </template>
@@ -45,6 +45,12 @@
 			};
 		},
 		computed: {
+			i18n() {
+				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
+			},
 			typeCtrlName: function() {
 				let _name = module.viewCtrlName[this.param.moduleId]
 				if (_name) {

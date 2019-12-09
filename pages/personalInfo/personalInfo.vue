@@ -19,14 +19,14 @@
 			</view>
 		</view>
 		<view class="wrapper" style="margin-top: 60upx;">
-			<text class="inner_title">{{langData.common.name}}</text>
+			<text class="inner_title">{{i18n.name}}</text>
 			<view v-if="isEdit">
 				<input disabled class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
 			</view>
 			<view class="input"  v-else>{{baseInfo.name}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.idcard}}</text>
+			<text class="inner_title">{{i18n.idcard}}</text>
 			<view v-if="isEdit">
 				<input class="input" type="text" v-model="baseInfo.idCard" placeholder-style="color:#999" placeholder="身份证" />
 			</view>
@@ -34,7 +34,7 @@
 			<!-- @blur="regValid('idcard', baseInfo.idCard)" -->
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.gender}}</text>
+			<text class="inner_title">{{i18n.gender}}</text>
 			<view v-if="isEdit">
 				<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
 					<view class="picker_inner">
@@ -46,7 +46,7 @@
 			<view class="input" v-else>{{arr.sex[idx.sex].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.nationality}}</text>
+			<text class="inner_title">{{i18n.nationality}}</text>
 			<view v-if="isEdit">
 				<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
 					<view class="picker_inner">
@@ -58,7 +58,7 @@
 			<view class="input" v-else>{{arr.nationality[idx.nationality].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.zodiac}}</text>
+			<text class="inner_title">{{i18n.zodiac}}</text>
 			<view v-if="isEdit">
 				<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
 					<view class="picker_inner">
@@ -70,7 +70,7 @@
 			<view class="input" v-else>{{arr.zodiac[idx.zodiac].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.birth}}</text>
+			<text class="inner_title">{{i18n.birth}}</text>
 			<view v-if="isEdit">
 				<picker mode="date" :value="baseInfo.dateOfBirth !='' ? baseInfo.dateOfBirth : '请选择'" :start="startDate" :end="endDate" 
 				@change="bindDateChange"
@@ -84,7 +84,7 @@
 			<view class="input" v-else>{{baseInfo.dateOfBirth | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.birthTime}}</text>
+			<text class="inner_title">{{i18n.birthTime}}</text>
 			<view v-if="isEdit">
 				<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
 					<view class="picker_inner">
@@ -96,14 +96,14 @@
 			<view class="input" v-else>{{arr.birthTime[idx.birthTime].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.birthPlace}}</text>
+			<text class="inner_title">{{i18n.birthPlace}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地" />
+				<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" :placeholder="i18n.birthPlace" />
 			</view>
 			<view class="input" v-else>{{baseInfo.birthPlace}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.isPassaway}}</text>
+			<text class="inner_title">{{i18n.isPassaway}}</text>
 			<view v-if="isEdit">
 				<picker @change="birthIsPassedAwayBindPickerChange" :value="idx.yesOrNo" :range=" arr.yesOrNo" range-key="value">
 					<view class="picker_inner">
@@ -115,7 +115,7 @@
 			<view class="input" v-else>{{arr.yesOrNo[idx.yesOrNo].value}}</view>
 		</view>
 		<view class="wrapper" :style="{display: baseInfo.isPassedAway ? 'flex' : 'none'}">
-			<text class="inner_title">{{langData.common.passingAway}}</text>
+			<text class="inner_title">{{i18n.passingAway}}</text>
 			<view v-if="isEdit">
 				<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : '请选择'" :start="startDate" :end="endDate"
 				 @change="bindPassingAwayDateChange" :fields="'day'">
@@ -128,42 +128,42 @@
 			<view class="input" v-else>{{baseInfo.passingAway | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.placeResidence}}</text>
+			<text class="inner_title">{{i18n.placeResidence}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" placeholder="居住地" />
+				<input class="input" type="text" v-model="baseInfo.placeResidence" placeholder-style="color:#999" :placeholder="i18n.placeResidence" />
 			</view>
 			<view class="input" v-else>{{baseInfo.placeResidence}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.fixedTelephone}}</text>
+			<text class="inner_title">{{i18n.fixedTelephone}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话" />
+				<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" :placeholder="i18n.fixedTelephone" />
 			</view>
 			<view class="input" v-else>{{baseInfo.fixedTelephone}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.mobile}}</text>
+			<text class="inner_title">{{i18n.mobile}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码" />
+				<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" :placeholder="i18n.mobile" />
 			</view>
 			<view class="input" v-else>{{baseInfo.mobile}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.emailAddress}}</text>
+			<text class="inner_title">{{i18n.emailAddress}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" placeholder="邮箱地址" />
+				<input class="input" type="text" v-model="baseInfo.emailAddress" placeholder-style="color:#999" :placeholder="i18n.emailAddress" />
 			</view>
 			<view class="input" v-else>{{baseInfo.emailAddress}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.career}}</text>
+			<text class="inner_title">{{i18n.career}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" placeholder="职业" />
+				<input class="input" type="text" v-model="baseInfo.career" placeholder-style="color:#999" :placeholder="i18n.career" />
 			</view>
 			<view class="input" v-else>{{baseInfo.career}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.corporeity}}</text>
+			<text class="inner_title">{{i18n.corporeity}}</text>
 			<view v-if="isEdit">
 				<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
 					<view class="picker_inner">
@@ -175,7 +175,7 @@
 			<view class="input" v-else>{{arr.corporeity[idx.corporeity].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.bloodType}}</text>
+			<text class="inner_title">{{i18n.bloodType}}</text>
 			<view v-if="isEdit">
 				<picker @change="bloodTypeBindPickerChange" :value="idx.bloodType" :range=" arr.bloodType" range-key="value">
 					<view class="picker_inner">
@@ -187,21 +187,21 @@
 			<view class="input" v-else>{{arr.bloodType[idx.bloodType].value}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.gene}}</text>
+			<text class="inner_title">{{i18n.gene}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.gene" placeholder-style="color:#999" placeholder="基因" />
+				<input class="input" type="text" v-model="baseInfo.gene" placeholder-style="color:#999" :placeholder="i18n.gene" />
 			</view>
 			<view class="input" v-else>{{baseInfo.gene}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.temperament}}</text>
+			<text class="inner_title">{{i18n.temperament}}</text>
 			<view v-if="isEdit">
-				<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" placeholder="气质" />
+				<input class="input" type="text" v-model="baseInfo.temperament" placeholder-style="color:#999" :placeholder="i18n.temperament" />
 			</view>
 			<view class="input" v-else>{{baseInfo.temperament}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.constellation}}</text>
+			<text class="inner_title">{{i18n.constellation}}</text>
 			<view v-if="isEdit">
 				<picker @change="constellationBindPickerChange" :value="idx.constellation" :range=" arr.constellation" range-key="value">
 					<view class="picker_inner">
@@ -213,9 +213,9 @@
 			<view class="input" v-else>{{arr.constellation[idx.constellation].value}}</view>
 		</view>
 		<view class="mul_wrapper">
-			<text class="inner_title">{{langData.common.brief}}</text>
+			<text class="inner_title">{{i18n.brief}}</text>
 			<template v-if="isEdit">
-				<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" />
+				<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" :placeholder="i18n.brief" />
 				</template>
 			<view v-else class="mul_input" style="min-height: 200upx;">{{baseInfo.brief}}</view>
 		</view>
@@ -237,14 +237,14 @@
 					language:null
 				},
 				arr:{
-					yesOrNo:dataJson['yesOrNo'],
-					sex:dataJson['sex'],
-					zodiac: dataJson['zodiac'],
-					nationality: dataJson['nationality'],
-					birthTime: dataJson['birthTime'],
-					corporeity: dataJson['corporeity'],
-					bloodType: dataJson['bloodType'],
-					constellation: dataJson['constellation']
+					yesOrNo:this.$t('selData').yesOrNo,
+					sex:this.$t('selData').sex,
+					zodiac: this.$t('selData').zodiac,
+					nationality: this.$t('selData').nationality,
+					birthTime: this.$t('selData').birthTime,
+					corporeity: this.$t('selData').corporeity,
+					bloodType: this.$t('selData').bloodType,
+					constellation: this.$t('selData').constellation
 				},
 				idx:{
 					yesOrNo:0,
@@ -257,7 +257,7 @@
 					constellation:0
 				},
 				// birthDate: '请选择',
-				passingAwayDate: '请选择',
+				passingAwayDate: this.$t('defaultText').ctrl,
 				startDate:util.getDate('start'),
 				endDate:util.getDate('end'),
 				isPassedAway: false,
@@ -268,7 +268,7 @@
 					birthPlace: '',
 					placeResidence: '',
 					mobile: '',
-					headUrl: '.',
+					headUrl: '',
 					signature: '',
 					dateOfBirth:'',
 					bloodType: '',
@@ -310,9 +310,8 @@
 					return this.defaultSignature
 				}
 			},
-			langData:function(){
-				let lang=this.$common.getLanguage()
-				return this.$common.getLanguageData(lang)
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		filters: {
@@ -322,8 +321,7 @@
 			}
 		},
 		onLoad: function (options) {
-			let _name=this.langData.personInfo.title
-			uni.setNavigationBarTitle({title: _name});
+			uni.setNavigationBarTitle({title: this.$t('title').personalInfo});
 			util.loadObj(this.param,options)
 			this.baseInfo.language=options.language
 			this.loadData()
@@ -341,10 +339,10 @@
 				let currentWebview = page.$getAppWebview();
 				let titleObj = currentWebview.getStyle().titleNView;
 				if (!titleObj.buttons) return;
-				if (titleObj.buttons[0].text == '编辑') {
-					titleObj.buttons[0].text = "完成";
+				if (titleObj.buttons[0].text == this.$t('btnText').update) {
+					titleObj.buttons[0].text = this.$t('btnText').summit;
 				} else {
-					titleObj.buttons[0].text = "编辑";
+					titleObj.buttons[0].text = this.$t('btnText').update;
 				}
 				currentWebview.setStyle({
 					titleNView: titleObj
@@ -365,7 +363,7 @@
 						this.initProp('corporeity',_info.corporeity);
 						this.initProp('bloodType',_info.bloodType);
 						this.initProp('constellation',_info.constellation);
-						let idx= dataJson['yesOrNo'].findIndex(item=>item.key===_info.isPassedAway)
+						let idx= this.arr['yesOrNo'].findIndex(item=>item.key===_info.isPassedAway)
 						this.idx['yesOrNo']=idx
 						
 					}else{
@@ -397,7 +395,7 @@
 			},
 			birthIsPassedAwayBindPickerChange: function(e){
 				this.idx['yesOrNo']=e.target.value
-				this.baseInfo.isPassedAway=dataJson['yesOrNo'][e.target.value].key;
+				this.baseInfo.isPassedAway=this.arr['yesOrNo'][e.target.value].key;
 			},
 			bindPassingAwayDateChange: function(e) {
 				let _date = e.target.value
@@ -406,7 +404,7 @@
 					this.passingAwayDate=_date;
 				} else {
 					this.baseInfo.passingAway='';
-					this.passingAwayDate='请选择';
+					this.passingAwayDate=this.$t('defaultText').ctrl;
 				}
 				
 			},
@@ -421,11 +419,11 @@
 			},
 			selProp:function(prop, index){
 				this.idx[prop]=index;
-				this.baseInfo[prop]=dataJson[prop][index].key;
+				this.baseInfo[prop]=this.arr[prop][index].key;
 			},
 			initProp:function(prop, val){
-				for(var i=0;i<dataJson[prop].length;i++){
-					if(dataJson[prop][i].key===val){
+				for(var i=0;i<this.arr[prop].length;i++){
+					if(this.arr[prop][i].key===val){
 						this.idx[prop]=i;
 						break;
 					}
@@ -464,7 +462,6 @@
 				this.uploadFile('signature',this.url)
 			},
 			openAlbum:function(type){
-				
 				let self = this;
 				uni.chooseImage({
 					count:1,
@@ -504,21 +501,18 @@
 						}
 					})
 				}).then((res)=>{
-					console.log(type);
 					if(type =='avatar'){
 						this.baseInfo.headUrl=res
 					} else if(type == 'signature'){
 						this.baseInfo.signature=res
 					}
-					
-					console.log(res)
 				})
 			},
 			save:function(){
 				let requestParam = this.baseInfo;
 				if(!this.baseInfo.isPassedAway){
 					this.baseInfo.passingAway='';
-					this.passingAwayDate='请选择';
+					this.passingAwayDate=this.$t('defaultText').ctrl;
 					requestParam['passingAway'] = '';
 				}
 				if(this.baseInfo.headUrl == this.defaultAvatar){

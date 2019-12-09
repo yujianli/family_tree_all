@@ -3,33 +3,33 @@
 		<view class="types_wrapper">
 			<view v-for="(module,index) in selectedModules">{{module.name}}</view>
 		</view>
-		<uni-search-bar :radius="200" class="search_info" />
+		<uni-search-bar :radius="200" class="search_info" @confirm="search"/>
 		<view class="card_list">
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
-<!-- 				<uni-swipe-action>
+				<!-- 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)"> -->
-						<view class="card_item" @tap="jumpToDetail(contentInfo)">
-							<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
-							<view class="card_inner">
-								<text class="card_title">{{contentInfo.content}}</text>
-								<view class="card_others">
-									<view class="tags">
-										<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
-											{{tag}}
-										</text>
-									</view>
-									<text class="time">{{contentInfo.createDate | formatDate}}</text>
-								</view>
+				<view class="card_item" @tap="jumpToDetail(contentInfo)">
+					<image v-if="contentInfo.imageUrl!=null" :src="contentInfo.imageUrl" class="card_pic"></image>
+					<view class="card_inner">
+						<text class="card_title">{{contentInfo.content}}</text>
+						<view class="card_others">
+							<view class="tags">
+								<text class="tags_text" v-for="(tag,i) in contentInfo.tags" v-bind:key="tag">
+									{{tag}}
+								</text>
 							</view>
+							<text class="time">{{contentInfo.createDate | formatDate}}</text>
 						</view>
-<!-- 					</uni-swipe-action-item>
+					</view>
+				</view>
+				<!-- 					</uni-swipe-action-item>
 				</uni-swipe-action> -->
 			</view>
 		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
 			<view>
 				<view class="pd18">
-					<view class="text">模块选择</view>
+					<view class="text">{{i18n.moduleSel}}</view>
 				</view>
 				<view class="all_types_container">
 					<view class="all_types_wrapper" v-for="(module,index) in modules">
@@ -37,13 +37,21 @@
 					</view>
 				</view>
 				<view class="pd18">
-					<view class="text" style="margin-top: 62upx;">时间选择</view>
-					<view class="text">起始时间：2013年9月6日</view>
-					<view class="text">结束时间：2013年9月6日</view>
+<!-- 					<view class="text" style="margin-top: 62upx;">{{i18n.timeSel}}</view>
+					<view class="text">{{i18n.beginTime}}：
+						<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="startTime">
+							<view>{{startTime}}</view>
+						</picker>
+					</view>
+					<view class="text">{{i18n.endTime}}：
+						<picker mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="endTime">
+							<view>{{endTime}}</view>
+						</picker>
+					</view> -->
 				</view>
 				<view class="all_opt_btn_container">
-					<button class="all_opt_btn" @tap="clearCondition">清空条件</button>
-					<button class="all_opt_btn active" @tap='confirmCondition'>确认</button>
+					<button class="all_opt_btn" @tap="clearCondition">{{btnText.clear}}</button>
+					<button class="all_opt_btn active" @tap='confirmCondition'>{{btnText.summit}}</button>
 				</view>
 			</view>
 		</uni-drawer>
@@ -65,35 +73,17 @@
 					isFamily: null
 				},
 				options: [{
-					text: '删除',
+					text: this.$t('btnText').remove,
 					style: {
 						backgroundColor: '#ED4848',
 						width: '210upx'
 					}
 				}],
+				startTime: this.$t('defaultText').ctrl,
+				endTime: this.$t('defaultText').ctrl,
 				showDrawer: false,
 				selectedModules: [],
-				modules: [{
-					id: 1,
-					name: '日记',
-					hasActive: false
-				}, {
-					id: 2,
-					name: '工资理财',
-					hasActive: false
-				}, {
-					id: 3,
-					name: '体貌特征',
-					hasActive: false
-				}, {
-					id: 4,
-					name: '爱好',
-					hasActive: false
-				}, {
-					id: 5,
-					name: '健康状况',
-					hasActive: false
-				}],
+				modules: [],
 				contentList: [],
 				suffixUrl: '&style=image/resize,m_fill,w_123,h_92',
 			}
@@ -104,6 +94,23 @@
 			uniSwipeActionItem,
 			uniDrawer
 		},
+		computed: {
+			i18n() {
+				return this.$t('common')
+			},
+			defaultText() {
+				return this.$t('defaultText')
+			},
+			btnText() {
+				return this.$t('btnText')
+			},
+			startDate() {
+				return util.getDate('start');
+			},
+			endDate() {
+				return util.getDate('end');
+			},
+		},
 		filters: {
 			formatDate: function(value) {
 				if (!value) return ''
@@ -111,8 +118,9 @@
 			}
 		},
 		onLoad: function(options) {
+			uni.setNavigationBarTitle({title: this.$t('title').all});
 			util.loadObj(this.param, options)
-			this.loadIndexContent()
+			this.loadIndexContent('')
 			this.loadAllModule()
 		},
 		methods: {
@@ -129,11 +137,13 @@
 					url: url
 				});
 			},
-			loadIndexContent: function() {
-				this.$http.get('content/userCards', {
+			loadIndexContent: function(val) {
+				this.$http.get('content/queryLike', {
 					userId: this.param.userId,
+					moduleId: this.selectedModules.join(','),
 					page: 1,
 					rows: 10,
+					content:val,
 					language: this.param.language,
 					isFamily: this.param.isFamily
 				}).then((res) => {
@@ -144,7 +154,7 @@
 								this.contentList[i].tags = this.contentList[i].tags.split(',')
 							}
 							if (this.contentList[i].imageUrl) {
-								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl+this.suffixUrl
+								this.contentList[i].imageUrl = this.$common.picPrefix() + this.contentList[i].imageUrl + this.suffixUrl
 							}
 						}
 					} else {
@@ -173,6 +183,9 @@
 					}
 				})
 			},
+			search:function(e){
+				this.loadIndexContent(e.value)
+			},
 			show: function() {
 				this.showDrawer = true
 			},
@@ -191,6 +204,12 @@
 				}
 				console.log(this.modules);
 				// console.log(index);
+			},
+			bindSDateChange: function(e) {
+				this.begintime = e.target.value
+			},
+			bindEDateChange: function(e) {
+				this.endtime = e.target.value
 			},
 			clearCondition: function() {
 				this.selectedModules = [];
@@ -254,9 +273,11 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-	page{
+
+	page {
 		border-top: 1px solid #e5e5e5;
 	}
+
 	.pd18 {
 		padding: 18upx;
 	}

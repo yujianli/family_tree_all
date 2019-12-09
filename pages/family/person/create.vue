@@ -7,50 +7,51 @@
 			</avatar> -->
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">姓名</text>
-			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
+			<text class="inner_title">{{i18n.name}}</text>
+			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" :placeholder="i18n.name" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">手机号码</text>
-			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" placeholder="手机号码" />
+			<text class="inner_title">{{i18n.mobile}}</text>
+			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" :placeholder="i18n.mobile" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">性别</text>
+			<text class="inner_title">{{i18n.gender}}</text>
 			<picker @change="sexBindPickerChange" :value="idx.sex" :range=" arr.sex" range-key="value">
 				<view class="input">{{ arr.sex[idx.sex].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">出生年月</text>
-			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : '请选择'" :start="startDate" :end="endDate" @change="bindDateChange"
+			<text class="inner_title">{{i18n.birth}}</text>
+			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'">
 				<view class="input">{{baseInfo.birth | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">是否过世</text>
+			<text class="inner_title">{{i18n.isPassaway}}</text>
 			<switch :checked="isPassedAway" @change="switchChange" class="input" />
 		</view>
 		<view class="wrapper" :style="{display: isPassedAway ? 'flex' : 'none'}">
-			<text class="inner_title">过世年月</text>
-			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : '请选择'" :start="startDate" :end="endDate"
+			<text class="inner_title">{{i18n.passingAway}}</text>
+			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : defaultText.ctrl" :start="startDate" :end="endDate"
 			 @change="bindPassingAwayDateChange" :fields="'day'">
 				<view class="input">{{baseInfo.passingAway | formatDate}}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" placeholder="职业" />
+			<text class="inner_title">{{i18n.career}}</text>
+			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" :placeholder="i18n.career" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">与{{pname}}之间的关系</text>
+			<text class="inner_title" v-if="param.language==='zh_CN'">与{{pname}}之间的关系</text>
+			<text class="inner_title" v-else>Relationship with {{pname}}</text>
 			<picker @change="relationBindPickerChange" :value="idx.relation" :range=" arr.relation" range-key="name">
 				<view class="input">{{ arr.relation[idx.relation].name }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">同辈排行</text>
-			<input class="input" type="text" v-model="baseInfo.ranking" placeholder-style="color:#999" placeholder="同辈排行" />
+			<text class="inner_title">{{i18n.rank}}</text>
+			<input class="input" type="text" v-model="baseInfo.ranking" placeholder-style="color:#999" :placeholder="i18n.rank" />
 		</view>
 	</view>
 
@@ -67,8 +68,8 @@
 		data() {
 			return {
 				arr: {
-					sex: dataJson['sex'],
-					relation:[{id:0,name:'请选择'}]
+					sex: this.$t('selData').sex,
+					relation:[{id:0,name:this.$t('defaultText').ctrl}]
 				},
 				idx: {
 					sex: 0,
@@ -76,8 +77,8 @@
 				},
 				pname:'',
 				relation:[],
-				birthDate: '请选择',
-				passingAwayDate: '请选择',
+				birthDate: this.$t('defaultText').ctrl,
+				passingAwayDate: this.$t('defaultText').ctrl,
 				startDate: util.getDate('start'),
 				endDate: util.getDate('end'),
 				isPassedAway: false,
@@ -102,6 +103,12 @@
 		},
 		components: {avatar},
 		computed: {
+			i18n() {
+				return this.$t('common')
+			},
+			defaultText(){
+				return this.$t('defaultText')
+			},
 			imageUrl: function() {
 				if (this.baseInfo.headUrl) {
 					return this.$common.picPrefix() + this.baseInfo.headUrl
@@ -151,7 +158,6 @@
 			switchChange: function(e) {
 				this.isPassedAway = e.target.value
 				this.baseInfo.isPassedAway = e.target.value ? 1 : 0
-				console.log('是否在世，携带值为', this.baseInfo.isPassedAway)
 			},
 			bindPassingAwayDateChange: function(e) {
 				console.log(e.target.value);
@@ -162,18 +168,18 @@
 					this.passingAwayDate = _date;
 				} else {
 					this.baseInfo.passingAway = '';
-					this.passingAwayDate = '请选择';
+					this.passingAwayDate = this.$t('defaultText').ctrl;
 				}
 
 			},
 			selProp: function(prop, index) {
 				this.idx[prop] = index;
-				this.baseInfo[prop] = dataJson[prop][index].key;
+				this.baseInfo[prop] = this.$t('selData')[prop][index].key;
 			},
 			initProp: function(prop, val) {
-				console.log(dataJson[prop])
-				for (var i = 0; i < dataJson[prop].length; i++) {
-					if (dataJson[prop][i].key === val) {
+				let data=this.$t('selData')
+				for (var i = 0; i < data[prop].length; i++) {
+					if (data[prop][i].key === val) {
 						this.idx[prop] = i;
 						break;
 					}
@@ -250,7 +256,7 @@
 				let requestParam = this.baseInfo;
 				if (!this.isPassedAway) {
 					this.baseInfo.passingAway = '';
-					this.passingAwayDate = '请选择';
+					this.passingAwayDate = this.$t('defaultText').ctrl;
 				}
 				if (this.baseInfo.headUrl == this.defaultAvatar) {
 					this.baseInfo.headUrl = '';

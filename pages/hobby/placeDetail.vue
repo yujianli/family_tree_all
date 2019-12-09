@@ -1,23 +1,23 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">购买年月</text>
+			<text class="inner_title">{{i18n.buyDate}}</text>
 			<view>{{placeInfo.begintime | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">出售年月</text>
+			<text class="inner_title">{{i18n.sellDate}}</text>
 			<view>{{placeInfo.endtime | formatDate}}</view>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">地址</text>
+			<text class="inner_title">{{i18n.address}}</text>
 			<view>{{placeInfo.address}}</view>
 		</view>
 		<view class="mul_wrapper">
-			<text class="inner_title">描述</text>
+			<text class="inner_title">{{i18n.desc}}</text>
 			<view>{{placeInfo.description}}</view>
 		</view>
 		<view class="opt_container">
-			<button class="btn_delete" @tap="remove">删除记录</button>
+			<button class="btn_delete" @tap="remove">{{btnText.remove}}</button>
 		</view>
 	</view>
 </template>
@@ -43,6 +43,14 @@
 					id: null
 				}
 			};
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
+			}
 		},
 		filters:{
 			formatDate:function(value){

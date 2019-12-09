@@ -54,6 +54,9 @@
 				}]
 			}
 		},
+		computed:{
+			
+		},
 		onLoad:function(options){
 			util.loadObj(this.param,options)
 		},

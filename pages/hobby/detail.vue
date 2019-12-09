@@ -28,8 +28,8 @@
 			</view>
 		</view>
 		<view class="detail_opt_container">
-			<button class="detail_opt_btn active" @tap="previousClick">上一页</button>
-			<button class="detail_opt_btn" @tap="nextClick">下一页</button>
+			<button class="detail_opt_btn active" @tap="previousClick">{{i18n.previous}}</button>
+			<button class="detail_opt_btn" @tap="nextClick">{{i18n.next}}</button>
 		</view>
 	</view>
 
@@ -85,6 +85,9 @@
 			}
 		},
 		computed: {
+			i18n() {
+				return this.$t('btnText')
+			},
 			tagList:function(){
 				if(!this.content.tags)return []
 				return this.content.tags.split(',')

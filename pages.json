@@ -445,7 +445,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "世纪图谱",
 		// "navigationStyle":"custom",
-		"navigationBarBackgroundColor": "#ffffff",
+		"navigationBarBackgroundColor": "#42B983",
 		"backgroundColor": "#ffffff",
 		"usingComponents":{
 		   "tree-chart":"/components/tree-chart/tree-chart"

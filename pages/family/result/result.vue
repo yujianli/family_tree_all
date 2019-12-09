@@ -7,12 +7,12 @@
 				<text>{{clan.name}}</text>
 			</view>
 			<view class="clan_item">
-				<view>出生年月： {{clan.birth | formatDate}}</view>
-				<view>职业： {{clan.createBy | nullFilter}}</view>
+				<view>{{i18n.birth}}： {{clan.birth }}</view>
+				<view>{{i18n.career}}： {{clan.createBy | nullFilter}}</view>
 			</view>
 			<view class="clan_item">
-				<view>出生地：{{clan.birthPlace | nullFilter}}</view>
-				<view>居住省市： {{clan.updateBy | nullFilter}}</view>
+				<view>{{i18n.birthPlace}}：{{clan.birthPlace | nullFilter}}</view>
+				<view>{{i18n.placeResidence}}： {{clan.updateBy | nullFilter}}</view>
 			</view>
 		</view>
 	</view>
@@ -35,6 +35,9 @@
 			}
 		},
 		computed:{
+			i18n() {
+				return this.$t('common')
+			},
 			dataList:function(){
 				if(!this.clanList.length)return [];
 				for(let i=0;i<this.clanList.length;i++){
@@ -42,6 +45,11 @@
 						this.clanList[i].headUrl=this.$common.picPrefix()+this.clanList[i].headUrl+this.suffixUrl;
 					}else{
 						this.clanList[i].headUrl='../../../static/images/avatar.png'
+					}
+					if(this.clanList[i].birth){
+						this.clanList[i].birth=util.dateFormat(this.clanList[i].birth)
+					}else{
+						this.clanList[i].birth=this.$t('defaultText').ctrl
 					}
 				}
 				return this.clanList

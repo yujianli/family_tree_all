@@ -9,47 +9,23 @@
 			</view>
 
 			<view class="inner_select" :style="{'display': showSelect ? 'block' : 'none'}">
-				<!-- <view class="active">万少波的家族树</view> -->
-
 				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
 				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
 			</view>
 		</view>
 
-<!-- 		<view class="func_container" style="margin-top: 38upx;">
-			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
-				<image class="pic_menu" :src="basicFunc.icon"></image>
-				<text class="text">{{ basicFunc.name }}</text>
-			</view>
-		</view> -->
 		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
 		<view style="padding: 34upx;">
 			<view class="family_training_container">
-				<view class="title">家训</view>
+				<view class="title">{{i18n.training}}</view>
 				<view class="content">
-					{{instruction}}
+					<textarea class="mul_input" placeholder-style="color:#999" v-model="instruction"></textarea>
+					<!-- {{instruction}} -->
 				</view>
 			</view>
 		</view>
 		
  		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
-			<!-- <view class="card_list">
-			<view class="more" @tap="jumpToAll">更多</view>
-			<view class="card_item" v-for="(item ,index) in testInfoList" :key="index">
-				<image :style="{display: item.pic == '' ? 'none' : 'block'}" :src="item.pic" class="card_pic"></image>
-				<view class="card_inner">
-					<view class="card_title">{{item.content}}</view>
-					<view class="card_others">
-						<view class="tags">
-							<text class="tags_text">旅行</text>
-							<text class="tags_text">游记</text>
-						</view>
-						<text class="time">2018/10/12</text>
-					</view>
-				</view>
-			</view>
-		</view> -->
-		
 	</view>
 
 </template>
@@ -70,23 +46,16 @@
 				},
 				showSelect: false,
 				familyUserId:null,
-				familyTitle: '家族',
+				familyTitle: this.$t('common').family,
 				familyList:[],
 				instruction: '',
 				basicFuncList: [],
-				testInfoList: [{
-					id: 1,
-					content: '这是一则很重要的新闻，欢迎大家',
-					pic: '../../static/images/icon_func_1.png',
-				}, {
-					id: 2,
-					content: '这是一则很重要的新闻，欢迎大家',
-					pic: '../../static/images/icon_func_2.png',
-				}, {
-					id: 3,
-					content: '超级长的故，这是一则很重要的新闻，欢迎大家,超级长的故事',
-					pic: '',
-				}]
+				testInfoList: []
+			}
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		components: {funchead,indexContentList},
@@ -111,11 +80,11 @@
 				}).then(res => {
 					if (res.data.code === 200) {
 						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: '更多',
-							icon: '../../static/images/icon_func_0.png'
-						});
+						// this.basicFuncList.push({
+						// 	id: 0,
+						// 	name: this.$t('btnText').more,
+						// 	icon: '../../static/images/icon_func_0.png'
+						// });
 					} else {
 						uni.showToast({
 							title: '模块信息加载失败',
@@ -411,6 +380,11 @@
 			font-size: 33upx;
 			color: #333;
 			margin-top: 32upx;
+		}
+		
+		.mul_input{
+			flex: 1;
+			padding: 12upx;
 		}
 	}
 </style>

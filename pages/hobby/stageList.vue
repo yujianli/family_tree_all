@@ -18,12 +18,12 @@
 								<!--婚礼时间-->
 								<view class="time mt20" v-if="param.moduleId==='32'">{{ stage.startTime}}</view>
 								<!--车辆日期-->
-								<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime | buyDesc}}</view>
+								<view class="time mt20" v-if="param.moduleId==='31'">{{stage.startTime}}</view>
 								<view class="time mt20" v-if="enableDateCtrl">{{ stage.startTime | formatDate }}-{{ stage.endTime | formatDate }}</view>
 								<view class="card_others card_others_1">
 									<view class="inner_flex">
 										<!--车辆已出售-->
-										<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime | saleDesc}}</text>
+										<text class="time" v-if="param.moduleId=='31'">{{ stage.endTime}}</text>
 										<text class="time" v-else>{{ stage.description }}</text>
 										<view v-if="!isEdit">
 											<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(stage)"></image>
@@ -35,11 +35,13 @@
 					</uni-swipe-action-item>
 				</uni-swipe-action>
 			</view>
-			<view @tap="loadMore"><uni-load-more :status="status" style="height: 100upx;"></uni-load-more></view>
+<!-- 			<view @tap="loadMore">
+				<uni-load-more :status="status" style="height: 100upx;"></uni-load-more>
+			</view> -->
 		</view>
 		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
 			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
-			<view style="font-size: 36upx;color: #999;">暂无数据</view>
+			<view style="font-size: 36upx;color: #999;">{{defaultText.nullData}}</view>
 		</view>
 	</view>
 </template>
@@ -74,10 +76,17 @@
 						width: '105px'
 					}
 				}],
-				suffixUrl: '&style=image/resize,m_fill,w_100,h_100'
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100',
+				status: 'more'
 			};
 		},
 		computed: {
+			defaultText() {
+				return this.$t('defaultText')
+			},
+			other() {
+				return this.$t('other')
+			},
 			enableDateCtrl: function() {
 				return ['27', '31', '32'].indexOf(this.param.moduleId) === -1
 			},
@@ -85,13 +94,26 @@
 				let self = this
 				for (let i = 0; i < this.stageList.length; i++) {
 					if (this.param.moduleId === '32') {
-						self.stageList[i].name = self.stageList[i].name.replace(',', '与').concat('的婚礼')
+						self.stageList[i].name = self.stageList[i].name.replace(',', this.other.and).concat(this.other.marriage)
 						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
+					} else if (this.param.moduleId === '31') {
+						if (self.stageList[i].startTime) {
+							self.stageList[i].startTime = this.other.buy + util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
+						}else{
+							self.stageList[i].startTime = ''
+						}
+						if (self.stageList[i].endTime) {
+							let curDt = new Date().getDate();
+							if(curDt>=self.stageList[i].endTime){
+								self.stageList[i].endTime=this.other.sell
+							}
+						}else{
+							self.stageList[i].endTime=''
+						}
 					}
 					if (self.stageList[i].imageUrl != null) {
 						self.stageList[i].imageUrl = this.$common.picPrefix() + self.stageList[i].imageUrl + this.suffixUrl
 					}
-
 				}
 				return self.stageList
 			}

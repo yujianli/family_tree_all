@@ -6,40 +6,40 @@
 		</view>
 		<view class="container">
 			<view class="tab_container">
-				<view :class="{ 'active': index == 0 }" @tap="tabFunc(0)">基本信息</view>
-				<view :class="{ 'active': index == 1 }" @tap="tabFunc(1)">个人信息</view>
+				<view :class="{ 'active': index == 0 }" @tap="tabFunc(0)">{{i18n.baseInfo}}</view>
+				<view :class="{ 'active': index == 1 }" @tap="tabFunc(1)">{{i18n.personInfo}}</view>
 			</view>
 		</view>
 
 
 		<view class="container" :style="{display: index == 0 ? 'block' : 'none'}">
 			<view class="wrapper">
-				<text class="inner_title">性别</text>
-				<text class="inner_info">{{baseInfo.sex}}</text>
+				<text class="inner_title">{{i18n.gender}}</text>
+				<text class="inner_info">{{baseInfo.sex | nullFilter}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">民族</text>
-				<text class="inner_info">{{baseInfo.nationality}}</text>
+				<text class="inner_title">{{i18n.nationality}}</text>
+				<text class="inner_info">{{baseInfo.nationality | nullFilter}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">生肖</text>
-				<text class="inner_info">{{baseInfo.zodiac}}</text>
+				<text class="inner_title">{{i18n.zodiac}}</text>
+				<text class="inner_info">{{baseInfo.zodiac | nullFilter}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">出生年月</text>
+				<text class="inner_title">{{i18n.birth}}</text>
 				<text class="inner_info">{{baseInfo.birth|formatDate}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">出生地</text>
-				<text class="inner_info">{{baseInfo.birthPlace}}</text>
+				<text class="inner_title">{{i18n.birthPlace}}</text>
+				<text class="inner_info">{{baseInfo.birthPlace | nullFilter}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">居住地</text>
-				<text class="inner_info">{{baseInfo.updateBy}}</text>
+				<text class="inner_title">{{i18n.placeResidence}}</text>
+				<text class="inner_info">{{baseInfo.updateBy | nullFilter}}</text>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">职业</text>
-				<text class="inner_info">{{baseInfo.createBy}}</text>
+				<text class="inner_title">{{i18n.career}}</text>
+				<text class="inner_info">{{baseInfo.createBy | nullFilter}}</text>
 			</view>
 		</view>
 
@@ -48,24 +48,17 @@
 				{{baseInfo.brief}}
 			</view>
 		</view>
-
-
-
-
 		<view class="more_container" v-if="showMore">
 			<view class="more_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 				<image class="more_pic_menu" :src="basicFunc.icon"></image>
 				<text class="more_text">{{basicFunc.name}}</text>
 			</view>
-			<button class="more_cancel" @tap="cancelShowFunc">取消</button>
+			<button class="more_cancel" @tap="cancelShowFunc">{{btnText.cancel}}</button>
 		</view>
 
 		<view class="opt_container" v-else>
-			<button class="more_more" @tap="showFunc">更多信息</button>
+			<button class="more_more" @tap="showFunc">{{btnText.more2}}</button>
 		</view>
-
-
-
 	</view>
 </template>
 
@@ -84,10 +77,10 @@
 					language: null
 				},
 				arr: {
-					zodiac: dataJson['zodiac'],
-					birthTime: dataJson['birthTime'],
-					nationality: dataJson['nationality'],
-					corporeity: dataJson['corporeity']
+					zodiac: this.$t('selData').zodiac,
+					birthTime: this.$t('selData').birthTime,
+					nationality: this.$t('selData').nationality,
+					corporeity: this.$t('selData').corporeity
 				},
 				baseInfo: {
 					userId: null,
@@ -164,6 +157,12 @@
 			}
 		},
 		computed: {
+			i18n() {
+				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
+			},
 			imgObj: function() {
 				return this.baseInfo.headUrl ? (this.prefixUrl + this.baseInfo.headUrl + this.suffixUrl) : this.defaultUrl
 			}
@@ -171,7 +170,11 @@
 		filters: {
 			formatDate: function(value) {
 				if (!value) return ''
-				return util.dateFormat(value, 'yyyy年MM月dd日')
+				return util.dateFormat(value)
+			},
+			nullFilter: function(value) {
+				if (!value) return ''
+				return value
 			}
 		},
 		onLoad: function(options) {
@@ -200,9 +203,10 @@
 				})
 			},
 			bindProp: function(key, val) {
-				for (var i = 0; i < dataJson[key].length; i++) {
-					if (dataJson[key][i].key === val) {
-						return dataJson[key][i].value;
+				let data=this.$t('selData')
+				for (var i = 0; i < data[key].length; i++) {
+					if (data[key][i].key === val) {
+						return data[key][i].value;
 					}
 				}
 			},

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">购买年月</text>
+			<text class="inner_title">{{i18n.buyDate}}</text>
 			<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'" :value="startTime">
 				<view class="picker_inner">
 					<view class="input">{{startTime}}</view>
@@ -10,7 +10,7 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">出售年月</text>
+			<text class="inner_title">{{i18n.sellDate}}</text>
 			<picker mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'" :value="endTime">
 				<view class="picker_inner">
 					<view class="input">{{endTime}}</view>
@@ -19,8 +19,8 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">居室地址</text>
-			<input class="input" type="text" placeholder-style="color:#999" placeholder="居室地址" v-model="placeInfo.address" />
+			<text class="inner_title">{{i18n.address}}</text>
+			<input class="input" type="text" placeholder-style="color:#999" :placeholder="i18n.address" v-model="placeInfo.address" />
 		</view>
 		
 		<robby-image-upload v-model="uploadConfig.imageData"
@@ -30,11 +30,14 @@
 		:header="uploadConfig.header">
 		</robby-image-upload>
 		<view  style="margin-top: 40upx;">
-			<text class="inner_title">描述</text>
+			<text class="inner_title">{{i18n.desc}}</text>
 		</view>
 		
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" placeholder="内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="placeInfo.description" :placeholder="i18n.content" />
+		</view>
+		<view class="opt_container" v-if="removeEnable">
+			<button class="btn_delete" @tap="remove">{{btnText.remove}}</button>
 		</view>
 	</view>
 
@@ -76,6 +79,9 @@
 			}
 		},
 		computed: {
+			i18n() {
+				return this.$t('common')
+			},
 			startDate() {
 				return util.getDate('start');
 			},
@@ -83,11 +89,11 @@
 				return util.getDate('end');
 			},
 			startTime(){
-				if(!this.placeInfo.begintime) return '请选择';
+				if(!this.placeInfo.begintime) return this.$t('defaultText').ctrl;
 				return this.placeInfo.begintime
 			},
 			endTime(){
-				if(!this.placeInfo.endtime) return '请选择';
+				if(!this.placeInfo.endtime) return this.$t('defaultText').ctrl;
 				return this.placeInfo.endtime
 			},
 		},
@@ -214,6 +220,30 @@
 		color: #303641;
 		flex:1;
 		text-align:right;
+	}
+	.opt_container {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: -8upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 114upx;
+		z-index: 999;
+	}
+	
+	.btn_delete {
+		flex: 1;
+		font-size: 38upx;
+		color: #ffffff;
+		background-color: #FB4F4F;
+		border-radius: 0;
+	}
+	
+	.btn_delete:after {
+		border: 0px;
 	}
 	.login {
 		margin-top: 100upx;

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">时间：</text>
+			<text class="inner_title">{{i18n.date}}：</text>
 			<picker class="input" mode="date" :value="contentInfo.time" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'" style="flex:1;">
 				<view class="picker_inner">
@@ -11,12 +11,12 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">地点：</text>
+			<text class="inner_title">{{i18n.address}}：</text>
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
 		<!-- 节日纪事 -->
 		<view class="wrapper" v-if="param.moduleId==='30'">
-			<text class="inner_title">节日：</text>
+			<text class="inner_title">{{i18n.festival}}：</text>
 			<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="fesIdx" :range="festivalList" style="flex:1;">
 				<view class="picker_inner">
 					<view class="uni-input">{{festivalList[0][fesIdx[0]]}}，{{festivalList[1][fesIdx[1]]}}</view>
@@ -26,7 +26,7 @@
 		</view>
 		<!-- 爱好二级分类 -->
 		<view class="wrapper" v-if="param.moduleId==='7'">
-			<text class="inner_title">类型：</text>
+			<text class="inner_title">{{i18n.type}}：</text>
 			<view class="picker_inner"  @tap="open" style="flex: 1;">
 				<view class="input">{{categoryName}}</view>
 				<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
@@ -35,7 +35,7 @@
 			<w-picker mode="linkage" @confirm="selVal" ref="linkage" themeColor="#f00" :linkList="linkList"></w-picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
-			<text class="inner_title">类型：</text>
+			<text class="inner_title">{{i18n.type}}：</text>
 			<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name" style="flex:1;">
 				<view class="picker_inner">
 					<view class="input">{{ typeList[idx].name }}</view>
@@ -55,7 +55,7 @@
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.placeCtrl">
-			<text class="inner_title">居室：</text>
+			<text class="inner_title">{{i18n.room}}：</text>
 			<picker @change="placeBindPickerChange" :value="placeIdx" :range="placeList" range-key="address" style="flex:1;">
 				<view class="picker_inner">
 					<view class="input">{{ placeList[placeIdx].address }}</view>
@@ -64,7 +64,7 @@
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.weatherCtrl">
-			<text class="inner_title">天气：</text>
+			<text class="inner_title">{{i18n.weather}}：</text>
 			<picker @change="weatherBindPickerChange" :value="weatherIdx" :range="weatherList" style="flex:1;">
 				<view class="picker_inner">
 					<view class="input">{{ weatherList[weatherIdx] }}</view>
@@ -94,7 +94,7 @@
 				<!-- #ifdef APP-PLUS -->
 				<view class="tags_text" v-for="(tag,index) in tagList">{{tag}}</view>
 				<!-- #endif -->
-				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" style="width: 120upx;" class="input smallipt" @blur="setTags" placeholder="编辑标签" />
+				<input type="text" v-model="tag" placeholder-style="color:#EE9C36" style="width: 120upx;" class="input smallipt" @blur="setTags" :placeholder="btnText.editTag" />
 			</view>
 		</view>
 		<view v-if="ctrlEnable.relationCtrl">
@@ -106,11 +106,11 @@
 				<!-- #ifdef APP-PLUS -->
 				<view class="tags_text" v-for="(relation,index) in relationList">{{relation}}</view>
 				<!-- #endif -->
-				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" placeholder="+添加关联" />
+				<input type="text" v-model="relation" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setRelation" :placeholder="associateTag" />
 			</view>
 		</view>	
 		<view class="opt_container" v-if="removeEnable">
-			<button class="btn_delete" @tap="remove">删除记录</button>
+			<button class="btn_delete" @tap="remove">{{btnText.remove}}</button>
 		</view>
 		
 	</view>
@@ -146,13 +146,13 @@
 					relationCtrl: true,
 				},
 				idx:0,
-				typeList:[{id:-1,name:'请选择'}],
+				typeList:[{id:-1,name:this.$t('defaultText').ctrl}],
 				stageIdx:0,
-				stageList:[{id:-1,name:'请选择'}],
+				stageList:[{id:-1,name:this.$t('defaultText').ctrl}],
 				placeIdx:0,
-				placeList:[{id:-1,address:'请选择'}],
+				placeList:[{id:-1,address:this.$t('defaultText').ctrl}],
 				fesIdx:[0,0],
-				weatherList:dataJson['weather'],
+				weatherList:this.$t('selData').weather,
 				weatherIdx:0,
 				festivalStr:'',
 				typeEnable: false,
@@ -193,8 +193,8 @@
 					isEdit: false
 				},
 				linkList:[],
-				defaultText:'请选择',
-				defaultVal:['请选择',''],
+				defaultText:this.$t('defaultText').ctrl,
+				defaultVal:[this.$t('defaultText').ctrl,''],
 				val:['0','0'],
 				selectedType:null,
 				tagList:[],
@@ -206,14 +206,20 @@
 			}
 		},
 		computed:{
+			i18n() {
+				return this.$t('common')
+			},
+			btnText() {
+				return this.$t('btnText')
+			},
 			festivalList:function(){
-				let arr=['请选择'];
+				let arr=[this.$t('defaultText').ctrl];
 				let dt=new Date();
 				let curYear=dt.getFullYear();
 				for(let i=curYear-10,j=curYear+10;i<=j;i++){
 					arr.push(i.toString())
 				}
-				let fesArr=dataJson['festival']
+				let fesArr=this.$t('selData').festival
 				let arrs=[]
 				arrs[0]=arr
 				arrs[1]=fesArr
@@ -227,7 +233,7 @@
 				if(_name){
 					return _name;
 				}else{
-					return '类型';
+					return this.i18n.type;
 				}
 			},
 			stageCtrlValue:function(){
@@ -244,8 +250,11 @@
 				return _list
 			},
 			categoryName:function(){
-				if(!this.contentInfo.categoryName) return '请选择'
+				if(!this.contentInfo.categoryName) return this.$t('defaultText').ctrl
 				return this.contentInfo.categoryName
+			},
+			associateTag:function(){
+				return '+'+this.btnText.associateTag
 			}
 		},
 		filters:{

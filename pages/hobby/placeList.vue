@@ -9,10 +9,10 @@
 							<image v-if="place.imageUrl != null" :src="place.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
 								<view class="card_title">{{ place.address }}</view>
-								<view class="time mt20">{{place.begintime | buyDesc}}</view>
+								<view class="time mt20">{{place.begintime}}</view>
 								<view class="card_others card_others_1">
 									<view class="inner_flex">
-										<text class="time">{{ place.endtime| saleDesc }}</text>
+										<text class="time">{{ place.endtime}}</text>
 										<view v-if="!isEdit">
 											<image src="../../static/images/icon_arrow_right.png" class="arrow" @tap.stop="jumpToList(place)"></image>
 										</view>
@@ -26,7 +26,7 @@
 		</view>
 		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
 			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
-			<view style="font-size: 36upx;color: #999;">暂无数据</view>
+			<view style="font-size: 36upx;color: #999;">{{defaultText.nullData}}</view>
 		</view>
 	</view>
 </template>
@@ -58,11 +58,29 @@
 			}
 		},
 		computed: {
+			defaultText() {
+				return this.$t('defaultText')
+			},
 			places: function() {
 				let self = this
 				for (let i = 0; i < this.placeList.length; i++) {
 					if(self.placeList[i].imageUrl){
 						self.placeList[i].imageUrl = this.$common.picPrefix() + self.placeList[i].imageUrl + this.suffixUrl;
+					}
+					if(self.placeList[i].begintime){
+						self.placeList[i].begintime= this.$t('other').buy + util.dateFormat(self.placeList[i].begintime, 'yyyy年MM月dd日')
+					}else{
+						self.placeList[i].begintime=''
+					}
+					if(self.placeList[i].endtime){
+						let curDt = new Date().getDate();
+						if(curDt>=self.placeList[i].endtime){
+							self.placeList[i].endtime=this.$('other').sell
+						}else{
+							self.placeList[i].endtime=''
+						}
+					}else{
+						self.placeList[i].endtime=''
 					}
 				}
 				return self.placeList

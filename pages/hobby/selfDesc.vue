@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="selfDesc" placeholder="内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="selfDesc" :placeholder="i18n.content" />
 		</view>
 	</view>
 </template>
@@ -18,6 +18,11 @@
 				},
 				descId:null,
 				selfDesc: ''
+			}
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		onLoad:function(options){

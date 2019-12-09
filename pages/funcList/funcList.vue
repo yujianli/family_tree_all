@@ -8,7 +8,7 @@
 			</view>
 		</view>
 		<view class="explain" style="">
-			<text>以下功能最多展示在首页（9个）</text>
+			<text>{{i18n.funcShow}}</text>
 		</view>
 		<view class="container">
 			<view class="wrapper" v-for="(otherFunc, i) in otherFuncList" v-bind:key="otherFunc.id" @tap="jumpToList(otherFunc)">
@@ -17,8 +17,6 @@
 				<image v-if="isEdit" src="../../static/images/icon_menu_add.png" class="pic_opt" @tap="addFunc(otherFunc.id)"></image>
 			</view>
 		</view>
-		<!-- <navigator url="/pages/login/login" hover-class="navigator-hover">aaa</navigator> -->
-		<!-- <button type="primary"  @tap="save">保存</button> -->
 	</view>
 </template>
 
@@ -40,6 +38,11 @@
 				isEdit: false
 			}
 		},
+		computed:{
+			i18n() {
+				return this.$t('common')
+			}
+		},
 		onLoad: function(options) {
 			this.personId=options.personId;
 			util.loadObj(this.param, options);
@@ -57,7 +60,7 @@
 						this.loadAllModule();
 					} else {
 						uni.showToast({
-							title: '用户模块信息加载失败',
+							title: this.$t('common').funcShow,
 							icon: 'none'
 						});
 					}
@@ -98,7 +101,7 @@
 			addFunc: function(moduleId) {
 				if (this.basicFuncList.length == 9) {
 					uni.showToast({
-						title: '首页模块最多只能显示9个',
+						title: this.$t('common').funcShow,
 						icon: 'none'
 					});
 					return false;

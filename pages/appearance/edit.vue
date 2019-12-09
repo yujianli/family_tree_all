@@ -1,19 +1,19 @@
 <template>
 	<view class="container" style="padding-bottom: 160upx;">
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.age}}({{langData.common.years}})</text>
+			<text class="inner_title">{{i18n.age}}({{i18n.years}})</text>
 			<input class="input" type="text" v-model="appearance.age" placeholder-style="color:#999" :placeholder="ageTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.height}}(cm)</text>
+			<text class="inner_title">{{i18n.height}}(cm)</text>
 			<input class="input" type="text" v-model="appearance.height" placeholder-style="color:#999" :placeholder="heightTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.weight}}(kg)</text>
+			<text class="inner_title">{{i18n.weight}}(kg)</text>
 			<input class="input" type="text" v-model="appearance.weight" placeholder-style="color:#999" :placeholder="weightTitle" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.faceShape}}</text>
+			<text class="inner_title">{{i18n.faceShape}}</text>
 			<picker @change="faceShapeBindPickerChange" :value="idx.faceShape" :range="arr.faceShape" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.faceShape[idx.faceShape].value }}</view>
@@ -22,11 +22,11 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.characteristics}}</text>
-			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" :placeholder="langData.common.characteristics" />
+			<text class="inner_title">{{i18n.characteristics}}</text>
+			<input class="input" type="text" v-model="appearance.characteristics" placeholder-style="color:#999" :placeholder="i18n.characteristics" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.tshirtSize}}</text>
+			<text class="inner_title">{{i18n.tshirtSize}}</text>
 			<picker @change="tshirtSizeBindPickerChange" :value="idx.tshirtSize" :range="arr.tshirtSize" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.tshirtSize[idx.tshirtSize].value }}</view>
@@ -35,7 +35,7 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.shirtSize}}</text>
+			<text class="inner_title">{{i18n.shirtSize}}</text>
 			<picker @change="shirtSizeBindPickerChange" :value="idx.shirtSize" :range="arr.shirtSize" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.shirtSize[idx.shirtSize].value }}</view>
@@ -44,7 +44,7 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.clothSize}}</text>
+			<text class="inner_title">{{i18n.clothSize}}</text>
 			<picker @change="clothSizeBindPickerChange" :value="idx.clothSize" :range="arr.clothSize" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.clothSize[idx.clothSize].value }}</view>
@@ -53,7 +53,7 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.trousersSize}}</text>
+			<text class="inner_title">{{i18n.trousersSize}}</text>
 			<picker @change="trousersSizeBindPickerChange" :value="idx.trousersSize" :range="arr.trousersSize" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.trousersSize[idx.trousersSize].value }}</view>
@@ -62,7 +62,7 @@
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{langData.common.shoeSize}}</text>
+			<text class="inner_title">{{i18n.shoeSize}}</text>
 			<picker @change="shoeSizeBindPickerChange" :value="idx.shoeSize" :range="arr.shoeSize" range-key="value">
 				<view class="picker_inner">
 					<view class="input">{{ arr.shoeSize[idx.shoeSize].value }}</view>
@@ -79,10 +79,10 @@
 			<!-- #ifdef APP-PLUS -->
 			<view class="mul_tags" v-for="(tag, index) in tagList">{{tag}}</view>
 			<!-- #endif -->
-			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" :placeholder="langData.button.editTag" />
+			<input type="text" v-model="tag" placeholder-style="color:#EE9C36" class="input smallipt" @blur="setTags" :placeholder="btnText.editTag" />
 		</view>
 		
-		<view class="opt_container" v-if="param.id"><button class="btn_delete" @tap="remove">删除</button></view>
+		<view class="opt_container" v-if="param.id"><button class="btn_delete" @tap="remove">{{btnText.remove}}</button></view>
 	</view>
 </template>
 
@@ -99,12 +99,12 @@
 					language: null
 				},
 				arr: {
-					faceShape: dataJson['faceShape'],
-					tshirtSize: dataJson['size'],
-					shirtSize: dataJson['size'],
-					clothSize: dataJson['size'],
-					trousersSize: dataJson['size'],
-					shoeSize: dataJson['size']
+					faceShape: this.$t('selData').faceShape,
+					tshirtSize: this.$t('selData').size,
+					shirtSize: this.$t('selData').size,
+					clothSize: this.$t('selData').size,
+					trousersSize: this.$t('selData').size,
+					shoeSize: this.$t('selData').size
 				},
 				idx: {
 					faceShape: 0,
@@ -137,18 +137,20 @@
 			};
 		},
 		computed:{
-			langData:function(){
-				let lang=this.$common.getLanguage()
-				return this.$common.getLanguageData(lang)
+			i18n() {
+				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
 			},
 			ageTitle:function(){
-				return this.langData.common.age+'('+this.langData.common.years+')'
+				return this.i18n.age+'('+this.i18n.years+')'
 			},
 			heightTitle:function(){
-				return this.langData.common.height+'(cm)'
+				return this.i18n.height+'(cm)'
 			},
 			weightTitle:function(){
-				return this.langData.common.weight+'(kg)'
+				return this.i18n.weight+'(kg)'
 			}
 		},
 		filters:{
@@ -158,8 +160,7 @@
 			}
 		},
 		onLoad: function(options) {
-			let _name=this.langData.appearance.title
-			uni.setNavigationBarTitle({title: _name});
+			uni.setNavigationBarTitle({title: this.$t('title').appearance});
 			util.loadObj(this.param, options)
 			if (options.id) {
 				this.isEdit = true;
@@ -194,11 +195,12 @@
 				if (!key) {
 					key = prop;
 				}
-				this.appearance[prop] = dataJson[key][index].key;
+				this.appearance[prop] = this.$t('selData')[key][index].key;
 			},
 			bindProp: function(prop, key, val) {
-				for (var i = 0; i < dataJson[key].length; i++) {
-					if (dataJson[key][i].key === val) {
+				let data=this.$t('selData')
+				for (var i = 0; i < data[key].length; i++) {
+					if (data[key][i].key === val) {
 						this.idx[prop]=i
 						break
 					}
@@ -222,7 +224,7 @@
 						this.bindProp('shoeSize','size',this.appearance.shoeSize)
 					} else {
 						uni.showToast({
-							title: '体貌特征信息加载失败',
+							title: '信息加载失败',
 							icon: 'none'
 						});
 					}

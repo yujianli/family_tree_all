@@ -2,43 +2,43 @@
 	<view>
 		<view class="container">
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.age}}</text>
-				<view class="input">{{appearanceInfo.age}}{{langData.common.years}}</view>
+				<text class="inner_title">{{i18n.age}}</text>
+				<view class="input">{{appearanceInfo.age}}{{i18n.years}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.height}}</text>
+				<text class="inner_title">{{i18n.height}}</text>
 				<view class="input">{{appearanceInfo.height}}cm</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.weight}}</text>
+				<text class="inner_title">{{i18n.weight}}</text>
 				<view class="input">{{appearanceInfo.weight}}kg</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.faceShape}}</text>
+				<text class="inner_title">{{i18n.faceShape}}</text>
 				<view class="input">{{appearanceInfo.faceShape}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.characteristics}}</text>
+				<text class="inner_title">{{i18n.characteristics}}</text>
 				<view class="input">{{appearanceInfo.characteristics}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.tshirtSize}}</text>
+				<text class="inner_title">{{i18n.tshirtSize}}</text>
 				<view class="input">{{appearanceInfo.tshirtSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.shirtSize}}</text>
+				<text class="inner_title">{{i18n.shirtSize}}</text>
 				<view class="input">{{appearanceInfo.shirtSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.clothSize}}</text>
+				<text class="inner_title">{{i18n.clothSize}}</text>
 				<view class="input">{{appearanceInfo.clothSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.trousersSize}}</text>
+				<text class="inner_title">{{i18n.trousersSize}}</text>
 				<view class="input">{{appearanceInfo.trousersSize}}</view>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">{{langData.common.shoeSize}}</text>
+				<text class="inner_title">{{i18n.shoeSize}}</text>
 				<view class="input">{{appearanceInfo.shoeSize}}</view>
 			</view>
 			<view class="detail_tag">
@@ -78,9 +78,8 @@ export default {
 		};
 	},
 	computed:{
-		langData:function(){
-			let lang=this.$common.getLanguage()
-			return this.$common.getLanguageData(lang)
+		i18n() {
+			return this.$t('common')
 		},
 		tags:function(){
 			if(!this.appearanceInfo.tags) return []
@@ -88,8 +87,7 @@ export default {
 		}
 	},
 	onLoad: function(options) {
-		let _name=this.langData.appearance.title			
-		uni.setNavigationBarTitle({title: _name});
+		uni.setNavigationBarTitle({title: this.$t('title').appearance});
 		util.loadObj(this.param,options)
 	},
 	onShow:function(){
@@ -119,16 +117,17 @@ export default {
 						util.loadObj(this.appearanceInfo, obj);
 					} else {
 						uni.showToast({
-							title: '体貌特征信息加载失败',
+							title: '信息加载失败',
 							icon: 'none'
 						});
 					}
 				});
 		},
 		bindProp: function(key, val) {
-			for (var i = 0; i < dataJson[key].length; i++) {
-				if (dataJson[key][i].key === val) {
-					return dataJson[key][i].value;
+			let data=this.$t('selData')
+			for (var i = 0; i < data[key].length; i++) {
+				if (data[key][i].key === val) {
+					return data[key][i].value;
 				}
 			}
 		}

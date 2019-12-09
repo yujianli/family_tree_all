@@ -6,7 +6,7 @@
 		</view>
 		<view class="container_pd" v-if="ctrlEnable.selfDescCtrl">
 			<view class="self_intro_container">
-				<text>{{ param.name }}自述</text>
+				<text>{{ param.name }}{{i18n.selfDesc}}</text>
 				<image src="../../static/images/edit.png" @tap="editDesc"></image>
 			</view>
 			<view class="intro_detail">{{ selfDesc }}</view>
@@ -42,7 +42,7 @@
 		</view>
 		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
 			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
-			<view style="font-size: 36upx;color: #999;">暂无数据</view>
+			<view style="font-size: 36upx;color: #999;">{{defaultText.nullData}}</view>
 		</view>
 	</view>
 </template>
@@ -93,6 +93,14 @@
 			uniSwipeAction,
 			uniSwipeActionItem,
 			myTab
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
+			},
+			defaultText(){
+				return this.$t('defaultText')
+			}
 		},
 		filters: {
 			formatDate: function(value) {
@@ -348,14 +356,7 @@
 						}
 					}
 				});
-			},
-			bindClick(e) {
-				console.log(e)
-				uni.showToast({
-					title: `点击了${e.content.text}按钮`,
-					icon: 'none'
-				})
-			},
+			}
 		}
 	};
 </script>

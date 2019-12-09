@@ -2,7 +2,7 @@
 	<view class="container">
 		<view v-if="param.moduleId==='32'">
 			<view class="wrapper">
-				<text class="inner_title">婚礼时间</text>
+				<text class="inner_title">{{i18n.marryTime}}</text>
 				<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
 				 :value="startTime">
 					<view class="picker_inner">
@@ -12,18 +12,18 @@
 				</picker>
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">新郎名字</text>
-				<input class="input" type="text" placeholder-style="color:#999" placeholder="新郎名字" v-model="newName" />
+				<text class="inner_title">{{i18n.newName}}</text>
+				<input class="input" type="text" placeholder-style="color:#999" :placeholder="i18n.newName" v-model="newName" />
 			</view>
 			<view class="wrapper">
-				<text class="inner_title">新娘名字</text>
-				<input class="input" type="text" placeholder-style="color:#999" placeholder="新娘名字" v-model="brideName" />
+				<text class="inner_title">{{i18n.brideName}}</text>
+				<input class="input" type="text" placeholder-style="color:#999" :placeholder="i18n.brideName" v-model="brideName" />
 			</view>
 		</view>
 		<view v-else>
 			<view class="wrapper" v-if="param.moduleId!=='27'">
-				<text class="inner_title" v-if="param.moduleId==='31'">购买年月</text>
-				<text class="inner_title" v-else>起始年月</text>
+				<text class="inner_title" v-if="param.moduleId==='31'">{{i18n.buyDate}}</text>
+				<text class="inner_title" v-else>{{i18n.beginTime}}</text>
 				<picker mode="date" :start="startDate" :end="endDate" @change="bindSDateChange" :fields="'day'"
 				 :value="startTime">
 					<view class="picker_inner">
@@ -33,8 +33,8 @@
 				</picker>
 			</view>
 			<view class="wrapper" v-if="param.moduleId!=='27'">
-				<text class="inner_title" v-if="param.moduleId==='31'">出售年月</text>
-				<text class="inner_title" v-else>结束年月</text>
+				<text class="inner_title" v-if="param.moduleId==='31'">{{i18n.sellDate}}</text>
+				<text class="inner_title" v-else>{{i18n.endTime}}</text>
 				<picker mode="date" :start="startDate" :end="endDate" @change="bindEDateChange" :fields="'day'"
 				 :value="endTime">
 					<view class="picker_inner">
@@ -45,14 +45,14 @@
 			</view>
 			<view class="wrapper">
 				<text class="inner_title">{{typeCtrlName}}</text>
-				<input class="input" type="text" placeholder-style="color:#999" placeholder="名称" v-model="stageInfo.name" />
+				<input class="input" type="text" placeholder-style="color:#999" :placeholder="i18n.heading" v-model="stageInfo.name" />
 			</view>
 			<view class="wrapper" v-if="param.moduleId==='27'">
-				<text class="inner_title">联系电话</text>
-				<input class="input" type="text" placeholder-style="color:#999" placeholder="联系电话" v-model="stageInfo.mobile" />
+				<text class="inner_title">{{i18n.linkTel}}</text>
+				<input class="input" type="text" placeholder-style="color:#999" :placeholder="i18n.linkTel" v-model="stageInfo.mobile" />
 			</view>
 			<view class="wrapper" v-if="param.moduleId==='27'">
-				<text class="inner_title">类型</text>
+				<text class="inner_title">{{i18n.type}}</text>
 				<picker @change="typeBindPickerChange" :value="idx" :range="typeList" range-key="name">
 					<view class="picker_inner">
 						<view class="input">{{ typeList[idx].name }}</view>
@@ -62,7 +62,7 @@
 			</view>
 		</view>
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" placeholder="内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="stageInfo.description" :placeholder="i18n.content" />
 			</view>
 		<robby-image-upload v-model="uploadConfig.imageData"
 		@delete="deleteImage" @add="addImage" 
@@ -103,7 +103,7 @@
 				},
 				brideName:'',
 				newName:'',
-				typeList:[{id:-1,name:'请选择'}],
+				typeList:[{id:-1,name:this.$t('defaultText').ctrl}],
 				idx:0,
 				uploadConfig:{
 					serverUrl: this.$common.uploadUrl(),
@@ -118,6 +118,12 @@
 			}
 		},
 		computed: {
+			i18n() {
+				return this.$t('common')
+			},
+			defaultText(){
+				return this.$t('defaultText')
+			},
 			startDate() {
 				return util.getDate('start');
 			},
@@ -125,20 +131,32 @@
 				return util.getDate('end');
 			},
 			startTime(){
-				if(!this.stageInfo.begintime) return '请选择';
+				if(!this.stageInfo.begintime) return this.defaultText.ctrl;
 				return this.stageInfo.begintime
 			},
 			endTime(){
-				if(!this.stageInfo.endtime) return '请选择';
+				if(!this.stageInfo.endtime) return this.defaultText.ctrl;
 				return this.stageInfo.endtime
 			},
-			typeCtrlName:function(){
-				let _name = module.viewCtrlName[this.param.moduleId]
-				if(_name){
-					return _name;
-				}else{
-					return '类型';
+			typeCtrlName(){
+				// let _name = module.viewCtrlName[this.param.moduleId]
+				// if(_name){
+				// 	return _name;
+				// }else{
+				// 	return '类型';
+				// }
+				let _name=this.i18n.type
+				switch(this.param.moduleId){
+					case '4': _name=this.i18n.planName;break;
+					case '14': _name=this.i18n.loveFriend;break;
+					case '15': 
+					case '16': _name=this.i18n.course;break;
+					case '27': _name=this.i18n.name;break;
+					case '31': _name=this.i18n.carName;break;
+					case '32': _name=this.i18n.marry;break;
+					default: _name=this.i18n.type
 				}
+				return _name
 			}
 		},
 		filters:{

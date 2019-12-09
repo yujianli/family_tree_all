@@ -4,24 +4,24 @@
 			<image :src="imageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('avatar')"></image>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">姓名</text>
-			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" placeholder="姓名" />
+			<text class="inner_title">{{i18n.name}}</text>
+			<input class="input" type="text" v-model="baseInfo.name" placeholder-style="color:#999" :placeholder="i18n.name" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">民族</text>
+			<text class="inner_title">{{i18n.nationality}}</text>
 			<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
 				<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">生肖</text>
+			<text class="inner_title">{{i18n.zodiac}}</text>
 			<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
 				<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">出生年月</text>
-			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : '请选择'" :start="startDate" :end="endDate" @change="bindDateChange"
+			<text class="inner_title">{{i18n.birth}}</text>
+			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'">
 				<view class="input">{{baseInfo.birth | formatDate}}</view>
 			</picker>
@@ -33,30 +33,30 @@
 			</picker>
 		</view> -->
 		<view class="wrapper">
-			<text class="inner_title">出生地</text>
-			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" placeholder="出生地" />
+			<text class="inner_title">{{i18n.birthPlace}}</text>
+			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" :placeholder="i18n.birthPlace" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">居住地</text>
-			<input class="input" type="text" v-model="baseInfo.updateBy" placeholder-style="color:#999" placeholder="居住地" />
+			<text class="inner_title">{{i18n.placeResidence}}</text>
+			<input class="input" type="text" v-model="baseInfo.updateBy" placeholder-style="color:#999" :placeholder="i18n.placeResidence" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">固定电话</text>
-			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" placeholder="固定电话" />
+			<text class="inner_title">{{i18n.fixedTelephone}}</text>
+			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" :placeholder="i18n.fixedTelephone" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">职业</text>
-			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" placeholder="职业" />
+			<text class="inner_title">{{i18n.career}}</text>
+			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" :placeholder="i18n.career" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">体质</text>
+			<text class="inner_title">{{i18n.corporeity}}</text>
 			<picker @change="corporeityBindPickerChange" :value="idx.corporeity" :range=" arr.corporeity" range-key="value">
 				<view class="input">{{ arr.corporeity[idx.corporeity].value }}</view>
 			</picker>
 		</view>
 		<view class="mul_wrapper">
-			<text class="inner_title">个人简介</text>
-			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" placeholder="个人简介" />
+			<text class="inner_title">{{i18n.brief}}</text>
+			<textarea class="mul_input" v-model="baseInfo.brief" placeholder-style="color:#999" :placeholder="i18n.brief" />
 			</view>
 	</view>
 
@@ -78,10 +78,10 @@
 					familyId:null,
 				},
 				arr:{
-					zodiac: dataJson['zodiac'],
-					birthTime: dataJson['birthTime'],
-					nationality: dataJson['nationality'],
-					corporeity: dataJson['corporeity']
+					zodiac: this.$t('selData').zodiac,
+					birthTime: this.$t('selData').birthTime,
+					nationality: this.$t('selData').nationality,
+					corporeity: this.$t('selData').corporeity
 				},
 				idx:{
 					zodiac:0,
@@ -89,8 +89,8 @@
 					nationality: 0,
 					corporeity:0
 				},
-				birthDate: '请选择',
-				passingAwayDate: '请选择',
+				birthDate: this.$t('defaultText').ctrl,
+				passingAwayDate: this.$t('defaultText').ctrl,
 				startDate:util.getDate('start'),
 				endDate:util.getDate('end'),
 				baseInfo: {
@@ -117,6 +117,12 @@
 		},
 		components:{avatar},
 		computed:{
+			i18n() {
+				return this.$t('common')
+			},
+			defaultText(){
+				return this.$t('defaultText')
+			},
 			imageUrl:function(){
 				if(this.baseInfo.headUrl){
 					return this.$common.picPrefix()+this.baseInfo.headUrl
@@ -185,12 +191,13 @@
 			},
 			selProp:function(prop, index){
 				this.idx[prop]=index;
-				this.baseInfo[prop]=dataJson[prop][index].key;
+				this.baseInfo[prop]=this.$t('selData')[prop][index].key;
 			},
 			initProp:function(prop, val){
 				if(!val)return
-				for(var i=0;i<dataJson[prop].length;i++){
-					if(dataJson[prop][i].key===val){
+				let data =this.$t('selData')
+				for(var i=0;i<data[prop].length;i++){
+					if(data[prop][i].key===val){
 						this.idx[prop]=i;
 						break;
 					}

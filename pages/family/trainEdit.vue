@@ -5,7 +5,7 @@
 			<input class="input" type="text" placeholder-style="color:#999" v-model="family.name" placeholder="家族名字" />
 		</view> -->
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="family.instruction" placeholder="家训内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="family.instruction" :placeholder="i18n.trainContent" />
 		</view>
 	</view>
 </template>
@@ -23,6 +23,11 @@
 					// name: '',
 					instruction: ''
 				}
+			}
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		onLoad:function(options){

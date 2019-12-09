@@ -2,9 +2,9 @@
 	<view>
 		<view class="container">
 			<view class="wrapper" @tap="setLanguage">
-				<text class="inner_title">语言选择</text>
+				<text class="inner_title">{{i18n.langSel}}</text>
 				<view>
-					<text class="inner_text_1">中文</text>
+					<text class="inner_text_1">{{langText}}</text>
 					<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 				</view>
 			</view>
@@ -12,7 +12,7 @@
 		
 		<view class="container">
 			<view class="wrapper" @tap="toPay">
-				<text class="inner_title">支付年费</text>
+				<text class="inner_title">{{i18n.payment}}</text>
 				<view>
 					<text class="inner_text_1">试用期还有{{day}}到期</text>
 					<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
@@ -22,34 +22,34 @@
 		
 		<view class="container">
 			<view class="wrapper" style="margin-top: 19upx;">
-				<text class="inner_title">关于我们</text>
+				<text class="inner_title">{{i18n.about}}</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
 		
 		<view class="container">
 			<view class="wrapper">
-				<text class="inner_title">隐私政策</text>
+				<text class="inner_title">{{i18n.privacy}}</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
 		
 		<view class="container">
 			<view class="wrapper" style="margin-top: 19upx;">
-				<text class="inner_title">当前版本</text>
+				<text class="inner_title">{{i18n.present}}</text>
 				<text class="inner_text_2">1.2.0</text>
 			</view>
 		</view>
 		
 		<view class="container">
 			<view class="wrapper">
-				<text class="inner_title">清除缓存</text>
+				<text class="inner_title">{{i18n.clear}}</text>
 				<text class="inner_text_2">3.32MB</text>
 			</view>
 		</view>
 		
 		<view style="margin-left:30upx;margin-right:30upx;">
-			<button type="primary" @click="bindLogin" class="logout">退出登录</button>
+			<button type="primary" @click="bindLogin" class="logout">{{btnText.logout}}</button>
 		</view>
 		
 	</view>
@@ -65,14 +65,27 @@
 				},
 				whetherRemind:null,
 				day:null,
+				langText:'中文'
+			}
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
 			}
 		},
 		onShow: function() {
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
+			if(this.param.language==='zh_CN'){
+				this.langText='中文'
+			}else{
+				this.langText='English'
+			}
 			this.loadWhetherRemind();
 		},
-		
 		methods: {
 			bindLogin() {
 				uni.removeStorageSync('USER');

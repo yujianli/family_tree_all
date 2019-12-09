@@ -10,7 +10,7 @@
 				<uni-icons color="#999999" class="icon-search" type="search" size="18" />
 				<text class="placeholder">{{ placeholder }}</text>
 			</view>
-			<text class="uni-searchbar-form__cancel" @click="cancel">取消</text>
+			<text class="uni-searchbar-form__cancel" @click="cancel">{{btnText.cancel}}</text>
 		</view>
 	</view>
 </template>
@@ -40,6 +40,14 @@
 			return {
 				show: false,
 				searchVal: ''
+			}
+		},
+		computed:{
+			btnText(){
+				return this.$t('btnText')
+			},
+			searchName(){
+				this.placeholder=this.$t('btnText').search
 			}
 		},
 		watch: {
@@ -149,7 +157,7 @@
 		padding-left: 20rpx;
 		line-height: 64rpx;
 		color: #333;
-		font-size: 34rpx;
+		font-size: 28rpx;
 		white-space: nowrap
 	}
 

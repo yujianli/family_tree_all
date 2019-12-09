@@ -2,10 +2,10 @@
 	<view class="common">
 		<view class="status_bar"></view>
 		<form class="loginView" @submit="submit">
-			<view style="margin-top:22px;margin-bottom: 33px;justify-content: center;"><text style="font-size: 27px;color: #333;">登录</text></view>
+			<view style="margin-top:22px;margin-bottom: 33px;justify-content: center;"><text style="font-size: 27px;color: #333;">{{i18n.login}}</text></view>
 			<view v-if="isShow" class="input-view"><input class="input" type="text" v-model="quickLoginInfo.nickname" placeholder="请输入姓名,首次输入后将不可修改" name="nickname" placeholder-style="color:#999" /></view>
 			<view v-if="isShow" class="input-view">
-				<text class="inner_title">性别</text>
+				<text class="inner_title">{{i18n.gender}}</text>
 				<picker @change="sexBindPickerChange" :value="sexIdx" :range="sexData" range-key="value" name="sex">
 					<view class="input">{{ sexData[sexIdx].value }}</view>
 				</picker>
@@ -18,7 +18,7 @@
 					{{ sendCodeInfo.msg }}
 				</button>
 			</view>
-			<button type="primary" form-type="submit" class="login">快捷登录</button>
+			<button type="primary" form-type="submit" class="login">{{}}</button>
 		</form>
 	</view>
 </template>
@@ -44,13 +44,13 @@ export default {
 			sendCodeInfo: {
 				time: 60,
 				hasSend: false,
-				msg: '获取验证码'
+				msg: this.$('btnText').getCode
 			}
 		};
 	},
 	computed:{
-		languageData:function(){
-			return null
+		i18n() {
+			return this.$t('common')
 		}
 	},
 	onLoad(){
@@ -85,7 +85,7 @@ export default {
 						sendInfo.msg = time + 'S';
 						if (time < 1) {
 							clearInterval(timer);
-							sendInfo.msg = '重新获取';
+							sendInfo.msg = this.$t('btnText').reacquire;
 							sendInfo.time = 60;
 							sendInfo.hasSend = false;
 						}
@@ -211,7 +211,7 @@ export default {
 		},
 		selProp:function(prop, index){
 			this.sexIdx=index;
-			this.quickLoginInfo[prop]=dataJson[prop][index].key;
+			this.quickLoginInfo[prop]=this.$t('selData')[prop][index].key;
 		},
 	}
 };

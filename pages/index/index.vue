@@ -18,56 +18,41 @@
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
 		</view> -->
-		<!-- 		<view class="person_intro">
-			<image src="personInfo.headUrl" style="width: 44px;height: 44px;"></image>
-			<text class="name">{{personInfo.name}}</text>
-		</view>
-		<view style="margin-bottom: 26px;">
-			<view class="other_info_container">
-				<text class="other_info">出生：{{personInfo.birth}}</text>
-				<text class="other_info">出生地：{{personInfo.birthPlace}}</text>
-			</view>
-			<view class="other_info_container">
-				<text class="other_info">民族：{{personInfo.nationality}}</text>
-				<text class="other_info">职业：{{personInfo.career}}</text>
-			</view>
-
-		</view> -->
-
+		<view class="tab_line"></view>
 		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
 			<swiper style="height: 490upx;">
-				<swiper-item v-for="(item, index) in userCardList" :key="index"  @tap="viewDetail(item)">
+				<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
 					<view style="padding: 34upx">
 						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;">
 							<view class="person_intro">
-								<image :src="item.headUrl + suffixUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
+								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
 							</view>
 							<view style="margin-bottom: 30upx;">
 								<view class="other_info_container">
-									<view  style="flex: 1;"  class="other_info">
-										<text>{{langData.common.birth2}}：</text>
+									<view style="flex: 1;" class="other_info">
+										<text>{{i18n.birth2}}：</text>
 										<text>{{ item.birth | formatDate}}</text>
 									</view>
-									<view  style="flex: 1;margin-left: 65upx;" class="other_info">
-										<text>{{langData.common.birthPlace}}：</text>
+									<view style="flex: 1;margin-left: 65upx;" class="other_info">
+										<text>{{i18n.birthPlace}}：</text>
 										<text>{{item.birthPlace | nullFilter}}</text>
 									</view>
 								</view>
 								<view class="other_info_container">
-									<view  style="flex: 1;"  class="other_info">
-										<text>{{langData.common.nationality}}：</text>
+									<view style="flex: 1;" class="other_info">
+										<text>{{i18n.nationality}}：</text>
 										<text>{{item.nationality | nullFilter}}</text>
 									</view>
-									<view  style="flex: 1;margin-left: 65upx;" class="other_info">
-										<text>{{langData.common.career}}：</text>
+									<view style="flex: 1;margin-left: 65upx;" class="other_info">
+										<text>{{i18n.career}}：</text>
 										<text>{{item.career | nullFilter}}</text>
 									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-					
+
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
@@ -91,10 +76,9 @@
 					isFamily: 1,
 					language: this.$common.getLanguage()
 				},
-				// langData:this.$common.getLanguageData(this.param.language),
 				basicFuncList: [{
 					id: -1,
-					name: '更多',
+					name: this.$t('btnText').more,
 					icon: '../../static/images/icon_func_0.png'
 				}],
 				personInfo: {
@@ -118,13 +102,13 @@
 				},
 				contentList: [],
 				options: [{
-					text: '删除',
+					text: this.$t('btnText').remove,
 					style: {
 						backgroundColor: '#ED4848',
 						width: '105px'
 					}
 				}],
-				defaultUrl:'../../static/images/avatar.png',
+				defaultUrl: '../../static/images/avatar.png',
 				suffixUrl: '&style=image/resize,m_fill,w_44,h_44'
 			};
 		},
@@ -133,10 +117,9 @@
 			indexContentList,
 			funchead
 		},
-		computed:{
-			langData:function(){
-				let lang=this.$common.getLanguage()
-				return this.$common.getLanguageData(this.param.language)
+		computed: {
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		filters: {
@@ -144,7 +127,7 @@
 				if (!value) return ''
 				return util.dateFormat(value)
 			},
-			nullFilter:function(value){
+			nullFilter: function(value) {
 				if (!value) return ''
 				return value
 			}
@@ -178,7 +161,7 @@
 			this.loadUserCardList()
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
-			this.$nextTick(()=>this.$refs['indexContent'].loadIndexContent())
+			this.$nextTick(() => this.$refs['indexContent'].loadIndexContent())
 		},
 		methods: {
 			loadModule: function() {
@@ -191,7 +174,7 @@
 						this.basicFuncList = res.data.data.module;
 						this.basicFuncList.push({
 							id: 0,
-							name: '更多',
+							name: this.$t('btnText').more,
 							icon: '../../static/images/icon_func_0.png'
 						});
 					} else {
@@ -212,8 +195,8 @@
 						break;
 					case 1:
 						linkUrl = linkUrl + util.jsonToQuery({
-							userId:this.param.userId,
-							language:this.param.language
+							userId: this.param.userId,
+							language: this.param.language
 						})
 						break;
 					default:
@@ -277,90 +260,91 @@
 						}
 					});
 			},
-			loadUserCardList:function(){
-				this.$http.get('content/userBaseCards',{
-					userId:this.param.userId,
-					language:this.param.language
-				}).then(res=>{
-					if(res.data.code===200){
-						this.userCardList=res.data.data.userCardList
-						for(let i=0;i<this.userCardList.length;i++){
-							this.userCardList[i].sex=this.userCardList[i].sex===1?'男':'女'
-							if(this.userCardList[i].headUrl){
-								this.userCardList[i].headUrl=this.$common.picPrefix()+this.userCardList[i].headUrl
-							}else{
-								this.userCardList[i].headUrl=this.defaultUrl
+			loadUserCardList: function() {
+				this.$http.get('content/userBaseCards', {
+					userId: this.param.userId,
+					language: this.param.language
+				}).then(res => {
+					if (res.data.code === 200) {
+						this.userCardList = res.data.data.userCardList
+						for (let i = 0; i < this.userCardList.length; i++) {
+							this.userCardList[i].sex = this.userCardList[i].sex === 1 ? '男' : '女'
+							if (this.userCardList[i].headUrl) {
+								this.userCardList[i].headUrl = this.$common.picPrefix() + this.userCardList[i].headUrl + this.suffixUrl
+							} else {
+								this.userCardList[i].headUrl = this.defaultUrl
 							}
-							if(this.userCardList[i].zodiac){
-								let item = dataJson['zodiac'].find(item=>item.key===this.userCardList[i].zodiac)
-								if(item){
-									this.userCardList[i].zodiac=item.value
+							if (this.userCardList[i].zodiac) {
+								let item = this.$t('selData').zodiac.find(item => item.key === this.userCardList[i].zodiac)
+								if (item) {
+									this.userCardList[i].zodiac = item.value
 								}
-							}else{
-								this.userCardList[i].zodiac=''
+							} else {
+								this.userCardList[i].zodiac = ''
 							}
-							if(this.userCardList[i].nationality){
-								let item = dataJson['nationality'].find(item=>item.key===this.userCardList[i].nationality)
-								if(item){
-									this.userCardList[i].nationality=item.value
+							if (this.userCardList[i].nationality) {
+								let item = this.$t('selData').nationality.find(item => item.key === this.userCardList[i].nationality)
+								if (item) {
+									this.userCardList[i].nationality = item.value
 								}
-							}else{
-								this.userCardList[i].nationality=''
+							} else {
+								this.userCardList[i].nationality = ''
 							}
-						}
-					}else{
-						uni.showToast({
-							title: '首页卡片内容加载失败',icon:'none'
-						});
-					}
-				})
-			},
-			// 获取用户试用期状态
-			loadWhetherRemind:function(){
-				this.$http
-				.post('content/whetherRemind',{
-					language: this.param.language,
-					userId: this.param.userId
-				})
-				.then(res => {
-					if(res.data.code == 200){
-						let whetherRemind = res.data.data.whetherRemind;
-						/*whetherRemind
-						值为0时代表未到预警时间，
-						值为1时代表软件试用期快结束了，
-						值为2时代表软件试用时间已到期*/
-						// 提醒试用到期
-						if(whetherRemind == 1){
-							uni.showModal({
-								title: '温馨提示',
-								content: '试用期快到期了，请支付年费后继续使用？',
-								cancelText:'以后再说',
-								confirmColor:'#4DC578',
-								success: function (res) {
-									if (res.confirm) { 
-									  uni.navigateTo({
-										url: '/pages/fee/fee'
-									  });
-									} else if (res.cancel) {
-										console.log('用户点击取消');
-									}
-								}
-							});
 						}
 					} else {
 						uni.showToast({
-							title: '用户试用期状态加载失败',
+							title: '首页卡片内容加载失败',
 							icon: 'none'
 						});
 					}
 				})
 			},
-			viewDetail:function(item){
+			// 获取用户试用期状态
+			loadWhetherRemind: function() {
+				this.$http
+					.post('content/whetherRemind', {
+						language: this.param.language,
+						userId: this.param.userId
+					})
+					.then(res => {
+						if (res.data.code == 200) {
+							let whetherRemind = res.data.data.whetherRemind;
+							/*whetherRemind
+							值为0时代表未到预警时间，
+							值为1时代表软件试用期快结束了，
+							值为2时代表软件试用时间已到期*/
+							// 提醒试用到期
+							if (whetherRemind == 1) {
+								uni.showModal({
+									title: this.$t('common').reminder,
+									content: this.$t('msg').msg8,
+									cancelText: this.$t('btnText').notNow,
+									confirmColor: '#4DC578',
+									success: function(res) {
+										if (res.confirm) {
+											uni.navigateTo({
+												url: '/pages/fee/fee'
+											});
+										} else if (res.cancel) {
+											console.log('用户点击取消');
+										}
+									}
+								});
+							}
+						} else {
+							uni.showToast({
+								title: '用户试用期状态加载失败',
+								icon: 'none'
+							});
+						}
+					})
+			},
+			viewDetail: function(item) {
 				uni.navigateTo({
-					url:'../family/person/info'+util.jsonToQuery({
-						familyUserId:item.familyUserId,
-						userId:this.param.userId,
-						language:this.param.language
+					url: '../family/person/info' + util.jsonToQuery({
+						familyUserId: item.familyUserId,
+						userId: this.param.userId,
+						language: this.param.language
 					})
 				})
 			}
@@ -434,9 +418,11 @@
 
 <style lang="less" scoped>
 	@import '../../common/card.css';
-	page{
+
+	page {
 		border-top: 1px solid #e5e5e5;
 	}
+
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -463,9 +449,9 @@
 	}
 
 	.tab_line {
-		width: 140upx;
+		width: 92%;
 		height: 1px;
-		background-color: #4DC578;
+		background-color: #E6E6E6;
 		margin: 0 auto;
 		margin-top: 28upx;
 	}

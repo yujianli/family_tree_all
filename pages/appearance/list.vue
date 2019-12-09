@@ -8,26 +8,26 @@
 					<uni-swipe-action-item :options="options" @click="remove(appearance.id)">
 						<view class="container" @tap="jumpToDetail(appearance.id)">
 							<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;background-color: #fff;">
-								<view>{{appearance.age}}岁</view>
+								<view>{{appearance.age}}{{i18n.years}}</view>
 								<view class="title">{{appearance.title}}</view>
 								<view class="row">
-									<view>{{langData.common.height}}：{{appearance.height}}cm</view>
-									<view>T{{langData.common.tshirtSize}}：{{appearance.tshirtSize}}</view>
+									<view>{{i18n.height}}：{{appearance.height}}cm</view>
+									<view>{{i18n.tshirtSize}}：{{appearance.tshirtSize}}</view>
 								</view>
 								<view class="row">
-									<view>{{langData.common.weight}}：{{appearance.weight}}kg</view>
-									<view>{{langData.common.shirtSize}}：{{appearance.shirtSize}}M</view>
+									<view>{{i18n.weight}}：{{appearance.weight}}kg</view>
+									<view>{{i18n.shirtSize}}：{{appearance.shirtSize}}M</view>
 								</view>
 								<view class="row">
-									<view>{{langData.common.faceShape}}：{{appearance.faceShape}}</view>
-									<view>{{langData.common.clothSize}}：{{appearance.clothSize}}</view>
+									<view>{{i18n.faceShape}}：{{appearance.faceShape}}</view>
+									<view>{{i18n.clothSize}}：{{appearance.clothSize}}</view>
 								</view>
 								<view class="row">
-									<view>{{langData.common.characteristics}}：{{appearance.characteristics}}</view>
-									<view>{{langData.common.trousersSize}}：{{appearance.trousersSize}}</view>
+									<view>{{i18n.characteristics}}：{{appearance.characteristics}}</view>
+									<view>{{i18n.trousersSize}}：{{appearance.trousersSize}}</view>
 								</view>
 								<view class="row">
-									<view>{{langData.common.shoeSize}}：{{appearance.shoeSize}}码</view>
+									<view>{{i18n.shoeSize}}：{{appearance.shoeSize}}{{i18n.yards}}</view>
 									<view></view>
 								</view>
 								<view class="row">
@@ -63,7 +63,7 @@
 				},
 				appearanceList: [],
 				options: [{
-					text: '删除',
+					text: this.$t('btnText').remove,
 					style: {
 						backgroundColor: '#ED4848',
 						width: '105px'
@@ -77,10 +77,9 @@
 			uniSwipeActionItem
 		},
 		computed: {
-			langData: function() {
-				let lang = this.$common.getLanguage()
-				return this.$common.getLanguageData(lang)
-			},
+			i18n() {
+				return this.$t('common')
+			}
 		},
 		filters: {
 			formatDate: function(value) {
@@ -89,9 +88,8 @@
 			}
 		},
 		onLoad: function(options) {
-			let _name = this.langData.appearance.title
 			uni.setNavigationBarTitle({
-				title: _name
+				title: this.$t('title').appearance
 			});
 			util.loadObj(this.param, options)
 		},
@@ -142,9 +140,10 @@
 				})
 			},
 			bindProp: function(key, val) {
-				for (var i = 0; i < dataJson[key].length; i++) {
-					if (dataJson[key][i].key === val) {
-						return dataJson[key][i].value;
+				let data=this.$t('selData')
+				for (var i = 0; i < data[key].length; i++) {
+					if (data[key][i].key === val) {
+						return data[key][i].value;
 					}
 				}
 			},

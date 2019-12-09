@@ -1,19 +1,19 @@
 <template>
 	<view class="container">
 		<view class="wrapper">
-			<text class="inner_title">传承人：</text>
-			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.inheritUserIds" placeholder="传承人" />
+			<text class="inner_title">{{i18n.inheritMan}}：</text>
+			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.inheritUserIds" :placeholder="i18n.inheritMan" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">传承人电话：</text>
-			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.mobile" placeholder="传承人电话" />
+			<text class="inner_title">{{i18n.inheritPhone}}：</text>
+			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.mobile" :placeholder="i18n.inheritPhone" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">传承人邮件：</text>
-			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.email" placeholder="传承人邮件" />
+			<text class="inner_title">{{i18n.inheritEmail}}：</text>
+			<input class="input" type="text" placeholder-style="color:#999" v-model="inheritInfo.email" :placeholder="i18n.inheritEmail" />
 		</view>
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="inheritInfo.content" placeholder="传承内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="inheritInfo.content" :placeholder="i18n.inheritContent" />
 			</view>
 	</view>
 	
@@ -35,6 +35,11 @@
 					email:'',
 					content: ''
 				}
+			}
+		},
+		computed:{
+			i18n() {
+				return this.$t('common')
 			}
 		},
 		onLoad:function(options){

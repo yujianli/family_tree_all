@@ -16,7 +16,7 @@ export default {
 		month = month > 9 ? month : '0' + month;;
 		day = day > 9 ? day : '0' + day;
 		if (!format) {
-			return `${year}-${month}-${day}`;
+			return `${year}/${month}/${day}`;
 		}
 		let _date = null;
 		switch (format) {
