@@ -18,12 +18,12 @@
 				<text class="text">{{ basicFunc.name }}</text>
 			</view>
 		</view> -->
-		<view class="tab_line"></view>
-		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
+		<!-- <view class="tab_line"></view> -->
+		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles" style="margin-top: 480upx;">
 			<swiper style="height: 490upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
-					<view style="padding: 34upx">
-						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;">
+					<view style="padding: 34upx;">
+						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
 							<view class="person_intro">
 								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
@@ -40,11 +40,11 @@
 									</view>
 								</view>
 								<view class="other_info_container">
-									<view style="flex: 1;" class="other_info">
+									<view style="flex: 1;margin-top: 4upx;" class="other_info">
 										<text>{{i18n.nationality}}：</text>
 										<text>{{item.nationality | nullFilter}}</text>
 									</view>
-									<view style="flex: 1;margin-left: 65upx;" class="other_info">
+									<view style="flex: 1;margin-left: 65upx;margin-top: 4upx;" class="other_info">
 										<text>{{i18n.career}}：</text>
 										<text>{{item.career | nullFilter}}</text>
 									</view>
@@ -434,6 +434,12 @@
 		justify-content: space-around;
 		align-items: center;
 		height: 100upx;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 999;
+		background-color: #4DC578;
 	}
 
 	.person_name {
@@ -442,10 +448,10 @@
 	}
 
 	.person_name_active {
-		color: #333;
+		color: #fff;
 		font-weight: 700;
 		padding-bottom: 28upx;
-		border-bottom: 1px solid #4DC578;
+		// border-bottom: 1px solid #4DC578;
 	}
 
 	.tab_line {
@@ -466,7 +472,7 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		margin-top: 40upx;
+		margin-top: 100upx;
 	}
 
 	.func_wrapper {

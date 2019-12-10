@@ -41,12 +41,12 @@
 			</view>
 		</view>
 		
-		<view class="container">
+<!-- 		<view class="container">
 			<view class="wrapper">
 				<text class="inner_title">{{i18n.clear}}</text>
 				<text class="inner_text_2">3.32MB</text>
 			</view>
-		</view>
+		</view> -->
 		
 		<view style="margin-left:30upx;margin-right:30upx;">
 			<button type="primary" @click="bindLogin" class="logout">{{btnText.logout}}</button>

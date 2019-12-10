@@ -15,7 +15,7 @@
 		</view>
 
 		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
-		<view style="padding: 34upx;">
+		<view style="padding: 34upx;margin-top:480upx">
 			<view class="family_training_container">
 				<view class="title">{{i18n.training}}</view>
 				<view class="content">
@@ -240,7 +240,7 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		margin-top: 40upx;
+		margin-top: 100upx;
 	}
 
 	.func_wrapper {
@@ -322,8 +322,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top: 43upx;
+		// margin-top: 43upx;
 		position: relative;
+		position: fixed;
+		left: 0;
+		right: 0;
+		height: 100upx;
+		top: 0;
+		z-index: 99;
+		background: #fff;
 		
 
 		text {

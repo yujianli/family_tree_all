@@ -14,6 +14,11 @@
 			<text class="inner_title">{{i18n.address}}：</text>
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
+		<!-- 是否设为我的格言 -->
+<!-- 		<view class="wrapper" v-if="param.moduleId==='30'">
+			<text class="inner_title">是否设为我的格言：</text>
+			
+		</view> -->
 		<!-- 节日纪事 -->
 		<view class="wrapper" v-if="param.moduleId==='30'">
 			<text class="inner_title">{{i18n.festival}}：</text>
@@ -31,7 +36,6 @@
 				<view class="input">{{categoryName}}</view>
 				<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
 			</view>
-			
 			<w-picker mode="linkage" @confirm="selVal" ref="linkage" themeColor="#f00" :linkList="linkList"></w-picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.typeCtrl">
@@ -41,7 +45,6 @@
 					<view class="input">{{ typeList[idx].name }}</view>
 					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
 				</view>
-				
 			</picker>
 		</view>
 		<view class="wrapper" v-if="ctrlEnable.stageCtrl">

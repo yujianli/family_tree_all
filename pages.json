@@ -46,7 +46,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -61,7 +61,7 @@
 						"buttons": [{
 							"text": "提交",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -76,7 +76,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -91,7 +91,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -106,7 +106,7 @@
 						"buttons": [{
 							"text": "提交",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -121,7 +121,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -136,7 +136,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -151,7 +151,7 @@
 						"buttons": [{
 							"text": "提交",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -166,7 +166,7 @@
 						"buttons": [{
 							"text": "提交",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -181,7 +181,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -196,7 +196,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -223,7 +223,7 @@
 						"buttons": [{
 							"text": "提交",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -238,7 +238,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -253,7 +253,7 @@
 				// 		"buttons": [{
 				// 			"text": "搜索",
 				// 			"fontSize": "32upx",
-				// 			"color": "#333333"
+				// 			"color": "#FFFFFF"
 				// 		}]
 				// 	}
 				// }
@@ -268,7 +268,7 @@
 						"buttons": [{
 							"text": "完成",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -282,7 +282,7 @@
 				// 		"buttons": [{
 				// 			"text": "完成",
 				// 			"fontSize": "32upx",
-				// 			"color": "#333333"
+				// 			"color": "#FFFFFF"
 				// 		}]
 				// 	}
 				// }
@@ -297,7 +297,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -311,7 +311,7 @@
 						"buttons": [{
 							"text": "筛选条件",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -334,7 +334,7 @@
 						"buttons": [{
 							"text": "保存",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -349,7 +349,7 @@
 						"buttons": [{
 							"text": "保存",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -364,7 +364,7 @@
 						"buttons": [{
 							"text": "保存",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -379,7 +379,7 @@
 						"buttons": [{
 							"text": "保存",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -411,7 +411,7 @@
 						"buttons": [{
 							"text": "编辑",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -426,7 +426,7 @@
 						"buttons": [{
 							"text": "完成",
 							"fontSize": "32upx",
-							"color": "#333333"
+							"color": "#FFFFFF"
 						}]
 					}
 				}
@@ -442,10 +442,10 @@
 		}
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "世纪图谱",
 		// "navigationStyle":"custom",
-		"navigationBarBackgroundColor": "#42B983",
+		"navigationBarBackgroundColor": "#4DC578",
 		"backgroundColor": "#ffffff",
 		"usingComponents":{
 		   "tree-chart":"/components/tree-chart/tree-chart"

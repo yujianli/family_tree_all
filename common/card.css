@@ -11,8 +11,9 @@
 	text-align: right;
 	padding-right: 36upx;
 	font-size: 32upx;
-	margin-bottom: 22upx;
+	padding-bottom: 22upx;
 	color: #999;
+	border-bottom: 1px solid #E5E5E5;
 }
 
 .card_pic {

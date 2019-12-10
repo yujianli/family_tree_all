@@ -62,6 +62,12 @@
 		justify-content: flex-start;
 		align-items: center;
 		margin-top: 40upx;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 9999;
+		background: #ffffff;
 	}
 	.func_wrapper {
 		display: flex;

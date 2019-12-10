@@ -151,6 +151,7 @@
 			queryNext: function(condition) {
 				let reqParam = this.param;
 				reqParam['condition'] = condition;
+				reqParam['contentId']=this.content.id
 				this.$http.get('content/nextDetail', reqParam).then((res) => {
 					if (res.data.code === 200) {
 						if (!res.data.data) {
@@ -199,7 +200,7 @@
 	}
 
 	.detail_content {
-		font-size: 32upx;
+		font-size: 34upx;
 		color: #333;
 		margin-top: 28upx;
 	}
