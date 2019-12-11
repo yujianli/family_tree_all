@@ -162,7 +162,7 @@
 		filters:{
 			formatDate: function(value) {
 				if (!value) return '';
-				return util.dateFormat(value, 'yyyy年MM月dd日');
+				return util.dateFormat(value);
 			}
 		},
 		components:{robbyImageUpload},

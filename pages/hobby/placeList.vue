@@ -68,14 +68,14 @@
 						self.placeList[i].imageUrl = this.$common.picPrefix() + self.placeList[i].imageUrl + this.suffixUrl;
 					}
 					if(self.placeList[i].begintime){
-						self.placeList[i].begintime= this.$t('other').buy + util.dateFormat(self.placeList[i].begintime, 'yyyy年MM月dd日')
+						self.placeList[i].begintime= this.$t('other').buy + util.dateFormat(self.placeList[i].begintime)
 					}else{
 						self.placeList[i].begintime=''
 					}
 					if(self.placeList[i].endtime){
 						let curDt = new Date().getDate();
 						if(curDt>=self.placeList[i].endtime){
-							self.placeList[i].endtime=this.$('other').sell
+							self.placeList[i].endtime=this.$t('other').sell
 						}else{
 							self.placeList[i].endtime=''
 						}
@@ -89,7 +89,7 @@
 		filters: {
 			buyDesc: function(value) {
 				if (!value) return '';
-				return '购买于' + util.dateFormat(value, 'yyyy年MM月dd日')
+				return '购买于' + util.dateFormat(value)
 			},
 			saleDesc: function(value) {
 				if (!value) return '';
