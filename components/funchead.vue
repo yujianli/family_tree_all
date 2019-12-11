@@ -61,12 +61,19 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		align-items: center;
-		margin-top: 40upx;
 		position: fixed;
-		top: 0;
+		
+		/* #ifdef H5 */
+		top: 100upx;
+		/* #endif */
+		
+		/* #ifdef APP-PLUS */
+		top: calc(100upx + var(--status-bar-height));
+		/* #endif */
+		
 		left: 0;
 		right: 0;
-		z-index: 9999;
+		z-index: 99;
 		background: #ffffff;
 	}
 	.func_wrapper {

@@ -1,6 +1,7 @@
 export default {
 	'zh-CN':{
 		common:{
+			login:'登录',
 			name:'姓名',idcard:'身份证',gender:'性别',nationality:'民族',zodiac:'生肖',birth:'出生年月',birth2:'出生',
 			birthTime:'出生时辰',birthPlace:'出生地',isPassaway:'是否过世',passingAway:'过世年月',placeResidence:'居住地',
 			fixedTelephone:'固定电话',mobile:'手机号码',emailAddress:'邮箱地址',career:'职业',corporeity:'体质',bloodType:'血型',
@@ -24,7 +25,6 @@ export default {
 			ctrl:'请选择',nullData:'暂无数据'
 		},
 		btnText:{
-			login:'登录',
 			update:'编辑',remove:'删除',summit:'完成',editTag:'编辑标签',associateTag:'添加关联',next:'下一页',previous:'上一页',more:'更多',
 			more2:'更多信息',speedLogin:'快捷登录',getCode:'获取验证码',reacquire:'重新获取',clear:'清空条件',search:'搜索',cancel:'取消',
 			logout:'退出登录',notNow:'以后再说'
@@ -86,23 +86,23 @@ export default {
 				{"key":0,"value":"圆脸"},{"key":1,"value":"长方形脸"},{"key":2,"value":"正方形脸"},{"key":3,"value":"三角形脸"},
 				{"key":4,"value":"瓜子脸"},{"key":5,"value":"凸侧脸"},{"key":6,"value":"平侧脸"},{"key":7,"value":"凹侧脸"}
 			],
-			"festival":[" ","元旦节","春节","元宵节","妇女节","清明节","劳动节","儿童节","端午节","中秋节","国庆节","圣诞节"],
+			"festival":[" ","元旦","春节","元宵节","妇女节","植树节","清明节","劳动节","青年节","儿童节","端午节","建军节","建党节","教师节","中秋节","国庆节"],
 			"weather":["请选择","晴","多云","阴","阵雨","雷阵雨","雨夹雪","小雨","中雨","大雨","暴雨","大暴雨","特大暴雨","大雪","小雪","中雪","暴雪","雾","有风","冰雹","打雷","闪电","龙卷风"]
 		}
 	},
 	'en-US':{
 		common:{
-			name:'Name', idcard:'ID card', gender:'Gender', nationality:'Race', zodiac:'生肖',
-			birth:'Birthday',birth2:'Birthday',birthTime:'Time of Birth',birthPlace:'Birthplace',isPassaway:'IsPassaway',passingAway:'Date Of death',
+			name:'Name', idcard:'ID card', gender:'Gender', nationality:'Nationality', zodiac:'Chinese Zodiac',
+			birth:'Birthday',birth2:'Birthday',birthTime:'Birthtime',birthPlace:'Birthplace',isPassaway:'is Alive',passingAway:'Date Of death',
 			placeResidence:'Address',fixedTelephone:'Home Phone',mobile:'Mobile Phone',emailAddress:'Email',career:'Occupation',
-			corporeity:'Physique', bloodType:'Blood Type',gene:'Gene',temperament:'Temperament',constellation:'Zodiac Signs',brief:'My Life',
-			years:'years',age:'Age',height:'Height',weight:'Weight',faceShape:'Face Shape',characteristics:'Individual characteristics',
-			tshirtSize:'T-shirt Size',shirtSize:'Shirt Size', clothSize:'Cloth Size',trousersSize:'Trousers Size',shoeSize:'Shoe Size',yards:'Yards',
-			selfDesc:'Self Describe',date:'Date',address:'Address',festival:'Festival',type:'Type',room:'Room',weather:'Weather',
+			corporeity:'Physique', bloodType:'Blood Type',gene:'Gene',temperament:'Temperament',constellation:'Zodiac Signs',brief:'Person Profile',
+			years:'years',age:'Age',height:'Height',weight:'Weight',faceShape:'Face Shape',characteristics:'Personality',
+			tshirtSize:'T-shirt Size',shirtSize:'Shirt Size', clothSize:'Clothing Size',trousersSize:'Trousers Size',shoeSize:'Shoe Size',yards:'Yards',
+			selfDesc:'Self Description',date:'Date',address:'Address',festival:'Festival',type:'Type',room:'Room',weather:'Weather',
 			beginTime:'Time Beginning',endTime:'Time End',content:'Contents',marryTime:'Date Marry',newName:'New Man',brideName:'New Woman',
 			buyDate:'Date Purchased',sellDate:'Date Sold',heading:'Name',linkTel:'Link Tel',planName:'Plan Name',loveFriend:'Boy & Girl Friend',
 			course:'Course',carName:'Car Name',marry:'Marriage',desc:'Describe',training:'Family Precepts',family:'family',
-			moduleSel:'Module Select',timeSel:'Time Select',baseInfo:'Basic Information',personInfo:'Person Brief',rank:'Peer Ranking',
+			moduleSel:'Module Select',timeSel:'Time Select',baseInfo:'Basic Information',personInfo:'Person Profile',rank:'Peer Ranking',
 			funcShow:'Features displayed up to 9 on the homepage',langSel:'Language Select',payment:'Pay annual subscription',about:'About Us',
 			privacy:'Privacy',present:'Copyright', clearCache:'Clear',reminder:'Reminder'
 		},
@@ -116,7 +116,6 @@ export default {
 			ctrl:'Please Select',nullData:'No Data'
 		},
 		btnText:{
-			login:'Login',
 			update:'Update',remove:'Delete',summit:'Summit',editTag:'Add a Label',associateTag:'Add a link',next:'Next Chapter',previous:'Previous Chapter',
 			more:'more',more2:'More Info',speedLogin:'Speed Login',getCode:'Get Verification Code',reacquire:'Reacquire',clear:'Clear',search:'Search',
 			cancel:'Cancel',logout:'Logout',notNow:'Not Now'
@@ -133,15 +132,15 @@ export default {
 				{"key":2,"value":"AB Type"},{"key":3,"value":"O Type"}],
 			"zodiac":[
 				{"key":-1,"value":"Please Select"},
-				{"key":0,"value":"鼠"},{"key":1,"value":"牛"},{"key":2,"value":"虎"},{"key":3,"value":"兔"},
-				{"key":4,"value":"龙"},{"key":5,"value":"蛇"},{"key":6,"value":"马"},{"key":7,"value":"羊"},
-				{"key":8,"value":"猴"},{"key":9,"value":"鸡"},{"key":10,"value":"狗"},{"key":11,"value":"猪"}
+				{"key":0,"value":"Rat"},{"key":1,"value":"Ox"},{"key":2,"value":"Tiger"},{"key":3,"value":"Hare"},
+				{"key":4,"value":"Dragon"},{"key":5,"value":"Snake"},{"key":6,"value":"Horse"},{"key":7,"value":"Sheep"},
+				{"key":8,"value":"Monkey"},{"key":9,"value":"Rooster"},{"key":10,"value":"Dog"},{"key":11,"value":"Boar"}
 			],
 			"birthTime":[
 				{"key":-1,"value":"Please Select"},
-				{"key":0,"value":"23时-1时(子时)"},{"key":1,"value":"1时-3时(丑时)"},{"key":2,"value":"3时-5时(寅时)"},{"key":3,"value":"5时-7时(卯时)"},
-				{"key":4,"value":"7时-9时(辰时)"},{"key":5,"value":"9时-11时(巳时)"},{"key":6,"value":"11时-13时(午时)"},{"key":7,"value":"13时-15时(未时)"},
-				{"key":8,"value":"15时-17时(申时)"},{"key":9,"value":"17时-19时(酉时)"},{"key":10,"value":"19时-21时(戌时)"},{"key":11,"value":"21时-23时(亥时)"}
+				{"key":0,"value":"23 p.m. to 1 a.m."},{"key":1,"value":"1 a.m. to 3 a.m."},{"key":2,"value":"3 a.m. to 5 a.m."},{"key":3,"value":"5 a.m. to 7 a.m."},
+				{"key":4,"value":"7 a.m. to 9 a.m."},{"key":5,"value":"9 a.m. to 11 a.m."},{"key":6,"value":"11 a.m. to 1 p.m."},{"key":7,"value":"1 p.m. to 3 p.m."},
+				{"key":8,"value":"3 p.m. to 5 p.m."},{"key":9,"value":"5 p.m. to 7 p.m."},{"key":10,"value":"7 p.m. to 9 p.m."},{"key":11,"value":"9 p.m. to 11 p.m."}
 			],
 			"corporeity":[
 				{"key":-1,"value":"Please Select"},{"key":0,"value":"Gentle"},{"key":1,"value":"Deficiency of Vital Energy"},{"key":2,"value":"Deficiency of Yang"},{"key":3,"value":"Deficiency of Yin"},
@@ -149,26 +148,26 @@ export default {
 			],
 			"constellation":[
 				{"key":-1,"value":"Please Select"},
-				{"key":1,"value":"白羊座"},{"key":2,"value":"金牛座"},{"key":3,"value":"双子座"},{"key":4,"value":"巨蟹座"},{"key":5,"value":"狮子座"},
-				{"key":6,"value":"处女座"},{"key":7,"value":"天秤座"},{"key":8,"value":"天蝎座"},{"key":9,"value":"射手座"},{"key":10,"value":"摩羯座"},
-				{"key":11,"value":"水瓶座"},{"key":12,"value":"双鱼座"}
+				{"key":1,"value":"Aries"},{"key":2,"value":"Taurus"},{"key":3,"value":"Gemini"},{"key":4,"value":"Cancer"},{"key":5,"value":"Leo"},
+				{"key":6,"value":"Virgo"},{"key":7,"value":"Libra"},{"key":8,"value":"Scorpio"},{"key":9,"value":"Sagittarius"},{"key":10,"value":"Capricornus"},
+				{"key":11,"value":"Aquarius"},{"key":12,"value":"Pisces"}
 			],
 			"nationality":[
 				{"key":"-1","value":"Please Select"},
-				{"key":"0","value":"汉族"},{"key":"1","value":"蒙古族"},{"key":"2","value":"回族"},{"key":"3","value":"藏族"},
-				{"key":"4","value":"维吾尔族"},{"key":"5","value":"苗族"},{"key":"6","value":"彝族"},{"key":"7","value":"壮族"},
-				{"key":"8","value":"布依族"},{"key":"9","value":"朝鲜族"},{"key":"10","value":"满族"},{"key":"11","value":"侗族"},
-				{"key":"12","value":"瑶族"},{"key":"13","value":"白族"},{"key":"14","value":"土家族"},{"key":"15","value":"哈尼族"},
-				{"key":"16","value":"哈萨克族"},{"key":"17","value":"傣族"},{"key":"18","value":"黎族"},{"key":"19","value":"傈僳族"},
-				{"key":"20","value":"佤族"},{"key":"21","value":"畲族"},{"key":"22","value":"高山族"},{"key":"23","value":"拉祜族"},
-				{"key":"24","value":"水族"},{"key":"25","value":"东乡族"},{"key":"26","value":"纳西族"},{"key":"27","value":"景颇族"},
-				{"key":"28","value":"柯尔克孜族"},{"key":"29","value":"土族"},{"key":"30","value":"达斡尔族"},{"key":"31","value":"仫佬族"},
-				{"key":"32","value":"羌族"},{"key":"33","value":"布朗族"},{"key":"34","value":"撒拉族"},{"key":"35","value":"毛南族"},
-				{"key":"36","value":"仡佬族"},{"key":"37","value":"锡伯族"},{"key":"38","value":"阿昌族"},{"key":"39","value":"普米族"},
-				{"key":"40","value":"塔吉克族"},{"key":"41","value":"怒族"},{"key":"42","value":"乌孜别克族"},{"key":"43","value":"俄罗斯族"},
-				{"key":"44","value":"鄂温克族"},{"key":"45","value":"德昂族"},{"key":"46","value":"保安族"},{"key":"47","value":"裕固族"},
-				{"key":"48","value":"京族"},{"key":"49","value":"塔塔尔族"},{"key":"50","value":"独龙族"},{"key":"51","value":"鄂伦春族"},
-				{"key":"52","value":"赫哲族"},{"key":"53","value":"门巴族"},{"key":"54","value":"珞巴族"},{"key":"55","value":"基诺族"}
+				{"key":"0","value":"Han Nationality"},{"key":"1","value":"Mongolian Nationality"},{"key":"2","value":"Hui Nationality"},{"key":"3","value":"Zang Nationality"},
+				{"key":"4","value":"Uygur Nationality"},{"key":"5","value":"Miao Nationality"},{"key":"6","value":"Yi Nationality"},{"key":"7","value":"Zhuang Nationality"},
+				{"key":"8","value":"Buyi Nationality"},{"key":"9","value":"Korean Nationality"},{"key":"10","value":"Manchu Nationality"},{"key":"11","value":"Dong Nationality"},
+				{"key":"12","value":"Yao Nationality"},{"key":"13","value":"Bai Nationality"},{"key":"14","value":"Tujia Nationality"},{"key":"15","value":"Hani Nationality"},
+				{"key":"16","value":"Kazak Nationality"},{"key":"17","value":"Dai Nationality"},{"key":"18","value":"Li Nationality"},{"key":"19","value":"Lisu Nationality"},
+				{"key":"20","value":"Wa Nationality"},{"key":"21","value":"She Nationality"},{"key":"22","value":"Gaoshan Nationality"},{"key":"23","value":"Lahu Nationality"},
+				{"key":"24","value":"Shui Nationality"},{"key":"25","value":"Dongxiang Nationality"},{"key":"26","value":"Naxi Nationality"},{"key":"27","value":"Jingpo Nationality"},
+				{"key":"28","value":"Kirgiz Nationality"},{"key":"29","value":"Tu Nationality"},{"key":"30","value":"Daur Nationality"},{"key":"31","value":"Mulam Nationality"},
+				{"key":"32","value":"Qiang Nationality"},{"key":"33","value":"Brown Nationality"},{"key":"34","value":"Salar Nationality"},{"key":"35","value":"Maonan Nationality"},
+				{"key":"36","value":"Gelao Nationality"},{"key":"37","value":"Xibo Nationality"},{"key":"38","value":"Chang Nationality"},{"key":"39","value":"Pumi Nationality"},
+				{"key":"40","value":"Tajik Nationality"},{"key":"41","value":"Nu Nationality"},{"key":"42","value":"Uzbek Nationality"},{"key":"43","value":"Russian Nationality"},
+				{"key":"44","value":"Ewenki Nationality"},{"key":"45","value":"Benglong Nationality"},{"key":"46","value":"Baoan Nationality"},{"key":"47","value":"Yugur Nationality"},
+				{"key":"48","value":"Jing Nationality"},{"key":"49","value":"Tatar Nationality"},{"key":"50","value":"Dulong Nationality"},{"key":"51","value":"Oroqen Nationality"},
+				{"key":"52","value":"Hezhen Nationality"},{"key":"53","value":"Mamba Nationality"},{"key":"54","value":"Lhoba Nationality"},{"key":"55","value":"Kino Nationality"}
 			],
 			"size":[
 				{"key":-1,"value":"Please Select"},
@@ -180,8 +179,8 @@ export default {
 				{"key":0,"value":"Round"},{"key":1,"value":"Long"},{"key":2,"value":"Square"},{"key":3,"value":"A-Triangle"},
 				{"key":4,"value":"Sunflower Seeds"},{"key":5,"value":"Convex Side"},{"key":6,"value":"Flat"},{"key":7,"value":"Hollow"}
 			],
-			"festival":[" ","New Year's Day","Chinese New Year","Lantern Day","Women's Day","Ching Ming Day","Labor Day","Children's Day",
-				"Dragon Boat Day","Mid-Autumn Day","National Day","Christmas"],
+			"festival":[" ","New Year's Day","Chinese New Year","Lantern Day","Women's Day","Arbor Day","Ching Ming Day","Labor Day","Youth Day","Children's Day",
+				"Dragon Boat Day","Army Day", "Party Building Day", "Teacher's Day", "Mid-Autumn Day","National Day"],
 			"weather":["Please Select","Sunny","Partly Cloudy","Cloudy","Shower","Thundershower","Sleeting","Light Rain","Moderate Rain",
 				"Heavy Rain","Torrential Rain","Heavy Torrential Rain","Extra Heavy Torrential Rain","Heavy Snow","Light Snow","Moderate Snow",
 				"Torrential Snow","Foggy","Windy","Hailing","Thunder","Lightening","Tornado"]

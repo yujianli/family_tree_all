@@ -75,12 +75,17 @@
 					fileKeyName: 'file',
 					showUploadProgerss:false,
 					limitNumber: 1,
-				}
+				},
+				removeEnable:false,
+				id:null
 			}
 		},
 		computed: {
 			i18n() {
 				return this.$t('common')
+			},
+			btnText(){
+				return this.$t('btnText')
 			},
 			startDate() {
 				return util.getDate('start');
@@ -95,7 +100,7 @@
 			endTime(){
 				if(!this.placeInfo.endtime) return this.$t('defaultText').ctrl;
 				return this.placeInfo.endtime
-			},
+			}
 		},
 		components:{robbyImageUpload},
 		onLoad: function (options) {
@@ -104,6 +109,8 @@
 			})
 			util.loadObj(this.param,options)
 			if(options.id){
+				this.removeEnable=true
+				this.id=options.id
 				this.loadData(options.id)
 			}
 			let token=uni.getStorageSync('USER').token;
@@ -171,6 +178,34 @@
 							title: '保存失败',icon:'none'
 						});
 					}
+				})
+			},
+			remove:function(){
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: res => {
+						if (res.confirm) {
+						  this.$http.post('contentPlace/deletePlace', {
+						  	contentPlaceId:this.id,
+						  	language: this.param.language,
+						  }).then((res)=>{
+						  	if(res.data.code===200){
+						  		uni.navigateBack({
+						  			delta:1
+						  		})
+						  	}else{
+						  		uni.showToast({
+						  			title: '删除失败',
+						  			icon: 'none'
+						  		});
+						  	}
+						  })
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					},
 				})
 			},
 			deleteImage: function(e){
@@ -248,7 +283,7 @@
 	.login {
 		margin-top: 100upx;
 		font-size: 32upx;
-		color: #e5e5e5;
+		color: #ffffff;
 		background-color: #4dc578;
 		height: 92upx;
 		line-height: 92upx;
@@ -264,5 +299,29 @@
 		height: 20upx;
 		width: 24upx;
 		margin-left: 10upx;
+	}
+	.opt_container {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: -8upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 114upx;
+		z-index: 999;
+	}
+	
+	.btn_delete {
+		flex: 1;
+		font-size: 38upx;
+		color: #ffffff;
+		background-color: #FB4F4F;
+		border-radius: 0;
+	}
+	
+	.btn_delete:after {
+		border: 0px;
 	}
 </style>

@@ -39,7 +39,8 @@
 				modId: 0,
 				mediaList: [],
 				edit: false,
-				suffixUrl: '&style=image/resize,m_fill,w_100,h_100'
+				suffixUrl: '&style=image/resize,m_fill,w_100,h_100',
+				suffixUrl2: '&style=image/resize,m_fill,w_375'
 			}
 		},
 		components: {
@@ -89,7 +90,7 @@
 				let imgs = _mediaList.list.map((item) => item.resourceUrl);
 				uni.previewImage({
 					urls: imgs,
-					current: imgs[index2],
+					current: imgs[index2] + this.suffixUrl2,
 					indicator:'default',
 					loop:true
 				});

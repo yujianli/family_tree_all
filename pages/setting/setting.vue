@@ -160,8 +160,8 @@
 	.logout{
 		margin-top: 100upx;;
 		font-size: 32upx;
-		color: #4DC578;
-		background-color: #ffffff;
+		color: #ffffff;
+		background-color: #4DC578;
 		height: 92upx;
 		line-height: 92upx;
 		&:after{

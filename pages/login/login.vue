@@ -18,7 +18,7 @@
 					{{ sendCodeInfo.msg }}
 				</button>
 			</view>
-			<button type="primary" form-type="submit" class="login">{{btnText.login}}</button>
+			<button type="primary" form-type="submit" class="login">{{btnText.speedLogin}}</button>
 		</form>
 	</view>
 </template>
@@ -224,6 +224,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+	page{
+		background: #fff;
+	}
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -272,7 +275,7 @@ export default {
 	.login {
 		margin-top: 100upx;
 		font-size: 32upx;
-		color: #e5e5e5;
+		color: #ffffff;
 		background-color: #4dc578;
 		height: 92upx;
 		line-height: 92upx;
@@ -288,12 +291,13 @@ export default {
 		border-radius: 2px;
 		border-style: solid;
 		border-width: 1px;
-		border-color: #999;
+		border-color: #333;
 		font-size: 32upx;
 		padding-left: 0;
 		padding-right: 0;
-		color: #999;
+		color: #333;
 		z-index: 999;
+		background: #fff;
 	}
 
 	button:after {

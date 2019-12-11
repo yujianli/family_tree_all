@@ -18,8 +18,8 @@
 		<view class="wrapper" v-if="param.moduleId==='19'">
 			<text class="inner_title">是否设为我的格言：</text>
 			<view class="my_motto_wrap">
-				<view class="my_motto_tab active">是</view>
-				<view class="my_motto_tab">否</view>
+				<view :class="{'active':contentInfo.isMyMotto==1}" @tap="selSetting(1)">是</view>
+				<view :class="{'active':contentInfo.isMyMotto==0}" @tap="selSetting(0)">否</view>
 			</view>
 		</view>
 		<!-- 节日纪事 -->
@@ -178,7 +178,7 @@
 					id: null,
 					position: '',
 					moduleId: null,
-					is_my_motto: null,
+					isMyMotto: 1,
 					categoryId: null,
 					periodStartTime: null,
 					periodEndTime:null,
@@ -342,6 +342,7 @@
 							let idx=this.weatherList.findIndex(item=>item===_data.weather)
 							this.weatherIdx=idx
 						}
+						this.selSetting(_data.isMyMotto)
 						let id=null;
 						switch(this.param.flag){
 							case 'category':
@@ -480,6 +481,9 @@
 					})
 				}
 			},
+			selSetting:function(active){
+				this.contentInfo.isMyMotto=active
+			},
 			open:function(){
 				this.$refs.linkage.show()
 			},
@@ -535,6 +539,9 @@
 						let name=this.festivalList[1][this.fesIdx[1]];
 						postParam.weather=year+'-'+name
 					}
+				}
+				if(this.param.moduleId==='19'){
+					postParam.isMyMotto=this.contentInfo.isMyMotto
 				}
 				if(this.uploadConfig.imageData.length){
 					postParam['imageUrls']=this.uploadConfig.imageData.join(',')
@@ -780,7 +787,7 @@
 		
 	.my_motto_wrap{
 		display: flex;flex-direction: row;
-		.my_motto_tab{
+		view{
 			width: 98upx;
 			height: 40upx;
 			line-height: 40upx;
@@ -788,15 +795,10 @@
 			font-size: 30upx;
 			background: #fff;
 			color: #4DC578;
-			border-top-right-radius: 8upx;
-			border-bottom-right-radius: 8upx;
 			border:1px solid #4DC578;
-			border-left-width: 0;
 			&.active{
 				background: #4DC578;
 				color: #fff;
-				border-top-left-radius: 8upx;
-				border-bottom-left-radius: 8upx;
 				border:1px solid #4DC578;
 				border-right-width: 0;
 			}

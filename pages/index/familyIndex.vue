@@ -1,16 +1,12 @@
 <template>
 	<view>
-		<view class="status_bar"></view>
-
+		<view class="status_bar">
+			<view class="top_view"></view>
+		</view>
 		<view class="family_select_container">
 			<view @tap="tabSelect">
 				<text>{{familyTitle}}</text>
 				<image src="../../static/images/arrow.png"></image>
-			</view>
-
-			<view class="inner_select" :style="{'display': showSelect ? 'block' : 'none'}">
-				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
-				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
 			</view>
 		</view>
 
@@ -19,18 +15,25 @@
 			<view class="family_training_container">
 				<view class="title">{{i18n.training}}</view>
 				<view class="content">
-					<textarea class="mul_input" placeholder-style="color:#999" v-model="instruction"></textarea>
+					<textarea class="mul_input" disabled placeholder-style="color:#999" v-model="instruction"></textarea>
 					<!-- {{instruction}} -->
 				</view>
 			</view>
 		</view>
 		
  		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
+		<uni-popup ref="popup" type="center" class="my_popup">
+			<view class="inner_select">
+				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
+				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
+			</view>
+		</uni-popup>
 	</view>
 
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue'
 	import funchead from '@/components/funchead.vue'
 	import indexContentList from '@/components/index-content-list.vue'
 	import moduleLink from '@/common/moduleLink.js';
@@ -44,7 +47,7 @@
 					language: this.$common.language,
 					isFamily: 2
 				},
-				showSelect: false,
+				//showSelect: false,
 				familyUserId:null,
 				familyTitle: this.$t('common').family,
 				familyList:[],
@@ -58,7 +61,7 @@
 				return this.$t('common')
 			}
 		},
-		components: {funchead,indexContentList},
+		components: {funchead,indexContentList,uniPopup},
 		onLoad: function() {
 			
 		},
@@ -152,7 +155,8 @@
 			// 	});
 			// },
 			tabSelect: function() {
-				this.showSelect = !this.showSelect;
+				//this.showSelect = !this.showSelect;
+				this.$refs.popup.open()
 			},
 			selFamily:function(item){
 				this.familyTitle=item.name
@@ -234,25 +238,6 @@
 		background-color: #ffffff;
 	}
 
-	.func_container {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		align-items: center;
-		margin-top: 100upx;
-	}
-
-	.func_wrapper {
-		display: flex;
-		flex-direction: column;
-		width: 20%;
-		height: 188upx;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-	}
-
 	.pic_menu {
 		width: 88upx;
 		height: 88upx;
@@ -328,7 +313,13 @@
 		left: 0;
 		right: 0;
 		height: 100upx;
+		/* #ifdef H5 */
 		top: 0;
+		/* #endif */
+		
+		/* #ifdef APP-PLUS */
+		top: var(--status-bar-height);
+		/* #endif */
 		z-index: 99;
 		background: #fff;
 		
@@ -344,31 +335,7 @@
 			height: 19upx;
 		}
 
-		.inner_select {
-			position: absolute;
-			background-color: #fff;
-			width: 295upx;
-			height: 328upx;
-			top: 80upx;
-			z-index: 9999;
-			text-align: center;
-			box-shadow: 2upx 0 18upx #E5E5E5;
-			
-			border: 1px #fff solid;
-            border-radius: 10upx;
-            background-color: #fff;
-
-			view {
-				height: 65upx;
-				line-height: 65upx;
-				font-size: 29upx;
-				color: #303641;
-
-				&.active {
-					background-color: #ccc;
-				}
-			}
-		}
+		
 	}
 
 	.family_training_container {
@@ -391,7 +358,38 @@
 		
 		.mul_input{
 			flex: 1;
-			padding: 12upx;
+			width: 600upx;
+			// padding: 12upx;
 		}
+	}
+	
+	.inner_select {
+		background-color: #fff;
+		//width: 335upx;
+		height: 328upx;
+		text-align: center;
+		// box-shadow: 2upx 0 18upx #E5E5E5;
+		
+		// border: 1px #fff solid;
+	 //    border-radius: 10upx;
+	
+		view {
+			height: 65upx;
+			line-height: 65upx;
+			font-size: 32upx;
+			color: #303641;
+	
+			&.active {
+				background-color: #ccc;
+			}
+		}
+	}
+	.top_view {
+	    height: var(--status-bar-height);  
+	    width: 100%;  
+	    position: fixed;  
+	    background-color: #FFFFFF;  
+	    top: 0;  
+	    z-index: 999;  
 	}
 </style>

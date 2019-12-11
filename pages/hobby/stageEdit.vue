@@ -70,6 +70,10 @@
 		:server-url="uploadConfig.serverUrl" 
 		:header="uploadConfig.header">
 		</robby-image-upload>
+		
+		<view class="opt_container" v-if="removeEnable">
+			<button class="btn_delete" @tap="remove">{{btnText.remove}}</button>
+		</view>
 	</view>
 
 </template>
@@ -115,6 +119,7 @@
 					showUploadProgerss:false,
 					limitNumber: 1,
 				},
+				removeEnable: false
 			}
 		},
 		computed: {
@@ -123,6 +128,9 @@
 			},
 			defaultText(){
 				return this.$t('defaultText')
+			},
+			btnText(){
+				return this.$t('btnText')
 			},
 			startDate() {
 				return util.getDate('start');
@@ -171,6 +179,9 @@
 				title: options.name
 			})
 			this.id=options.id
+			if(options.id){
+				this.removeEnable=true
+			}
 			util.loadObj(this.param,options)
 			if(this.param.moduleId==='27'){
 				//同事朋友模块初始化类型
@@ -240,6 +251,34 @@
 			},
 			bindEDateChange: function(e) {
 				this.stageInfo.endtime = e.target.value
+			},
+			remove:function(){
+				uni.showModal({
+					title: '删除',
+					content: '确认删除该记录？',
+					confirmText: '确认',
+					success: res => {
+						if (res.confirm) {
+						  this.$http.post('contentPeriod/deletePeriod', {
+						  	contentPeriodId:this.id,
+						  	language: this.param.language,
+						  }).then((res)=>{
+						  	if(res.data.code===200){
+						  		uni.navigateBack({
+						  			delta:1
+						  		})
+						  	}else{
+						  		uni.showToast({
+						  			title: '删除失败',
+						  			icon: 'none'
+						  		});
+						  	}
+						  })
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					},
+				})
 			},
 			saveSchedule:function(){
 				let postParam= {name:null,description:null,begintime:null,endtime:null,mobile:null,type:null}
@@ -328,7 +367,7 @@
 	.login {
 		margin-top: 100upx;
 		font-size: 32upx;
-		color: #e5e5e5;
+		color: #ffffff;
 		background-color: #4dc578;
 		height: 92upx;
 		line-height: 92upx;
@@ -349,5 +388,29 @@
 		height: 20upx;
 		width: 24upx;
 		margin-left: 10upx;
+	}
+	.opt_container {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: -8upx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 114upx;
+		z-index: 999;
+	}
+	
+	.btn_delete {
+		flex: 1;
+		font-size: 38upx;
+		color: #ffffff;
+		background-color: #FB4F4F;
+		border-radius: 0;
+	}
+	
+	.btn_delete:after {
+		border: 0px;
 	}
 </style>
