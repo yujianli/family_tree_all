@@ -15,10 +15,13 @@
 			<input class="input" type="text" placeholder-style="color:#999" v-model="contentInfo.position" placeholder="地点" />
 		</view>
 		<!-- 是否设为我的格言 -->
-<!-- 		<view class="wrapper" v-if="param.moduleId==='30'">
+		<view class="wrapper" v-if="param.moduleId==='19'">
 			<text class="inner_title">是否设为我的格言：</text>
-			
-		</view> -->
+			<view class="my_motto_wrap">
+				<view class="my_motto_tab active">是</view>
+				<view class="my_motto_tab">否</view>
+			</view>
+		</view>
 		<!-- 节日纪事 -->
 		<view class="wrapper" v-if="param.moduleId==='30'">
 			<text class="inner_title">{{i18n.festival}}：</text>
@@ -32,7 +35,7 @@
 		<!-- 爱好二级分类 -->
 		<view class="wrapper" v-if="param.moduleId==='7'">
 			<text class="inner_title">{{i18n.type}}：</text>
-			<view class="picker_inner"  @tap="open" style="flex: 1;">
+			<view class="picker_inner" @tap="open" style="flex: 1;">
 				<view class="input">{{categoryName}}</view>
 				<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
 			</view>
@@ -772,5 +775,31 @@
 	.picker_arrow{
 		height: 20upx;
 		width: 24upx;
+	}
+	
+		
+	.my_motto_wrap{
+		display: flex;flex-direction: row;
+		.my_motto_tab{
+			width: 98upx;
+			height: 40upx;
+			line-height: 40upx;
+			text-align: center;
+			font-size: 30upx;
+			background: #fff;
+			color: #4DC578;
+			border-top-right-radius: 8upx;
+			border-bottom-right-radius: 8upx;
+			border:1px solid #4DC578;
+			border-left-width: 0;
+			&.active{
+				background: #4DC578;
+				color: #fff;
+				border-top-left-radius: 8upx;
+				border-bottom-left-radius: 8upx;
+				border:1px solid #4DC578;
+				border-right-width: 0;
+			}
+		}
 	}
 </style>
