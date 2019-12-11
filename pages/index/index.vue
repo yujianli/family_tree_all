@@ -3,13 +3,13 @@
 		<view class="status_bar"></view>
 		<view class="person_tabs">
 			<view>
-				<text class="person_name person_name_active">{{personInfo.name}}（本人）</text>
+				<text class="person_name person_name_active">{{personInfo.name}}</text>
 				<!-- <view class="tab_line"></view> -->
 			</view>
-			<!-- 			<view>
-				<text class="person_name">杨林艳（配偶）</text>
-				<view class="tab_line tab_line_active"></view>
-			</view> -->
+			<view style="margin-left: 53upx;">
+				<text class="person_name">杨林艳</text>
+				<!-- <view class="tab_line tab_line_active"></view> -->
+			</view>
 		</view>
 		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
 		<!-- 		<view class="func_container">
@@ -23,7 +23,7 @@
 			<swiper style="height: 490upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
 					<view style="padding: 34upx;">
-						<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
+						<view style="box-shadow: 2upx 0 0 #E5E5E5;border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
 							<view class="person_intro">
 								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
@@ -431,7 +431,7 @@
 	.person_tabs {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: center;
 		align-items: center;
 		height: 100upx;
 		position: fixed;
@@ -443,14 +443,15 @@
 	}
 
 	.person_name {
-		font-size: 36upx;
-		color: #999;
+		font-size: 32upx;
+		color: #fff;
 	}
 
 	.person_name_active {
-		color: #fff;
-		font-weight: 700;
-		padding-bottom: 28upx;
+		//color: #fff;
+		// font-weight: 700;
+		// padding-bottom: 28upx;
+		font-size: 40upx;
 		// border-bottom: 1px solid #4DC578;
 	}
 

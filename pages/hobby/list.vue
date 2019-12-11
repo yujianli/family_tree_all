@@ -16,6 +16,8 @@
 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
 						<view class="card_item" @tap="jumpToDetail(content)">
+							<view style="position: absolute;left: 0;top:0;width: 88upx;height: 37upx;line-height: 37upx;text-align: center;background: #ED4848;color: #fff;
+							border-bottom-left-radius: 8upx;border-bottom-right-radius: 8upx;font-size: 20upx;left: 30upx;">我的格言</view>
 							<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
 								<text class="card_title">{{ content.content }}</text>
