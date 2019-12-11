@@ -108,7 +108,7 @@ export default {
 						if (isMore) {
 							setTimeout(() => {
 								this.contentList = this.contentList.concat(contents);
-								this.status = contents.length == 0 ? 'noMore' : 'more';
+								this.status = contents.length <5 ? 'noMore' : 'more';
 							}, 1000);
 						} else {
 							this.contentList = contents;
