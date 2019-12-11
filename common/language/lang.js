@@ -1,7 +1,6 @@
 export default {
 	'zh-CN':{
 		common:{
-			login:'登录',
 			name:'姓名',idcard:'身份证',gender:'性别',nationality:'民族',zodiac:'生肖',birth:'出生年月',birth2:'出生',
 			birthTime:'出生时辰',birthPlace:'出生地',isPassaway:'是否过世',passingAway:'过世年月',placeResidence:'居住地',
 			fixedTelephone:'固定电话',mobile:'手机号码',emailAddress:'邮箱地址',career:'职业',corporeity:'体质',bloodType:'血型',
@@ -25,6 +24,7 @@ export default {
 			ctrl:'请选择',nullData:'暂无数据'
 		},
 		btnText:{
+			login:'登录',
 			update:'编辑',remove:'删除',summit:'完成',editTag:'编辑标签',associateTag:'添加关联',next:'下一页',previous:'上一页',more:'更多',
 			more2:'更多信息',speedLogin:'快捷登录',getCode:'获取验证码',reacquire:'重新获取',clear:'清空条件',search:'搜索',cancel:'取消',
 			logout:'退出登录',notNow:'以后再说'
@@ -116,6 +116,7 @@ export default {
 			ctrl:'Please Select',nullData:'No Data'
 		},
 		btnText:{
+			login:'Login',
 			update:'Update',remove:'Delete',summit:'Summit',editTag:'Add a Label',associateTag:'Add a link',next:'Next Chapter',previous:'Previous Chapter',
 			more:'more',more2:'More Info',speedLogin:'Speed Login',getCode:'Get Verification Code',reacquire:'Reacquire',clear:'Clear',search:'Search',
 			cancel:'Cancel',logout:'Logout',notNow:'Not Now'

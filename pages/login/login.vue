@@ -3,22 +3,22 @@
 		<view class="status_bar"></view>
 		<form class="loginView" @submit="submit">
 			<view style="margin-top:22px;margin-bottom: 33px;justify-content: center;"><text style="font-size: 27px;color: #333;">{{i18n.login}}</text></view>
-			<view v-if="isShow" class="input-view"><input class="input" type="text" v-model="quickLoginInfo.nickname" placeholder="请输入姓名,首次输入后将不可修改" name="nickname" placeholder-style="color:#999" /></view>
+			<view v-if="isShow" class="input-view"><input class="input" type="text" v-model="quickLoginInfo.nickname" :placeholder="msg.msg1" name="nickname" placeholder-style="color:#999" /></view>
 			<view v-if="isShow" class="input-view">
 				<text class="inner_title">{{i18n.gender}}</text>
 				<picker @change="sexBindPickerChange" :value="sexIdx" :range="sexData" range-key="value" name="sex">
 					<view class="input">{{ sexData[sexIdx].value }}</view>
 				</picker>
 			</view>
-			<view class="input-view"><input class="input" type="text" v-model="quickLoginInfo.mobile" placeholder="请输入手机号" name="mobile" placeholder-style="color:#999" /></view>
+			<view class="input-view"><input class="input" type="text" v-model="quickLoginInfo.mobile" :placeholder="msg.msg2" name="mobile" placeholder-style="color:#999" /></view>
 			<view class="input-view" style="position: relative;">
-				<input class="input" v-model="quickLoginInfo.code" placeholder="输入验证码" name="code" placeholder-style="color:#999" />
+				<input class="input" v-model="quickLoginInfo.code" :placeholder="msg.msg3" name="code" placeholder-style="color:#999" />
 				<button class="sendCode" :disabled="sendCodeInfo.hasSend" @tap="sendCode">
 				<!-- :class="{disabled: sendCodeInfo.hasSend}" -->
 					{{ sendCodeInfo.msg }}
 				</button>
 			</view>
-			<button type="primary" form-type="submit" class="login">{{}}</button>
+			<button type="primary" form-type="submit" class="login">{{btnText.login}}</button>
 		</form>
 	</view>
 </template>
@@ -44,13 +44,19 @@ export default {
 			sendCodeInfo: {
 				time: 60,
 				hasSend: false,
-				msg: this.$('btnText').getCode
+				msg: this.$t('btnText').getCode
 			}
 		};
 	},
 	computed:{
 		i18n() {
 			return this.$t('common')
+		},
+		msg(){
+			return this.$t('msg')
+		},
+		btnText(){
+			return this.$t('btnText')
 		}
 	},
 	onLoad(){
@@ -62,7 +68,7 @@ export default {
 		sendCode: function() {
 			let mobile = this.quickLoginInfo.mobile;
 			let rule = [
-				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" }
+				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: this.$t('msg').msg4 }
 			];
 			let checkSendCode = graceChecker.check({mobile}, rule);
 			if(!checkSendCode){
@@ -105,14 +111,14 @@ export default {
 			let {nickname, mobile, code,sex} = e.detail.value;
 			
 			let rule = [
-				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: "请填写11位手机号" },
-				{ name: "code", checkType: "string", checkRule: "6", errorMsg: "请填写6位验证码" },
+				{ name: "mobile", checkType: "phoneno", checkRule: "", errorMsg: this.$t('msg').msg4 },
+				{ name: "code", checkType: "string", checkRule: "6", errorMsg: this.$t('msg').msg5 },
 			];
 			if(this.isShow && !nickname){
-				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_\u4e00-\u9fa5]+$", errorMsg: "请填写姓名"})
+				rule.push({name: "name", checkType: "reg", checkRule: "^[a-zA-Z0-9_\u4e00-\u9fa5]+$", errorMsg: this.$t('msg').msg6})
 			}
 			if(this.isShow && !sex){
-				rule.push({name: "sex", checkType: "in", checkRule: "1,2", errorMsg: "请选择性别"})
+				rule.push({name: "sex", checkType: "in", checkRule: "1,2", errorMsg: this.$t('msg').msg7})
 			}
 			let checkLogin = graceChecker.check(e.detail.value, rule);
 			if(!checkLogin){
