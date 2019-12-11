@@ -84,6 +84,7 @@ export default {
 					let sendInfo = this.sendCodeInfo;
 					sendInfo.msg = '60S';
 					sendInfo.hasSend = true;
+					let self = this
 					let timer = setInterval(function() {
 						let time = sendInfo.time;
 						time--;
@@ -91,7 +92,7 @@ export default {
 						sendInfo.msg = time + 'S';
 						if (time < 1) {
 							clearInterval(timer);
-							sendInfo.msg = this.$t('btnText').reacquire;
+							sendInfo.msg = self.$t('btnText').reacquire;
 							sendInfo.time = 60;
 							sendInfo.hasSend = false;
 						}
