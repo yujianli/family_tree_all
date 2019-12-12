@@ -149,18 +149,22 @@
 				})
 			},
 			queryNext: function(condition) {
+				if (!this.content) {
+					uni.showToast({title: condition==='previous'?'当前是第一条':'当前是最后一条'});
+					return;
+				}
 				let reqParam = this.param;
 				reqParam['condition'] = condition;
+				console.log(this.content)
 				reqParam['contentId']=this.content.id
 				this.$http.get('content/nextDetail', reqParam).then((res) => {
 					if (res.data.code === 200) {
-						if (!res.data.data) {
-							uni.showToast({
-								title: '当前记录已经是第一条'
-							});
+						if(res.data.data.contentInfo){
+							this.content = res.data.data.contentInfo
+						}else{
+							uni.showToast({title: condition==='previous'?'当前是第一条':'当前是最后一条'});
 							return;
 						}
-						this.content = res.data.data.contentInfo
 					} else {
 						uni.showToast({
 							title: '加载失败',

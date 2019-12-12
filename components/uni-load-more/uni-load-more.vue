@@ -109,7 +109,7 @@ export default {
 .uni-load-more {
 	display: flex;
 	flex-direction: row;
-	height: 400upx;
+	height: 100upx;
 	align-items: center;
 	justify-content: center;
 
@@ -120,16 +120,16 @@ export default {
 
 	&__img {
     position: relative;
-		height: 24px;
-		width: 24px;
-		margin-right: 10px;
+		height: 48upx;
+		width: 48upx;
+		margin-right: 20upx;
 		& > .load {
 			position: absolute;
 			.uni-load-view_wrapper {
-				width: 6px;
-				height: 2px;
-				border-top-left-radius: 1px;
-				border-bottom-left-radius: 1px;
+				width: 12upx;
+				height: 4upx;
+				border-top-left-radius: 2upx;
+				border-bottom-left-radius: 2upx;
 				background: $uni-text-color-grey;
 				position: absolute;
 				opacity: 0.2;
@@ -138,25 +138,25 @@ export default {
 
 				&:nth-child(1) {
 					transform: rotate(90deg);
-					top: 2px;
-					left: 9px;
+					top: 4upx;
+					left: 18upx;
 				}
 
 				&:nth-child(2) {
 					transform: rotate(180deg);
-					top: 11px;
-					right: 0px;
+					top: 22upx;
+					right: 0upx;
 				}
 
 				&:nth-child(3) {
 					transform: rotate(270deg);
-					bottom: 2px;
-					left: 9px;
+					bottom: 4upx;
+					left: 18upx;
 				}
 
 				&:nth-child(4) {
-					top: 11px;
-					left: 0px;
+					top: 22upx;
+					left: 0upx;
 				}
 			}
 		}
@@ -168,7 +168,7 @@ export default {
       right: 0;
       bottom: 0;
       box-sizing: border-box;
-      border: solid 2px #777777;
+      border: solid 4upx #777777;
       border-radius: 50%;
       border-bottom-color: transparent !important;
       animation: loader-android 1s 0s linear infinite;
@@ -179,8 +179,8 @@ export default {
 .load1,
 .load2,
 .load3 {
-	height: 24px;
-	width: 24px;
+	height: 48upx;
+	width: 48upx;
 }
 
 .load2 {

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="fee_info fee_pd" style="margin-top: 18px;">会员类型：VIP年费会员</view>
-		<view class="fee_info fee_pd">{{startTime}}-{{endTime}}</view>
+		<view class="fee_info fee_pd">有效期限：{{startTime}}-{{endTime}}</view>
 		<view class="fee_tips">有效期还有{{day}}过期</view>
 		<view class="more_tips fee_pd">直接购买更多年限有更多优惠</view>
 		<view class="fee_wrapper">
@@ -17,7 +17,7 @@
 				</view>
 			</view>
 		</view>
-		<view  style="margin-left: 15upx;margin-right: 15upx;margin-bottom: 80upx;">
+		<view  style="margin-left: 30upx;margin-right: 30upx;margin-bottom: 80upx;">
 			<button type="primary" @click="openPopup" class="btn_open">立即开通</button>
 		</view>
 		<uni-popup ref="fee_popup" type="bottom">
@@ -262,7 +262,6 @@
 	}
 
 	.fee_info {
-		margin-top: 36upx;
 		color: #333;
 		font-size: 32upx;
 	}
@@ -271,7 +270,6 @@
 		font-size: 28upx;
 		color: #999;
 		text-align: center;
-		margin-top: 36upx;
 	}
 
 	.more_tips {
@@ -281,11 +279,12 @@
 	}
 
 	.fee_wrapper {
-		margin-top: 32upx;
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: space-between;
 		align-items: center;
+		margin-left: 15upx;
+		margin-right: 15upx;
 
 	}
 
@@ -329,7 +328,7 @@
 	.btn_open {
 		margin-top: 160upx;
 		font-size: 32upx;
-		color: #e5e5e5;
+		color: #ffffff;
 		background-color: #4DC578;
 		height: 92upx;
 		line-height: 92upx;

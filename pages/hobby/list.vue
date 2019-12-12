@@ -16,8 +16,8 @@
 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
 						<view class="card_item" @tap="jumpToDetail(content)">
-							<view style="position: absolute;left: 0;top:0;width: 88upx;height: 37upx;line-height: 37upx;text-align: center;background: #ED4848;color: #fff;
-							border-bottom-left-radius: 8upx;border-bottom-right-radius: 8upx;font-size: 20upx;left: 30upx;">我的格言</view>
+							<view v-if="content.isMyMotto" style="position: absolute;left: 0;top:0;height: 37upx;line-height: 37upx;text-align: center;background: #ED4848;color: #fff;
+							border-bottom-left-radius: 8upx;border-bottom-right-radius: 8upx;font-size: 20upx;left: 30upx;padding-left: 8upx;padding-right: 8upx;">我的格言</view>
 							<image v-if="content.imageUrl != null" :src="content.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
 								<text class="card_title">{{ content.content }}</text>
@@ -67,7 +67,8 @@ export default {
 				flagId: null,
 				name: '',
 				language: null,
-				isFamily: null
+				isFamily: null,
+				stageId: null
 			},
 			ctrlEnable: {
 				tabCtrl: true,
@@ -180,7 +181,8 @@ export default {
 			if (this.param.flag == 'category') {
 				this.initCategory();
 			} else if (this.param.flag == 'period') {
-				this.initPeriod();
+				// this.initPeriod();
+				this.loadContent(this.param.stageId)
 			} else {
 				this.loadContent(null);
 			}
@@ -209,31 +211,31 @@ export default {
 					}
 				});
 		},
-		initPeriod: function() {
-			this.$http
-				.get('contentPeriod/query', {
-					userId: this.param.userId,
-					moduleId: this.param.moduleId,
-					language: this.param.language,
-					type: '1',
-					userId: this.param.userId
-				})
-				.then(res => {
-					if (res.data.code === 200) {
-						let _list = res.data.data.contentPeriodList;
-						this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
-						if (!this.seledFlagId) {
-							this.seledFlagId = this.moduleList[0].id;
-						}
-						this.loadContent(this.seledFlagId);
-					} else {
-						uni.showToast({
-							title: '模块信息加载失败',
-							icon: 'none'
-						});
-					}
-				});
-		},
+		// initPeriod: function() {
+		// 	this.$http
+		// 		.get('contentPeriod/query', {
+		// 			userId: this.param.userId,
+		// 			moduleId: this.param.moduleId,
+		// 			language: this.param.language,
+		// 			type: '1',
+		// 			userId: this.param.userId
+		// 		})
+		// 		.then(res => {
+		// 			if (res.data.code === 200) {
+		// 				let _list = res.data.data.contentPeriodList;
+		// 				this.moduleList = util.objectTransfer(_list, ['id', 'name'], ['id', 'label']);
+		// 				if (!this.seledFlagId) {
+		// 					this.seledFlagId = this.moduleList[0].id;
+		// 				}
+		// 				this.loadContent(this.seledFlagId);
+		// 			} else {
+		// 				uni.showToast({
+		// 					title: '模块信息加载失败',
+		// 					icon: 'none'
+		// 				});
+		// 			}
+		// 		});
+		// },
 		loadContent: function(flagId, isMore) {
 			//重新切换到不是搜索状态，将page置为1
 			if (this.isSearch) {

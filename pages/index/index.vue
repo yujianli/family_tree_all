@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<view class="status_bar"></view>
+		<view class="status_bar">
+			<view class="top_view"></view> 
+		</view>
 		<view class="person_tabs">
 			<view>
 				<text class="person_name person_name_active">{{personInfo.name}}</text>
@@ -19,11 +21,12 @@
 			</view>
 		</view> -->
 		<!-- <view class="tab_line"></view> -->
-		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles" style="margin-top: 480upx;">
+		<view style="margin-top: 480upx;">
+		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles" >
 			<swiper style="height: 490upx;">
 				<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
 					<view style="padding: 34upx;">
-						<view style="box-shadow: 2upx 0 0 #E5E5E5;border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
+						<view style="border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
 							<view class="person_intro">
 								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
 								<text class="name">{{ item.name }}</text>
@@ -57,6 +60,8 @@
 			</swiper>
 		</uni-swiper-dot>
 		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
+		</view>
+		
 	</view>
 </template>
 
@@ -435,7 +440,15 @@
 		align-items: center;
 		height: 100upx;
 		position: fixed;
+		
+		/* #ifdef H5 */
 		top: 0;
+		/* #endif */
+		
+		/* #ifdef APP-PLUS */
+		top: var(--status-bar-height);
+		/* #endif */
+		
 		left: 0;
 		right: 0;
 		z-index: 999;
@@ -465,25 +478,6 @@
 
 	.tab_line_active {
 		background-color: #ffffff;
-	}
-
-	.func_container {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		align-items: center;
-		margin-top: 100upx;
-	}
-
-	.func_wrapper {
-		display: flex;
-		flex-direction: column;
-		width: 20%;
-		height: 188upx;
-		justify-content: center;
-		align-items: center;
-		position: relative;
 	}
 
 	.pic_menu {
@@ -549,5 +543,13 @@
 
 	uni-button.button-hover {
 		background-color: #fff;
+	}
+	.top_view {  
+	    height: var(--status-bar-height);  
+	    width: 100%;  
+	    position: fixed;  
+	    background-color: #4DC578;  
+	    top: 0;  
+	    z-index: 999;  
 	}
 </style>
