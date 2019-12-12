@@ -6,11 +6,11 @@
 		<view class="family_select_container">
 			<view @tap="tabSelect">
 				<text>{{familyTitle}}</text>
-				<image src="../../static/images/arrow.png"></image>
+				<!-- <image src="../../static/images/arrow.png"></image> -->
 			</view>
 		</view>
 
-		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
+		<funchead :basicFuncList="basicFuncList" :language="param.language" @gotoList="jumpToList"></funchead>
 		<view style="padding: 34upx;margin-top:480upx">
 			<view class="family_training_container">
 				<view class="title">{{i18n.training}}</view>
@@ -321,12 +321,12 @@
 		top: var(--status-bar-height);
 		/* #endif */
 		z-index: 99;
-		background: #fff;
+		background-color: #4DC578;
 		
 
 		text {
 			font-size: 33upx;
-			color: #333;
+			color: #fff;
 		}
 
 		image {
@@ -388,7 +388,7 @@
 	    height: var(--status-bar-height);  
 	    width: 100%;  
 	    position: fixed;  
-	    background-color: #FFFFFF;  
+	    background-color: #4DC578; 
 	    top: 0;  
 	    z-index: 999;  
 	}

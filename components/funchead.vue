@@ -2,7 +2,12 @@
 	<view class="func_container">
 		<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
 			<image class="pic_menu" :src="basicFunc.icon"></image>
-			<text class="text">{{ basicFunc.name }}</text>
+			<view v-if="language==='zh_CN'">
+				<text class="text">{{ basicFunc.name }}</text>
+			</view>
+			<view v-else>
+				<text class="text">{{ basicFunc.englishName }}</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -19,7 +24,7 @@
 			// 	default: 1
 			// },
 			// personId: Number,
-			// language: String
+			language: String,
 			basicFuncList:{
 				type: Array,
 				default: []

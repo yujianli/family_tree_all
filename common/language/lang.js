@@ -92,6 +92,7 @@ export default {
 	},
 	'en-US':{
 		common:{
+			login:'Login',
 			name:'Name', idcard:'ID card', gender:'Gender', nationality:'Nationality', zodiac:'Chinese Zodiac',
 			birth:'Birthday',birth2:'Birthday',birthTime:'Birthtime',birthPlace:'Birthplace',isPassaway:'is Alive',passingAway:'Date Of death',
 			placeResidence:'Address',fixedTelephone:'Home Phone',mobile:'Mobile Phone',emailAddress:'Email',career:'Occupation',

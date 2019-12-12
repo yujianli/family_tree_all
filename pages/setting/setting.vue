@@ -21,14 +21,14 @@
 		</view>
 		
 		<view class="container">
-			<view class="wrapper" style="margin-top: 19upx;">
+			<view class="wrapper" style="margin-top: 19upx;" @tap="gotoAbout('about')">
 				<text class="inner_title">{{i18n.about}}</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
 		</view>
 		
 		<view class="container">
-			<view class="wrapper">
+			<view class="wrapper" @tap="gotoAbout('privacy')">
 				<text class="inner_title">{{i18n.privacy}}</text>
 				<image src="../../static/images/icon_arrow_right.png" class="arrow"></image>
 			</view>
@@ -99,6 +99,11 @@
 			toPay(){
 				uni.navigateTo({
 					url:'/pages/fee/fee'
+				})
+			},
+			gotoAbout(type){
+				uni.navigateTo({
+					url:'/pages/setting/about?type='+type
 				})
 			},
 			loadWhetherRemind:function(){

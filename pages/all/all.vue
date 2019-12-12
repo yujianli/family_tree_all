@@ -4,7 +4,7 @@
 			<view v-for="(module,index) in selectedModules">{{module.name}}</view>
 		</view>
 		<uni-search-bar :radius="200" class="search_info" @confirm="search"/>
-		<view class="card_list">
+		<view class="card_list" v-if="contentList.length">
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 				<!-- 				<uni-swipe-action>
 					<uni-swipe-action-item :options="options" @click="deleteContent(contentInfo.id)"> -->
@@ -26,6 +26,10 @@
 				</uni-swipe-action> -->
 			</view>
 		</view>
+		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+			<image src="../../static/images/null_data.png" style="width: 464upx;height: 417upx;"></image>
+			<view style="font-size: 36upx;color: #999;">暂无数据</view>
+		</view>
 		<uni-drawer :visible="showDrawer" mode="right" @close="closeDrawer">
 			<view>
 				<view class="pd18">
@@ -33,7 +37,7 @@
 				</view>
 				<view class="all_types_container">
 					<view class="all_types_wrapper" v-for="(module,index) in modules">
-						<view :class="{'active' : module.hasActive == true }" @tap="selectType(module,index)">{{module.name}}</view>
+						<view v-if="[1,2,5].indexOf(module.id)===-1" :class="{'active' : module.hasActive == true }" @tap="selectType(module,index)">{{module.name}}</view>
 					</view>
 				</view>
 				<view class="pd18">
@@ -56,6 +60,7 @@
 			</view>
 		</uni-drawer>
 	</view>
+	
 </template>
 
 <script>
@@ -173,6 +178,7 @@
 					if (res.data.code === 200) {
 						this.modules = res.data.data.module;
 						for (let i = 0; i < this.modules.length; i++) {
+							// if([].indexOf(this.modules[i].))
 							this.modules[i]['hasActive'] = false
 						}
 					} else {

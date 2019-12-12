@@ -209,6 +209,12 @@
 			}
 		},
 		{
+			"path": "pages/setting/about",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
 			"path": "pages/appearance/list",
 			"style": {
 				"navigationBarTitleText": ""

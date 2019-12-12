@@ -3,7 +3,7 @@
 		<view class="detail_container">
 			<view class="detail_hd">
 				<view>{{content.time | formatDate}}</view>
-				<view>{{content.position}}</view>
+				<view>{{content.position | nullFilter}}</view>
 				<view v-if="param.moduleId==='30'">{{content.weather}}</view>
 				<view v-if="ctrlEnable.typeCtrl">{{content.categoryName}}</view>
 				<view v-if="ctrlEnable.stageCtrl">{{content.periodName}}</view>
@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<view class="detail_opt_container">
-			<button class="detail_opt_btn active" @tap="previousClick">{{i18n.previous}}</button>
+			<button class="detail_opt_btn" @tap="previousClick">{{i18n.previous}}</button>
 			<button class="detail_opt_btn" @tap="nextClick">{{i18n.next}}</button>
 		</view>
 	</view>
@@ -109,6 +109,10 @@
 			formatDate: function(value) {
 				if (!value) return ''
 				return util.dateFormat(value,'yyyy/MM/dd')
+			},
+			nullFilter:function(value){
+				if(!value) return ''
+				return value
 			}
 		},
 		onLoad: function(options) {
@@ -219,7 +223,7 @@
 		position: fixed;
 		left: 0;
 		right: 0;
-		bottom: 0;
+		bottom: -8upx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -239,7 +243,7 @@
 		border: 0px;
 	}
 
-	.detail_opt_btn.active {
+	.detail_opt_btn:active {
 		background-color: #4DC578;
 		color: #ffffff;
 	}

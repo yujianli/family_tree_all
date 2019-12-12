@@ -1,67 +1,64 @@
 <template>
 	<view>
 		<view class="status_bar">
-			<view class="top_view"></view> 
+			<view class="top_view"></view>
 		</view>
 		<view class="person_tabs">
-			<view>
-				<text class="person_name person_name_active">{{personInfo.name}}</text>
+			<view class="person_name">
+				<text :class="{person_name_active:isActive}" @tap="selPerson(true, personInfo.userId)">{{personInfo.name}}</text>
 				<!-- <view class="tab_line"></view> -->
 			</view>
-			<view style="margin-left: 53upx;">
-				<text class="person_name">杨林艳</text>
+			<view v-if="spouseUserId" class="person_name" style="margin-left: 53upx;">
+				<text :class="{person_name_active:!isActive}" @tap="selPerson(false,spouseUserId)">{{spouseName}}</text>
 				<!-- <view class="tab_line tab_line_active"></view> -->
 			</view>
 		</view>
-		<funchead :basicFuncList="basicFuncList" @gotoList="jumpToList"></funchead>
-		<!-- 		<view class="func_container">
-			<view class="func_wrapper" v-for="(basicFunc, i) in basicFuncList" v-bind:key="basicFunc.id" @tap="jumpToList(basicFunc)">
-				<image class="pic_menu" :src="basicFunc.icon"></image>
-				<text class="text">{{ basicFunc.name }}</text>
-			</view>
-		</view> -->
-		<!-- <view class="tab_line"></view> -->
+		<funchead :basicFuncList="basicFuncList" :language="param.language" @gotoList="jumpToList"></funchead>
 		<view style="margin-top: 480upx;">
-		<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles" >
-			<swiper style="height: 490upx;">
-				<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
-					<view style="padding: 34upx;">
-						<view style="border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: cover;">
-							<view class="person_intro">
-								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
-								<text class="name">{{ item.name }}</text>
-							</view>
-							<view style="margin-bottom: 30upx;">
-								<view class="other_info_container">
-									<view style="flex: 1;" class="other_info">
-										<text>{{i18n.birth2}}：</text>
-										<text>{{ item.birth | formatDate}}</text>
-									</view>
-									<view style="flex: 1;margin-left: 65upx;" class="other_info">
-										<text>{{i18n.birthPlace}}：</text>
-										<text>{{item.birthPlace | nullFilter}}</text>
-									</view>
+			<view style="padding-bottom: 28upx;">
+				
+			
+				<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
+				<swiper>
+					<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
+						<view style="padding: 34upx;">
+							<view style="border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: contain;">
+								<view class="person_intro">
+									<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
+									<text class="name">{{ item.name }}</text>
 								</view>
-								<view class="other_info_container">
-									<view style="flex: 1;margin-top: 4upx;" class="other_info">
-										<text>{{i18n.nationality}}：</text>
-										<text>{{item.nationality | nullFilter}}</text>
+								<view style="margin-bottom: 50upx;">
+									<view class="other_info_container">
+										<view style="flex: 1.2;" class="other_info">
+											<text>{{i18n.birth2}}：</text>
+											<text>{{ item.birth | formatDate}}{{item.isPassedAway| isPassaway}}</text>
+										</view>
+										<view style="flex: 0.8;margin-left: 45upx;" class="other_info">
+											<text>{{i18n.birthPlace}}：</text>
+											<text>{{item.birthPlace | nullFilter}}</text>
+										</view>
 									</view>
-									<view style="flex: 1;margin-left: 65upx;margin-top: 4upx;" class="other_info">
-										<text>{{i18n.career}}：</text>
-										<text>{{item.career | nullFilter}}</text>
+									<view class="other_info_container">
+										<view style="flex: 1.2;margin-top: 4upx;" class="other_info">
+											<text>{{i18n.nationality}}：</text>
+											<text>{{item.nationality | nullFilter}}</text>
+										</view>
+										<view style="flex: 0.8;margin-left: 45upx;margin-top: 4upx;" class="other_info">
+											<text>{{i18n.career}}：</text>
+											<text>{{item.career | nullFilter}}</text>
+										</view>
 									</view>
 								</view>
 							</view>
 						</view>
-					</view>
 
-				</swiper-item>
-			</swiper>
-		</uni-swiper-dot>
-		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
+					</swiper-item>
+				</swiper>
+			</uni-swiper-dot>
+			</view>
+			<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -93,7 +90,8 @@
 					birth: '',
 					birthPlace: '',
 					nationality: '',
-					career: ''
+					career: '',
+					userId:null
 				},
 				userCardList: [],
 				current: 0,
@@ -114,7 +112,10 @@
 					}
 				}],
 				defaultUrl: '../../static/images/avatar.png',
-				suffixUrl: '&style=image/resize,m_fill,w_44,h_44'
+				suffixUrl: '&style=image/resize,m_fill,w_44,h_44',
+				spouseName: null,
+				spouseUserId: null,
+				isActive: true
 			};
 		},
 		components: {
@@ -132,12 +133,23 @@
 				if (!value) return ''
 				return util.dateFormat(value)
 			},
+			isPassaway:function(value){
+				if(value===1){
+					return '(陨)'
+				}else{
+					return '(存)'
+				}
+			},
 			nullFilter: function(value) {
 				if (!value) return ''
 				return value
 			}
 		},
 		onLoad: function() {
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.spouseName = user.spouseName
+			this.spouseUserId = parseInt(user.spouseUserId)
 			//console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
@@ -157,12 +169,12 @@
 			// });
 		},
 		onShow: function() {
-			//console.log(JSON.stringify(this.personInfo))
-			let user = uni.getStorageSync("USER");
-			this.param.userId = user.id;
+			console.log(this.param.userId)
 			this.loadModule();
-			this.loadUserInfo();
-			this.loadWhetherRemind();
+			if (this.isActive) {
+				this.loadUserInfo();
+				this.loadWhetherRemind();
+			}
 			this.loadUserCardList()
 			// this.loadIndexContent();
 			// this.$refs.funchead.loadIndexContent()
@@ -218,36 +230,6 @@
 					url: linkUrl
 				});
 			},
-			// jumpToDetail:function(content){
-			// 	let p = {
-			// 		userId: this.param.userId,
-			// 		moduleId: content.moduleId,
-			// 		flag: content.flag,
-			// 		contentId: content.id,
-			// 		name: content.moduleName
-			// 	}
-			// 	let url = '/pages/hobby/detail' + util.jsonToQuery(p);
-			// 	uni.navigateTo({
-			// 		url: url
-			// 	});
-			// },
-			// loadModule: function() {
-			// 	this.$http.get('module/user/all', this.param).then(res => {
-			// 		if (res.data.code === 200) {
-			// 			this.basicFuncList = res.data.data.module;
-			// 			this.basicFuncList.push({
-			// 				id: 0,
-			// 				name: '更多',
-			// 				icon: '../../static/images/icon_func_0.png'
-			// 			});
-			// 		} else {
-			// 			uni.showToast({
-			// 				title: '模块信息加载失败',
-			// 				icon: 'none'
-			// 			});
-			// 		}
-			// 	});
-			// },
 			loadUserInfo: function() {
 				this.$http
 					.get('base/selectBase', {
@@ -352,70 +334,14 @@
 						language: this.param.language
 					})
 				})
+			},
+			selPerson: function(active, _userId) {
+				this.isActive = active
+				this.param.userId = _userId
+				this.loadModule();
+				this.loadUserCardList()
+				this.$nextTick(() => this.$refs['indexContent'].loadIndexContent())
 			}
-			// loadIndexContent:function(){
-			// 	this.$http.get('content/userCards',{
-			// 		userId:this.param.userId,
-			// 		page:1,
-			// 		rows:10,
-			// 		language:this.param.language,
-			// 		isFamily:this.param.isFamily
-			// 	}).then((res)=>{
-			// 		if(res.data.code===200){
-			// 			this.contentList = res.data.data.contentList;
-			// 			for(let i=0;i<this.contentList.length;i++){
-			// 				if(this.contentList[i].tags){
-			// 					this.contentList[i].tags=this.contentList[i].tags.split(',')
-			// 				}
-			// 				if(this.contentList[i].imageUrl){
-			// 					this.contentList[i].imageUrl=this.$common.picPrefix()+this.contentList[i].imageUrl
-			// 				}
-			// 			}
-			// 		}else{
-			// 			uni.showToast({
-			// 				title: '首页内容加载失败',icon:'none'
-			// 			});
-			// 		}
-			// 	})
-			// },
-			// toMore:function(){
-			// 	uni.navigateTo({
-			// 		url:'/pages/all/all'+ util.jsonToQuery({
-			// 			userId: this.param.userId,
-			// 			language: this.param.language,
-			// 			isFamily: this.isFamily
-			// 		})
-			// 	})
-			// },
-			// deleteContent(contentId) {
-			// 	var self = this
-			// 	uni.showModal({
-			// 		title: '删除',
-			// 		content: '确认删除该记录？',
-			// 		confirmText: '确认',
-			// 		success: function (res) {
-			// 			if (res.confirm) {
-			// 			  self.$http
-			// 			  	.post('content/delete', {
-			// 			  		language: self.$common.language,
-			// 			  		contentId: contentId
-			// 			  	})
-			// 			  	.then(res => {
-			// 			  		if (res.data.code === 200) {
-			// 			  			self.loadIndexContent();
-			// 			  		} else {
-			// 			  			uni.showToast({
-			// 			  				title: '内容删除失败',
-			// 			  				icon: 'none'
-			// 			  			});
-			// 			  		}
-			// 			  	});
-			// 			} else if (res.cancel) {
-			// 				console.log('用户点击取消');
-			// 			}
-			// 		}
-			// 	});
-			// }
 		}
 	};
 </script>
@@ -440,15 +366,15 @@
 		align-items: center;
 		height: 100upx;
 		position: fixed;
-		
+
 		/* #ifdef H5 */
 		top: 0;
 		/* #endif */
-		
+
 		/* #ifdef APP-PLUS */
 		top: var(--status-bar-height);
 		/* #endif */
-		
+
 		left: 0;
 		right: 0;
 		z-index: 999;
@@ -457,7 +383,7 @@
 
 	.person_name {
 		font-size: 32upx;
-		color: #fff;
+		color: #E0FFEB;
 	}
 
 	.person_name_active {
@@ -465,6 +391,7 @@
 		// font-weight: 700;
 		// padding-bottom: 28upx;
 		font-size: 40upx;
+		color: #fff;
 		// border-bottom: 1px solid #4DC578;
 	}
 
@@ -525,7 +452,6 @@
 	.other_info_container {
 		display: flex;
 		justify-content: space-between;
-		margin-top: 16upx;
 		margin-left: 30upx;
 		margin-right: 30upx;
 
@@ -544,12 +470,13 @@
 	uni-button.button-hover {
 		background-color: #fff;
 	}
-	.top_view {  
-	    height: var(--status-bar-height);  
-	    width: 100%;  
-	    position: fixed;  
-	    background-color: #4DC578;  
-	    top: 0;  
-	    z-index: 999;  
+
+	.top_view {
+		height: var(--status-bar-height);
+		width: 100%;
+		position: fixed;
+		background-color: #4DC578;
+		top: 0;
+		z-index: 999;
 	}
 </style>

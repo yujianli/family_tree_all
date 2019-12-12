@@ -11,23 +11,23 @@
 								<view>{{appearance.age}}{{i18n.years}}</view>
 								<view class="title">{{appearance.title}}</view>
 								<view class="row">
-									<view>{{i18n.height}}：{{appearance.height}}cm</view>
-									<view>{{i18n.tshirtSize}}：{{appearance.tshirtSize}}</view>
+									<view>{{i18n.height}}：{{appearance.height}}</view>
+									<view>{{i18n.tshirtSize}}：{{appearance.tshirtSize | nullFilter}}</view>
 								</view>
 								<view class="row">
-									<view>{{i18n.weight}}：{{appearance.weight}}kg</view>
-									<view>{{i18n.shirtSize}}：{{appearance.shirtSize}}M</view>
+									<view>{{i18n.weight}}：{{appearance.weight}}</view>
+									<view>{{i18n.shirtSize}}：{{appearance.shirtSize | nullFilter}}</view>
 								</view>
 								<view class="row">
-									<view>{{i18n.faceShape}}：{{appearance.faceShape}}</view>
-									<view>{{i18n.clothSize}}：{{appearance.clothSize}}</view>
+									<view>{{i18n.faceShape}}：{{appearance.faceShape | nullFilter}}</view>
+									<view>{{i18n.clothSize}}：{{appearance.clothSize | nullFilter}}</view>
 								</view>
 								<view class="row">
-									<view>{{i18n.characteristics}}：{{appearance.characteristics}}</view>
-									<view>{{i18n.trousersSize}}：{{appearance.trousersSize}}</view>
+									<view>{{i18n.characteristics}}：{{appearance.characteristics | nullFilter}}</view>
+									<view>{{i18n.trousersSize}}：{{appearance.trousersSize | nullFilter}}</view>
 								</view>
 								<view class="row">
-									<view>{{i18n.shoeSize}}：{{appearance.shoeSize}}{{i18n.yards}}</view>
+									<view>{{i18n.shoeSize}}：{{appearance.shoeSize}}</view>
 									<view></view>
 								</view>
 								<view class="row">
@@ -38,7 +38,6 @@
 									<view style="font-size: 30upx;color: #999999;">{{appearance.createDate | formatDate}}</view>
 								</view>
 							</view>
-
 						</view>
 					</uni-swipe-action-item>
 				</uni-swipe-action>
@@ -85,6 +84,10 @@
 			formatDate: function(value) {
 				if (!value) return ''
 				return util.dateFormat(value)
+			},
+			nullFilter:function(value){
+				if(!value) return ''
+				return value
 			}
 		},
 		onLoad: function(options) {
@@ -118,12 +121,27 @@
 					if (res.data.code === 200) {
 						let _list = res.data.data.appearanceList;
 						for (var i = 0; i < _list.length; i++) {
+							if(_list[i].height){
+								_list[i].height=_list[i].height+'cm'
+							}else{
+								_list[i].height=''
+							}
+							if(_list[i].weight){
+								_list[i].weight=_list[i].weight+'kg'
+							}else{
+								_list[i].weight=''
+							}
+							if(_list[i].shoeSize){
+								_list[i].shoeSize = this.bindProp('size', _list[i].shoeSize)+this.$t('common').yards
+							}else{
+								_list[i].shoeSize=''
+							}
 							_list[i].faceShape = this.bindProp('faceShape', _list[i].faceShape);
 							_list[i].tshirtSize = this.bindProp('size', _list[i].tshirtSize);
 							_list[i].shirtSize = this.bindProp('size', _list[i].shirtSize);
 							_list[i].clothSize = this.bindProp('size', _list[i].clothSize);
 							_list[i].trousersSize = this.bindProp('size', _list[i].trousersSize);
-							_list[i].shoeSize = this.bindProp('size', _list[i].shoeSize);
+							
 							if (_list[i].tags) {
 								_list[i].tags = _list[i].tags.split(',')
 							} else {
