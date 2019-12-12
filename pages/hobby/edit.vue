@@ -5,7 +5,7 @@
 			<picker class="input" mode="date" :value="contentInfo.time" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'" style="flex:1;">
 				<view class="picker_inner">
-					<view>{{contentInfo.time}}</view>
+					<view>{{contentInfo.time | formatDate}}</view>
 					<image src="../../static/images/jiantou.png" class="picker_arrow"></image>
 				</view>
 			</picker>
@@ -266,7 +266,7 @@
 		filters:{
 			formatDate:function(value){
 				if(!value) return ''
-				return util.dateFormat(value, 'yyyy.MM.dd')
+				return util.dateFormat(value)
 			},
 			formatDate2:function(value){
 				if(!value) return ''
@@ -324,7 +324,7 @@
 					if (res.data.code === 200) {
 						let _data = res.data.data.contentInfo
 						util.loadObj(this.contentInfo,_data)
-						this.contentInfo.time=util.dateFormat(this.contentInfo.time)
+						this.contentInfo.time=util.dateFormat(this.contentInfo.time,'yyyy-MM-dd')
 						if(this.contentInfo.tags){
 							this.tagList=this.contentInfo.tags.split(',')
 						}
@@ -547,15 +547,15 @@
 					postParam['imageUrls']=this.uploadConfig.imageData.join(',')
 				}
 				postParam.time=this.contentInfo.time
+				postParam.userId=this.param.userId
+				postParam.moduleId=this.param.moduleId
+				postParam.flag=this.param.flag
 				let url = null;
 				if(this.contentInfo.id){
 					url='content/edit';
 					postParam.contentId=this.contentInfo.id
 				}else{
 					url='content/create';
-					postParam.userId=this.param.userId
-					postParam.moduleId=this.param.moduleId
-					postParam.flag=this.param.flag
 				}
 				
 				util.nullFilter(postParam)
