@@ -95,10 +95,10 @@
 				for (let i = 0; i < this.stageList.length; i++) {
 					if (this.param.moduleId === '32') {
 						self.stageList[i].name = self.stageList[i].name.replace(',', this.other.and).concat(this.other.marriage)
-						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
+						self.stageList[i].startTime = util.dateFormat(self.stageList[i].startTime)
 					} else if (this.param.moduleId === '31') {
 						if (self.stageList[i].startTime) {
-							self.stageList[i].startTime = this.other.buy + util.dateFormat(self.stageList[i].startTime, 'yyyy年MM月dd日')
+							self.stageList[i].startTime = this.other.buy + util.dateFormat(self.stageList[i].startTime)
 						}else{
 							self.stageList[i].startTime = ''
 						}
@@ -121,11 +121,11 @@
 		filters: {
 			formatDate: function(value) {
 				if (!value) return '';
-				return util.dateFormat(value, 'yyyy.MM.dd');
+				return util.dateFormat(value);
 			},
 			buyDesc: function(value) {
 				if (!value) return '';
-				return '购买于' + util.dateFormat(value, 'yyyy年MM月dd日')
+				return '购买于' + util.dateFormat(value)
 			},
 			saleDesc: function(value) {
 				if (!value) return '';

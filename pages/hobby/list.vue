@@ -373,8 +373,7 @@ export default {
 		},
 		editDesc: function() {
 			uni.navigateTo({
-				url:
-					'selfDesc' +
+				url:'selfDesc' +
 					util.jsonToQuery({
 						userId: this.param.userId,
 						moduleId: this.param.moduleId,
