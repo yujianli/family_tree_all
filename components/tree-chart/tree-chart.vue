@@ -193,7 +193,7 @@
 	}
 
 	.user-selected {
-		border: 2px solid #FF0000;
+		border: 2px solid #09BB07;
 	}
 
 	.vertical-line {

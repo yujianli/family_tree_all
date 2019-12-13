@@ -145,10 +145,10 @@
 			loadIndexContent: function(val) {
 				this.$http.get('content/queryLike', {
 					userId: this.param.userId,
-					moduleId: this.selectedModules.join(','),
+					moduleId: this.selectedModules.map(mod=>mod.id).join(','),
 					page: 1,
 					rows: 10,
-					content:val,
+					content: encodeURIComponent(val),
 					language: this.param.language,
 					isFamily: this.param.isFamily
 				}).then((res) => {
@@ -208,7 +208,8 @@
 					this.$forceUpdate();
 					this.$set(module, 'hasActive', true);
 				}
-				console.log(this.modules);
+				
+				// console.log(this.modules);
 				// console.log(index);
 			},
 			bindSDateChange: function(e) {
@@ -229,6 +230,7 @@
 				});
 				this.selectedModules = activeArr;
 				this.closeDrawer();
+				this.loadIndexContent('')
 			},
 			deleteContent(contentId) {
 				var self = this

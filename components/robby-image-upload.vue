@@ -363,7 +363,7 @@
 		padding-bottom: 4upx;
 		right: 0;
 		left: 98upx;
-		bottom: 164upx;
+		bottom: 170upx;
 		border-top-right-radius: 16upx;
 		
 	}

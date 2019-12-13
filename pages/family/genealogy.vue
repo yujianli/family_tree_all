@@ -13,9 +13,9 @@
 		 @trigger="trigger"></uni-fab> -->
 		<uni-popup ref="popup" type="center" class="my_popup">
 			<view class="inner_select">
-				<view @tap="operate('view')">查看人员</view>
-				<view @tap="operate('add')">添加人员</view>
-				<view @tap="operate('edit')">修改人员</view>
+				<!-- <view @tap="operate('view')">查看人员</view> -->
+				<view style="color: #09BB07;" @tap="operate('add')">添加人员</view>
+				<view style="color: #09BB07;" @tap="operate('edit')">修改人员</view>
 				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
 			</view>
 		</uni-popup>

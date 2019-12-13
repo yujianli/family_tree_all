@@ -68,7 +68,8 @@
 		@delete="deleteImage" @add="addImage" 
 		:server-url-delete-image="uploadConfig.serverUrlDeleteImage" 
 		:server-url="uploadConfig.serverUrl" 
-		:header="uploadConfig.header">
+		:header="uploadConfig.header"
+		:is-edit="uploadConfig.isEdit">
 		</robby-image-upload>
 		
 		<view class="opt_container" v-if="removeEnable">
@@ -118,6 +119,7 @@
 					fileKeyName: 'file',
 					showUploadProgerss:false,
 					limitNumber: 1,
+					isEdit: false
 				},
 				removeEnable: false
 			}
@@ -181,6 +183,7 @@
 			this.id=options.id
 			if(options.id){
 				this.removeEnable=true
+				this.uploadConfig.isEdit=true
 			}
 			util.loadObj(this.param,options)
 			if(this.param.moduleId==='27'){
