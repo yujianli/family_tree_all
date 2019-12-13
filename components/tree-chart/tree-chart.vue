@@ -27,7 +27,8 @@
 					<!-- 每个子节点头部画一个垂直的线 由于是配偶  要透明处理 -->
 					<view v-if="!isRoot" class="vertical-line" style="background-color:rgba(0,0,0,0)" />
 					<!-- 用户信息 -->
-					<view class="user-info" :class="{'user-selected':dataSource.isself}" @tap="itemClick(dataSource.spouseTreeDto)">
+					<!-- <view class="user-info" :class="{'user-selected':dataSource.isself}" @tap="itemClick(dataSource.spouseTreeDto)"> -->
+						<view class="user-info"  @tap="itemClick(dataSource.spouseTreeDto)">
 						<image class="user-avatar" :src="dataSource.headUrl ? (prefixUrl+dataSource.headUrl+suffixUrl) : (dataSource.spouseTreeDto.sex == 1 ? manUrl : womanUrl)" />
 
 						<view class="user-name">
@@ -58,7 +59,7 @@
 						<!-- 中间的 -->
 						<view v-else class="horizontal-line" style="width:100%" />
 					</view>
-					<tree-chart :dataSource="item" @openBtn="openBtn" />
+					<tree-chart :dataSource="item"  @openBtn="openBtn" />
 				</view>
 			</view>
 		</view>
@@ -78,8 +79,23 @@
 				suffixUrl: '&style=image/resize,m_fill,w_48,h_48',
 				womanUrl: '../../static/images/icon_default_woman.png',
 				manUrl: '../../static/images/icon_default_man.png',
-				targetData: null
+				targetData: null,
+				width:0,
+				height:0
 			}
+		},
+		mounted() {
+			// if (this.isRoot) {
+			// 	console.log('root init')
+			// 	let systemInfo = uni.getSystemInfoSync();
+			// 	let windowWidth = systemInfo.windowWidth;
+			// 	let windowHeight = systemInfo.windowHeight;
+			// 	uni.createSelectorQuery().select('#rootTree').boundingClientRect(function(e) {
+			// 		console.log(e)
+			// 		this.width = e.width > windowWidth ? e.width : windowWidth;
+			// 		this.height = e.height > windowHeight ? e.height : windowHeight;
+			// 	}).exec()
+			// }
 		},
 		methods: {
 			itemClick: function(target) {

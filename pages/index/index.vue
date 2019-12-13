@@ -15,47 +15,42 @@
 		</view>
 		<funchead :basicFuncList="basicFuncList" :language="param.language" @gotoList="jumpToList"></funchead>
 		<view style="margin-top: 480upx;">
-			<view style="padding-bottom: 28upx;">
-				
-			
-				<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
-				<swiper>
+			<uni-swiper-dot :info="userCardList" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
+				<swiper style="height: 360upx;">
 					<swiper-item v-for="(item, index) in userCardList" :key="index" @tap="viewDetail(item)">
-						<view style="padding: 34upx;">
-							<view style="border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: contain;">
-								<view class="person_intro">
-									<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
-									<text class="name">{{ item.name }}</text>
-								</view>
-								<view style="margin-bottom: 50upx;">
-									<view class="other_info_container">
-										<view style="flex: 1.2;" class="other_info">
-											<text>{{i18n.birth2}}：</text>
-											<text>{{ item.birth | formatDate}}{{item.isPassedAway| isPassaway}}</text>
-										</view>
-										<view style="flex: 0.8;margin-left: 45upx;" class="other_info">
-											<text>{{i18n.birthPlace}}：</text>
-											<text>{{item.birthPlace | nullFilter}}</text>
-										</view>
+						<view style="border-radius: 15upx;padding: 30upx;padding-bottom: 10upx;background: url(../../static/images/bg_card.png) no-repeat center center;background-size: contain;">
+							<view class="person_intro">
+								<image :src="item.headUrl" style="width: 88upx;height: 88upx;border-radius: 50%;"></image>
+								<text class="name">{{ item.name }}</text>
+							</view>
+							<view style="margin-bottom: 30upx;">
+								<view class="other_info_container">
+									<view style="flex: 1.2;" class="other_info">
+										<text>{{i18n.birth2}}：</text>
+										<text>{{ item.birth | formatDate}}{{item.isPassedAway| isPassaway}}</text>
 									</view>
-									<view class="other_info_container">
-										<view style="flex: 1.2;margin-top: 4upx;" class="other_info">
-											<text>{{i18n.nationality}}：</text>
-											<text>{{item.nationality | nullFilter}}</text>
-										</view>
-										<view style="flex: 0.8;margin-left: 45upx;margin-top: 4upx;" class="other_info">
-											<text>{{i18n.career}}：</text>
-											<text>{{item.career | nullFilter}}</text>
-										</view>
+									<view style="flex: 0.8;margin-left: 45upx;" class="other_info">
+										<text>{{i18n.birthPlace}}：</text>
+										<text>{{item.birthPlace | nullFilter}}</text>
+									</view>
+								</view>
+								<view class="other_info_container">
+									<view style="flex: 1.2;margin-top: 4upx;" class="other_info">
+										<text>{{i18n.nationality}}：</text>
+										<text>{{item.nationality | nullFilter}}</text>
+									</view>
+									<view style="flex: 0.8;margin-left: 45upx;margin-top: 4upx;" class="other_info">
+										<text>{{i18n.career}}：</text>
+										<text>{{item.career | nullFilter}}</text>
 									</view>
 								</view>
 							</view>
 						</view>
 
+
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
-			</view>
 			<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language"></indexContentList>
 		</view>
 
@@ -91,7 +86,7 @@
 					birthPlace: '',
 					nationality: '',
 					career: '',
-					userId:null
+					userId: null
 				},
 				userCardList: [],
 				current: 0,
@@ -115,7 +110,8 @@
 				suffixUrl: '&style=image/resize,m_fill,w_44,h_44',
 				spouseName: null,
 				spouseUserId: null,
-				isActive: true
+				isActive: true,
+				mainUserId:null
 			};
 		},
 		components: {
@@ -133,10 +129,10 @@
 				if (!value) return ''
 				return util.dateFormat(value)
 			},
-			isPassaway:function(value){
-				if(value===1){
+			isPassaway: function(value) {
+				if (value === 1) {
 					return '(陨)'
-				}else{
+				} else {
 					return '(存)'
 				}
 			},
@@ -148,6 +144,7 @@
 		onLoad: function() {
 			let user = uni.getStorageSync("USER");
 			this.param.userId = user.id;
+			this.mainUserId = user.id;
 			this.spouseName = user.spouseName
 			this.spouseUserId = parseInt(user.spouseUserId)
 			//console.log(JSON.stringify(this.personInfo))
@@ -182,18 +179,24 @@
 		},
 		methods: {
 			loadModule: function() {
-				this.$http.get('module/user/all', {
+				let postParam={
 					isFamily: this.param.isFamily,
 					language: this.param.language,
-					userId: this.param.userId
-				}).then(res => {
+					userId: this.mainUserId
+				}
+				if(!this.isActive){
+					postParam.spouseUserId=this.param.userId
+				}
+				this.$http.get('module/user/all', postParam).then(res => {
 					if (res.data.code === 200) {
 						this.basicFuncList = res.data.data.module;
-						this.basicFuncList.push({
-							id: 0,
-							name: this.$t('btnText').more,
-							icon: '../../static/images/icon_func_0.png'
-						});
+						if(this.isActive){
+							this.basicFuncList.push({
+								id: 0,
+								name: this.$t('btnText').more,
+								icon: '../../static/images/icon_func_0.png'
+							});
+						}
 					} else {
 						uni.showToast({
 							title: '模块信息加载失败',

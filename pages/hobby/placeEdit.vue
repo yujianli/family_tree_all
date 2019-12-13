@@ -95,11 +95,11 @@
 			},
 			startTime(){
 				if(!this.placeInfo.begintime) return this.$t('defaultText').ctrl;
-				return this.placeInfo.begintime
+				return util.dateFormat(this.placeInfo.begintime)
 			},
 			endTime(){
 				if(!this.placeInfo.endtime) return this.$t('defaultText').ctrl;
-				return this.placeInfo.endtime
+				return util.dateFormat(this.placeInfo.endtime)
 			}
 		},
 		components:{robbyImageUpload},
@@ -128,9 +128,9 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPlaceInfo
 						util.loadObj(this.placeInfo,_data)
-						this.placeInfo.begintime=util.dateFormat(this.placeInfo.begintime)
+						this.placeInfo.begintime=util.dateFormat(this.placeInfo.begintime,'yyyy-MM-dd')
 						if(this.placeInfo.endtime){
-							this.placeInfo.endtime=util.dateFormat(this.placeInfo.endtime)
+							this.placeInfo.endtime=util.dateFormat(this.placeInfo.endtime,'yyyy-MM-dd')
 						}
 						if(this.placeInfo.imageUrl){
 							let imgs=this.placeInfo.imageUrl.split(',')

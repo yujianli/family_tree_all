@@ -140,11 +140,11 @@
 			},
 			startTime(){
 				if(!this.stageInfo.begintime) return this.defaultText.ctrl;
-				return this.stageInfo.begintime
+				return util.dateFormat(this.stageInfo.begintime)
 			},
 			endTime(){
 				if(!this.stageInfo.endtime) return this.defaultText.ctrl;
-				return this.stageInfo.endtime
+				return util.dateFormat(this.stageInfo.endtime)
 			},
 			typeCtrlName(){
 				// let _name = module.viewCtrlName[this.param.moduleId]
@@ -205,8 +205,8 @@
 					if(res.data.code===200){
 						let _data=res.data.data.contentPeriodInfo
 						util.loadObj(this.stageInfo,_data)
-						this.stageInfo.begintime=util.dateFormat(_data.startTime)
-						this.stageInfo.endtime=util.dateFormat(_data.endTime)
+						this.stageInfo.begintime=util.dateFormat(_data.startTime,'yyyy-MM-dd')
+						this.stageInfo.endtime=util.dateFormat(_data.endTime,'yyyy-MM-dd')
 						let names=this.stageInfo.name.split(',');
 						this.newName=names[0];
 						this.brideName=names[1];

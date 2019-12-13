@@ -43,7 +43,7 @@
 			<input class="input" type="text" v-model="baseInfo.createBy" placeholder-style="color:#999" :placeholder="i18n.career" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title" v-if="param.language==='zh_CN'">与{{pname}}之间的关系</text>
+			<text class="inner_title" v-if="baseInfo.language==='zh_CN'">与{{pname}}之间的关系</text>
 			<text class="inner_title" v-else>Relationship with {{pname}}</text>
 			<picker @change="relationBindPickerChange" :value="idx.relation" :range=" arr.relation" range-key="name">
 				<view class="input">{{ arr.relation[idx.relation].name }}</view>
@@ -131,6 +131,7 @@
 		onLoad: function(options) {
 			this.pname=options.pname
 			util.loadObj(this.baseInfo, options)
+			console.log(this.baseInfo)
 			this.loadRelation()
 		},
 		methods: {
