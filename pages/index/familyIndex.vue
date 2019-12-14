@@ -53,7 +53,7 @@
 				familyList:[],
 				instruction: '',
 				basicFuncList: [],
-				testInfoList: []
+				testInfoList: [],
 			}
 		},
 		computed:{
@@ -63,14 +63,13 @@
 		},
 		components: {funchead,indexContentList,uniPopup},
 		onLoad: function() {
-			
-		},
-		onShow:function(){
 			let user = uni.getStorageSync("USER");
 			this.param.language = this.$common.language
 			this.param.userId = user.id;
 			this.loadModule();
 			this.loadFamilyList()
+		},
+		onShow:function(){
 			if(this.param.familyId){
 				this.loadFamilyInfo()
 			}

@@ -31,7 +31,7 @@ export default {
 		},
 		msg:{
 			msg1:'请输入姓名,首次输入后将不可修改',msg2:'请输入手机号',msg3:'输入验证码',msg4:'请填写11位手机号',msg5:'请填写6位验证码',
-			msg6:'请填写姓名',msg7:'请选择性别',msg8:'试用期已到期，请支付年费后继续使用'
+			msg6:'请填写姓名',msg7:'请选择性别',msg8:'试用期已到期，请支付年费后继续使用',msg9:'内容不能为空'
 		},
 		selData:{
 			"yesOrNo":[{"key":-1,"value":"请选择"},{"key":1,"value":"是"},{"key":0,"value":"否"}],
@@ -123,7 +123,7 @@ export default {
 		},
 		msg:{
 			msg1:'Enter Name,First entry can not be changed',msg2:'Enter Phone Number',msg3:'Enter Verification Code',msg4:'Please Enter 11-digit Phone Number',msg5:'请填写6位验证码',
-			msg6:'Please Enter Name',msg7:'Please Enter Gender',msg8:'Trial expires,  make a payment'
+			msg6:'Please Enter Name',msg7:'Please Enter Gender',msg8:'Trial expires,  make a payment',msg9:'Content cannot be empty'
 		},
 		selData:{
 			"yesOrNo":[{"key":-1,"value":"Please Select"},{"key":1,"value":"Yes"},{"key":0,"value":"No"}],

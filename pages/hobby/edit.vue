@@ -521,6 +521,11 @@
 				this.weatherIdx=e.target.value
 			},
 			save:function(){
+				if(!this.contentInfo.content){
+					uni.showToast({
+						title:this.$t('msg').msg9
+					})
+				}
 				let postParam={
 					content:null,categoryId:null,periodId:null,placeId:null,
 					tags:null,position:null,language:null,imageUrls:null,
