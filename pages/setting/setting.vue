@@ -88,7 +88,9 @@
 		},
 		methods: {
 			bindLogin() {
-				uni.removeStorageSync('USER');
+				// uni.removeStorageSync('USER');
+				// uni.removeStorageSync('language')
+				uni.clearStorageSync()
 				uni.navigateTo({
 					url: '/pages/login/login'
 				})

@@ -228,6 +228,7 @@
 	.container{
 		padding-left:30upx;
 		padding-right:30upx;
+		/* padding-bottom: 120upx; */
 	}
 	.wrapper{
 		height: 110upx;
@@ -259,7 +260,7 @@
 		flex:1;
 		text-align:right;
 	}
-	.opt_container {
+/* 	.opt_container {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -270,7 +271,7 @@
 		align-items: center;
 		height: 114upx;
 		z-index: 999;
-	}
+	} */
 	
 	.btn_delete {
 		flex: 1;
@@ -304,7 +305,8 @@
 		margin-left: 10upx;
 	}
 	.opt_container {
-		position: fixed;
+		/* position: fixed; */
+		margin-top: 60upx;
 		left: 0;
 		right: 0;
 		bottom: -8upx;

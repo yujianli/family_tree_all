@@ -22,20 +22,26 @@
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{i18n.birth}}</text>
-			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate" @change="bindDateChange"
-			 :fields="'day'">
+			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate"
+			 @change="bindDateChange" :fields="'day'">
 				<view class="input">{{baseInfo.birth | formatDate}}</view>
 			</picker>
 		</view>
-		<view class="wrapper">
+<!-- 		<view class="wrapper">
 			<text class="inner_title">{{i18n.isPassaway}}</text>
 			<switch :checked="isPassedAway" @change="switchChange" class="input" />
 		</view>
 		<view class="wrapper" :style="{display: isPassedAway ? 'flex' : 'none'}">
 			<text class="inner_title">{{i18n.passingAway}}</text>
-			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : defaultText.ctrl" :start="startDate" :end="endDate"
-			 @change="bindPassingAwayDateChange" :fields="'day'">
+			<picker mode="date" :value="baseInfo.passingAway != '' ? baseInfo.passingAway : defaultText.ctrl" :start="startDate"
+			 :end="endDate" @change="bindPassingAwayDateChange" :fields="'day'">
 				<view class="input">{{baseInfo.passingAway | formatDate}}</view>
+			</picker>
+		</view> -->
+		<view class="wrapper">
+			<text class="inner_title">{{i18n.birthTime}}</text>
+			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
+				<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
 			</picker>
 		</view>
 		<view class="wrapper">
@@ -69,14 +75,19 @@
 			return {
 				arr: {
 					sex: this.$t('selData').sex,
-					relation:[{id:0,name:this.$t('defaultText').ctrl}]
+					birthTime: this.$t('selData').birthTime,
+					relation: [{
+						id: 0,
+						name: this.$t('defaultText').ctrl
+					}]
 				},
 				idx: {
 					sex: 0,
-					relation:0
+					birthTime:0,
+					relation: 0
 				},
-				pname:'',
-				relation:[],
+				pname: '',
+				relation: [],
 				birthDate: this.$t('defaultText').ctrl,
 				passingAwayDate: this.$t('defaultText').ctrl,
 				startDate: util.getDate('start'),
@@ -98,15 +109,20 @@
 					isPassedAway: 0,
 					passingAway: ''
 				},
-				defaultAvatar: '../../../static/images/avatar.png'
+				defaultAvatar: '../../../static/images/avatar.png',
+				isFather: null,
+				isMother: null,
+				isSpouse: null
 			}
 		},
-		components: {avatar},
+		components: {
+			avatar
+		},
 		computed: {
 			i18n() {
 				return this.$t('common')
 			},
-			defaultText(){
+			defaultText() {
 				return this.$t('defaultText')
 			},
 			imageUrl: function() {
@@ -114,11 +130,6 @@
 					return this.$common.picPrefix() + this.baseInfo.headUrl
 				} else {
 					return this.defaultAvatar
-				}
-			},
-			relationName:function(){
-				if(this.relation.length){
-					return this.relation.find(item=>item.id===parseInt(this.baseInfo.relationId)).name
 				}
 			}
 		},
@@ -129,27 +140,43 @@
 			}
 		},
 		onLoad: function(options) {
-			this.pname=options.pname
+			this.pname = options.pname
+			this.isFather = options.isFather
+			this.isMother = options.isMother
+			this.isSpouse = options.isSpouse
 			util.loadObj(this.baseInfo, options)
-			console.log(this.baseInfo)
+			// console.log(this.baseInfo)
 			this.loadRelation()
 		},
 		methods: {
-			loadRelation:function(){
-				this.$http.get('relationType/all',{
-					language:this.baseInfo.language
-				}).then(res=>{
-					if(res.data.code===200){
-						this.arr.relation = this.arr.relation.concat(res.data.data.relationType)
+			loadRelation: function() {
+				this.$http.get('relationType/all', {
+					language: this.baseInfo.language
+				}).then(res => {
+					if (res.data.code === 200) {
+						let arrays = res.data.data.relationType
+						if (this.isSpouse === '0') {
+							arrays.splice(4, 2)
+						}
+						if (this.isMother === '0') {
+							arrays.splice(1, 1)
+						}
+						if (this.isFather === '0') {
+							arrays.splice(0, 1)
+						}
+						this.arr.relation = this.arr.relation.concat(arrays)
 					}
 				})
 			},
 			sexBindPickerChange: function(e) {
 				this.selProp('sex', e.target.value)
 			},
+			birthTimeBindPickerChange: function(e) {
+				this.selProp('birthTime', e.target.value)
+			},
 			relationBindPickerChange: function(e) {
-				this.idx.relation=e.target.value
-				this.baseInfo.relationId=this.arr.relation[e.target.value].id
+				this.idx.relation = e.target.value
+				this.baseInfo.relationId = this.arr.relation[e.target.value].id
 			},
 			bindDateChange: function(e) {
 				let _date = e.target.value
@@ -178,7 +205,7 @@
 				this.baseInfo[prop] = this.$t('selData')[prop][index].key;
 			},
 			initProp: function(prop, val) {
-				let data=this.$t('selData')
+				let data = this.$t('selData')
 				for (var i = 0; i < data[prop].length; i++) {
 					if (data[prop][i].key === val) {
 						this.idx[prop] = i;
@@ -265,7 +292,7 @@
 				this.$http.post('familyUser/createFamilyUser', requestParam).then((res) => {
 					if (res.data.code === 200) {
 						uni.navigateBack({
-							delta:1
+							delta: 1
 						})
 					} else {
 						uni.showToast({
@@ -283,9 +310,10 @@
 </script>
 
 <style scoped>
-	page{
+	page {
 		border-top: 1px solid #e5e5e5;
 	}
+
 	.container {
 		padding-left: 30upx;
 		padding-right: 30upx;

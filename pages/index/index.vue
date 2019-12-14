@@ -111,7 +111,7 @@
 				spouseName: null,
 				spouseUserId: null,
 				isActive: true,
-				mainUserId:null
+				mainUserId: null
 			};
 		},
 		components: {
@@ -142,11 +142,7 @@
 			}
 		},
 		onLoad: function() {
-			let user = uni.getStorageSync("USER");
-			this.param.userId = user.id;
-			this.mainUserId = user.id;
-			this.spouseName = user.spouseName
-			this.spouseUserId = parseInt(user.spouseUserId)
+			
 			//console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
@@ -166,37 +162,38 @@
 			// });
 		},
 		onShow: function() {
-			console.log(this.param.userId)
+			let user = uni.getStorageSync("USER");
+			console.log(user)
+			this.param.userId = user.id;
+			this.mainUserId = user.id;
+			this.spouseName = user.spouseName
+			this.spouseUserId = parseInt(user.spouseUserId)
 			this.loadModule();
 			if (this.isActive) {
 				this.loadUserInfo();
 				this.loadWhetherRemind();
 			}
 			this.loadUserCardList()
-			// this.loadIndexContent();
-			// this.$refs.funchead.loadIndexContent()
 			this.$nextTick(() => this.$refs['indexContent'].loadIndexContent())
 		},
 		methods: {
 			loadModule: function() {
-				let postParam={
+				let postParam = {
 					isFamily: this.param.isFamily,
 					language: this.param.language,
 					userId: this.mainUserId
 				}
-				if(!this.isActive){
-					postParam.spouseUserId=this.param.userId
+				if (!this.isActive) {
+					postParam.spouseUserId = this.param.userId
 				}
 				this.$http.get('module/user/all', postParam).then(res => {
 					if (res.data.code === 200) {
 						this.basicFuncList = res.data.data.module;
-						if(this.isActive){
-							this.basicFuncList.push({
-								id: 0,
-								name: this.$t('btnText').more,
-								icon: '../../static/images/icon_func_0.png'
-							});
-						}
+						this.basicFuncList.push({
+							id: 0,
+							name: this.$t('btnText').more,
+							icon: '../../static/images/icon_func_0.png'
+						});
 					} else {
 						uni.showToast({
 							title: '模块信息加载失败',
@@ -211,6 +208,8 @@
 					case 0:
 						let _param = this.param
 						_param['personId'] = this.personInfo.id
+						_param['isActive'] = this.isActive
+						_param['spouseUserId']=this.spouseUserId
 						linkUrl = linkUrl + util.jsonToQuery(_param);
 						break;
 					case 1:

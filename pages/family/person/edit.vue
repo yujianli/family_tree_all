@@ -23,15 +23,15 @@
 			<text class="inner_title">{{i18n.birth}}</text>
 			<picker mode="date" :value="baseInfo.birth !='' ? baseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate" @change="bindDateChange"
 			 :fields="'day'">
-				<view class="input">{{baseInfo.birth | formatDate}}</view>
+				<view class="input">{{birth}}</view>
 			</picker>
 		</view>
-<!-- 		<view class="wrapper">
-			<text class="inner_title">出生时辰</text>
+		<view class="wrapper">
+			<text class="inner_title">{{i18n.birthTime}}</text>
 			<picker @change="birthTimeBindPickerChange" :value="idx.birthTime" :range=" arr.birthTime" range-key="value">
 				<view class="input">{{ arr.birthTime[idx.birthTime].value }}</view>
 			</picker>
-		</view> -->
+		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{i18n.birthPlace}}</text>
 			<input class="input" type="text" v-model="baseInfo.birthPlace" placeholder-style="color:#999" :placeholder="i18n.birthPlace" />
@@ -41,8 +41,8 @@
 			<input class="input" type="text" v-model="baseInfo.updateBy" placeholder-style="color:#999" :placeholder="i18n.placeResidence" />
 		</view>
 		<view class="wrapper">
-			<text class="inner_title">{{i18n.fixedTelephone}}</text>
-			<input class="input" type="text" v-model="baseInfo.fixedTelephone" placeholder-style="color:#999" :placeholder="i18n.fixedTelephone" />
+			<text class="inner_title">{{i18n.mobile}}</text>
+			<input class="input" type="text" v-model="baseInfo.mobile" placeholder-style="color:#999" :placeholder="i18n.mobile" />
 		</view>
 		<view class="wrapper">
 			<text class="inner_title">{{i18n.career}}</text>
@@ -129,6 +129,11 @@
 				} else {
 					return this.defaultAvatar
 				}
+			},
+			birth:function(){
+				if(this.baseInfo.birth){
+					return util.dateFormat(this.baseInfo.birth)
+				}
 			}
 		},
 		filters: {
@@ -150,17 +155,16 @@
 					}).then((res)=>{
 					if(res.data.code === 200){
 						let _info = res.data.data.familyUserInfo;
-						_info.birth=util.dateFormat(_info.birth)
+						_info.birth=util.dateFormat(_info.birth,'yyyy-MM-dd')
 						util.loadObj(this.baseInfo, _info);
 						this.initProp('sex',_info.sex);
 						this.initProp('zodiac',_info.zodiac);
 						this.initProp('nationality',_info.nationality);
-						this.initProp('birthTime',_info.birthTime);
+						this.initProp('birthTime',parseInt(_info.birthTime));
 						this.initProp('corporeity',_info.corporeity);
 						this.initProp('constellation',_info.constellation);
 						this.date=_info.birth;
 						this.isPassedAway=_info.isPassedAway==1;
-						
 					}else{
 						uni.showToast({
 							title: '加载失败',

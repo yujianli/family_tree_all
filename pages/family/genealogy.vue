@@ -3,9 +3,10 @@
 	<view>
 		<!-- <view style="margin-left: 10px;font-size:28upx">当前选中人员：{{selectNode.name}}</view> -->
 		<!-- <movable-area v-if="dataSource" style="height:calc(100vh - 66upx);width:100vh"> -->
-		<movable-area v-if="dataSource" style="height:calc(100vh - 66upx);width:100vh">
+		<movable-area v-if="dataSource" style="height:calc(100vh - 66upx);">
 			<!-- <movable-view scale=1 direction="all" id="rootTree" style="width:100%;height:100%;justify-content: flex-start;"> -->
-				<movable-view scale=1 direction="all" id="rootTree" :style="{'width':width == 0 ? 'auto' : width + 'px','height':height == 0 ? 'auto' : height + 'px','justify-content': 'flex-start'}">
+			<!-- :style="{'width':width == 0 ? 'auto' : width + 'px','height':height == 0 ? 'auto' : height + 'px','justify-content': 'flex-start'}" -->
+			<movable-view scale=1 direction="all" id="rootTree" :x="width/3" :y="height/2">
 				<tree-chart :dataSource="dataSource" :isRoot="isRoot" @openBtn="openBtnList"></tree-chart>
 			</movable-view>
 		</movable-area>
@@ -53,7 +54,9 @@
 				selectNode: {
 					name: ''
 				},
-				firstLoad:true,
+				firstLoad: true,
+				isOpen: true,
+				isSame: false,
 				// horizontal: 'left',
 				// vertical: 'bottom',
 				// direction: 'horizontal',
@@ -82,34 +85,46 @@
 			treeChart,
 			uniPopup
 		},
-		mounted() {
+		computed: {
+			tranX: function() {
+				return (this.width - this.windowWidth) / 2 - 72
+			}
+		},
+		updated() {
 			let systemInfo = uni.getSystemInfoSync();
-			let windowWidth = systemInfo.windowWidth;
-			let windowHeight = systemInfo.windowHeight;
-			this.width=windowWidth*2
-			this.hidth=windowHeight*2
-			this.loadData(this.param.familyUserId)
+			this.windowWidth = systemInfo.windowWidth;
+			this.windowHeight = systemInfo.windowHeight;
+			this.initPosition()
 		},
 		onLoad: function(options) {
 			util.loadObj(this.param, options)
 
 		},
 		onShow: function() {
-			if(!this.firstLoad){
-				this.loadData(this.param.familyUserId)
-			}
+			// if (!this.firstLoad) {
+			// 	this.loadData(this.param.familyUserId)
+			// }
+
+			this.loadData(this.param.familyUserId)
 		},
 		methods: {
 			initPosition() {
 				//动态设置宽高
 				if (this.dataSource) {
-					uni.createSelectorQuery().select('#rootTree').boundingClientRect(function(e) {
+					let self = this
+					uni.createSelectorQuery().in(this).select('#rootTree').boundingClientRect(function(e) {
 						console.log(e)
-						this.width = e.width > windowWidth ? e.width : windowWidth;
-						this.height = e.height > windowHeight ? e.height : windowHeight;
+						self.width = e.width > self.windowWidth ? e.width : self.windowWidth;
+						self.height = e.height > self.windowHeight ? e.height : self.windowHeight;
+						// console.log('windowWidth=' + self.windowWidth)
+						// console.log('windowHeight=' + self.windowHeight)
+						// console.log('width=' + self.width)
+						// console.log('height=' + self.height)
+						// console.log((parseInt(self.width) - parseInt(self.windowWidth)) / 2)
+
 					}).exec()
 				}
-				this.firstLoad=false
+				// this.firstLoad = false
 			},
 			loadData: function(mainId) {
 				this.$http.get('familyUser/query', {
@@ -129,20 +144,38 @@
 				})
 			},
 			openBtnList: function(e) {
+				let _node = null
 				// #ifdef APP-PLUS
-				this.selectNode = uni.getStorageSync('selNode')
+				_node = uni.getStorageSync('selNode')
 				// #endif
 				// #ifdef H5
-				console.log(e)
-				this.selectNode = e;
-				// this.selChange(this.dataSource)
+				_node = e
 				// #endif
-				this.$refs.popup.open()
-				this.loadData(this.selectNode.id)
+				if (this.selectNode && this.selectNode.id == _node.id) {
+					this.isSame = true
+				} else {
+					this.isOpen = false
+					this.isSame = false
+				}
+				if (this.isOpen && this.isSame) {
+					this.$refs.popup.open()
+				} else {
+					// #ifdef APP-PLUS
+					this.selectNode = uni.getStorageSync('selNode')
+					// #endif
+					// #ifdef H5
+					console.log(e)
+					this.selectNode = e;
+					// this.selChange(this.dataSource)
+					// #endif
+					this.loadData(this.selectNode.id)
+					this.isOpen = true
+				}
 			},
 			setIsSelf(id, ds) {
 				if (ds.id === parseInt(id)) {
 					ds.isself = true
+					this.selectNode = ds
 				} else {
 					if (ds.spouseTreeDto) {
 						this.setIsSelf(id, ds.spouseTreeDto)
@@ -213,7 +246,10 @@
 							familyId: this.param.familyId,
 							userId: this.param.userId,
 							pname: this.selectNode.name,
-							language: this.param.language
+							language: this.param.language,
+							isFather: this.selectNode.isFather,
+							isMother: this.selectNode.isMother,
+							isSpouse: this.selectNode.isSpouse
 						});
 						break;
 					case 'edit':

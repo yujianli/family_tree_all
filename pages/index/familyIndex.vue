@@ -15,8 +15,8 @@
 			<view class="family_training_container">
 				<view class="title">{{i18n.training}}</view>
 				<view class="content">
-					<textarea class="mul_input" disabled placeholder-style="color:#999" v-model="instruction"></textarea>
-					<!-- {{instruction}} -->
+					<!-- <textarea class="mul_input" disabled placeholder-style="color:#999" v-model="instruction"></textarea> -->
+					<view class="mul_input"><text>{{instruction}}</text></view>
 				</view>
 			</view>
 		</view>
@@ -71,6 +71,9 @@
 			this.param.userId = user.id;
 			this.loadModule();
 			this.loadFamilyList()
+			if(this.param.familyId){
+				this.loadFamilyInfo()
+			}
 			// this.$refs.indexcontentlist.loadIndexContent()
 			this.$nextTick(()=>this.$refs['indexContent'].loadIndexContent())
 		},
@@ -186,7 +189,12 @@
 				}).then(res=>{
 					if(res.data.code===200){
 						this.familyUserId=res.data.data.family.familyUserId
-						this.instruction=res.data.data.family.instruction
+						if(res.data.data.family.instruction){
+							this.instruction=res.data.data.family.instruction
+						}else{
+							this.instruction=''
+						}
+						
 					}else{
 						uni.showToast({
 							title: '家族信息加载失败',icon:'none'

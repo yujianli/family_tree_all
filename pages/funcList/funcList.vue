@@ -31,6 +31,8 @@
 					isFamily: 1,
 					language: null,
 					familyId:null,
+					isActive:null,
+					spouseUserId:null
 				},
 				personId: null,
 				basicFuncList: [],
@@ -50,11 +52,15 @@
 		},
 		methods: {
 			loadUserModule: function(userId) {
-				this.$http.get('module/user/all', {
+				let _param={
 					'isFamily': this.param.isFamily,
 					'language': this.param.language,
 					'userId': userId
-				}).then((res) => {
+				}
+				if(this.param.isActive==='false'){
+					_param['spouseUserId']=this.param.spouseUserId
+				}
+				this.$http.get('module/user/all', _param).then((res) => {
 					if (res.data.code === 200) {
 						this.basicFuncList = res.data.data.module;
 						this.loadAllModule();
@@ -67,10 +73,14 @@
 				})
 			},
 			loadAllModule: function() {
-				this.$http.get('module/all', {
+				let _param={
 					'isFamily': this.param.isFamily,
 					'language': this.param.language
-				}).then((res) => {
+				}
+				if(this.param.isActive==='false'){
+					_param['spouseUserId']=this.param.spouseUserId
+				}
+				this.$http.get('module/all', _param).then((res) => {
 					if (res.data.code === 200) {
 						let _list = res.data.data.module;
 						for (var i = _list.length - 1; i >= 0; i--) {

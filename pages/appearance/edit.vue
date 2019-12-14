@@ -319,6 +319,7 @@
 	.container {
 		padding-left: 30upx;
 		padding-right: 30upx;
+		// padding-bottom: 120upx;
 	}
 
 	.wrapper {
@@ -389,7 +390,8 @@
 		vertical-align: middle;
 	}
 	.opt_container {
-		position: fixed;
+		// position: fixed;
+		margin-top: 60upx;
 		left: 0;
 		right: 0;
 		bottom: 0;

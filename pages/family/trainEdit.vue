@@ -56,8 +56,11 @@
 				this.family['language']=this.param.language
 				this.$http.post('family/edit',this.family).then((res)=>{
 					if(res.data.code===200){
-						uni.navigateBack({
-							delta:1
+						// uni.navigateBack({
+						// 	delta:1
+						// })
+						uni.reLaunch({
+							url:'../index/familyIndex'
 						})
 					}else{
 						uni.showToast({
