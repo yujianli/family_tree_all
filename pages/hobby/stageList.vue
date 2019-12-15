@@ -4,8 +4,8 @@
 
 		<view class="card_list" v-if="stages.length>0">
 			<view v-for="(stage, index) in stages" :key="index">
-				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @click="deleteContent(stage.id)">
+<!-- 				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(stage.id)"> -->
 						<view class="card_item" @tap="jumpToPage(stage)">
 							<image v-if="stage.imageUrl != null" :src="stage.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
@@ -32,8 +32,8 @@
 								</view>
 							</view>
 						</view>
-					</uni-swipe-action-item>
-				</uni-swipe-action>
+<!-- 					</uni-swipe-action-item>
+				</uni-swipe-action> -->
 			</view>
 <!-- 			<view @tap="loadMore">
 				<uni-load-more :status="status" style="height: 100upx;"></uni-load-more>
@@ -49,8 +49,8 @@
 <script>
 	import util from '@/common/util.js';
 	import config from '@/common/componetConfig.js'
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	// import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
 		data() {
@@ -103,8 +103,8 @@
 							self.stageList[i].startTime = ''
 						}
 						if (self.stageList[i].endTime) {
-							let curDt = new Date().getDate();
-							if(curDt>=self.stageList[i].endTime){
+							// let curDt = new Date().getDate();
+							if(self.stageList[i].endTime){
 								self.stageList[i].endTime=this.other.sell
 							}
 						}else{
@@ -133,11 +133,7 @@
 				if (curDt >= value) return '已出售'
 			}
 		},
-		components: {
-			uniSwipeAction,
-			uniSwipeActionItem,
-			uniLoadMore
-		},
+		components: {uniLoadMore},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name

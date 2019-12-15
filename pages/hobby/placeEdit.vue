@@ -155,6 +155,12 @@
 				this.placeInfo.endtime = e.target.value
 			},
 			save:function(){
+				if(!this.placeInfo.description){
+					uni.showToast({
+						title:this.$t('msg').msg9
+					})
+					return false
+				}
 				let postParam= {address: null,name:null,description:null,begintime:null,endtime:null}
 				util.loadObj(postParam,this.placeInfo);
 				postParam.language=this.param.language

@@ -392,6 +392,21 @@
 			}
 		},
 		{
+			"path": "pages/family/person/editPerson",
+			"style": {
+				"navigationBarTitleText": "家族成员",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "保存",
+							"fontSize": "32upx",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/family/search/search",
 			"style": {
 				"navigationBarTitleText": "族人搜索"

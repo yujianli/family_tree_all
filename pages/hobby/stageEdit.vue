@@ -118,7 +118,7 @@
 					imageData : [],
 					fileKeyName: 'file',
 					showUploadProgerss:false,
-					limitNumber: 1,
+					limit: 1,
 					isEdit: false
 				},
 				removeEnable: false
@@ -284,6 +284,12 @@
 				})
 			},
 			saveSchedule:function(){
+				if(!this.stageInfo.description){
+					uni.showToast({
+						title:this.$t('msg').msg9
+					})
+					return false
+				}
 				let postParam= {name:null,description:null,begintime:null,endtime:null,mobile:null,type:null}
 				util.loadObj(postParam,this.stageInfo);
 				if(this.param.moduleId==='32'){

@@ -3,8 +3,8 @@
 		<view class="float_btn" @tap="add">+</view>
 		<view class="card_list" v-if="places.length>0">
 			<view v-for="(place, index) in places" :key="index">
-				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @click="deleteContent(place.id)">
+<!-- 				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(place.id)"> -->
 						<view class="card_item" @tap="jumpToPage(place)">
 							<image v-if="place.imageUrl != null" :src="place.imageUrl" class="card_pic"></image>
 							<view class="card_inner">
@@ -20,8 +20,8 @@
 								</view>
 							</view>
 						</view>
-					</uni-swipe-action-item>
-				</uni-swipe-action>
+<!-- 					</uni-swipe-action-item>
+				</uni-swipe-action> -->
 			</view>
 		</view>
 		<view v-else style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
@@ -33,8 +33,8 @@
 
 <script>
 	import util from '@/common/util.js';
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	// import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	export default {
 		data() {
 			return {
@@ -73,8 +73,8 @@
 						self.placeList[i].begintime=''
 					}
 					if(self.placeList[i].endtime){
-						let curDt = new Date().getDate();
-						if(curDt>=self.placeList[i].endtime){
+						// let curDt = new Date().getDate();
+						if(self.placeList[i].endtime){
 							self.placeList[i].endtime=this.$t('other').sell
 						}else{
 							self.placeList[i].endtime=''
@@ -97,7 +97,7 @@
 				if (curDt >= value) return '已售出'
 			}
 		},
-		components:{uniSwipeAction,uniSwipeActionItem},
+		// components:{uniSwipeAction,uniSwipeActionItem},
 		onLoad: function(options) {
 			uni.setNavigationBarTitle({
 				title: options.name

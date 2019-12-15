@@ -79,7 +79,7 @@
 			</picker>
 		</view>
 		<view class="mul_wrapper">
-			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" placeholder="内容" />
+			<textarea class="mul_input" placeholder-style="color:#999" v-model="contentInfo.content" :placeholder="i18n.content" />
 			</view>
 		<!-- 绑定图片数据，监听添加、删除事件，设置是否拖拉，是否可删除，是否可选择添加，图片数量限制-->		
 		<robby-image-upload v-model="uploadConfig.imageData" 
@@ -525,6 +525,7 @@
 					uni.showToast({
 						title:this.$t('msg').msg9
 					})
+					return false
 				}
 				let postParam={
 					content:null,categoryId:null,periodId:null,placeId:null,

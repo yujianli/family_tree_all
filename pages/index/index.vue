@@ -142,7 +142,11 @@
 			}
 		},
 		onLoad: function() {
-			
+			let user = uni.getStorageSync("USER");
+			this.param.userId = user.id;
+			this.mainUserId = user.id;
+			this.spouseName = user.spouseName
+			this.spouseUserId = parseInt(user.spouseUserId)
 			//console.log(JSON.stringify(this.personInfo))
 			// 提醒试用到期
 			// uni.showModal({
@@ -162,12 +166,7 @@
 			// });
 		},
 		onShow: function() {
-			let user = uni.getStorageSync("USER");
-			console.log(user)
-			this.param.userId = user.id;
-			this.mainUserId = user.id;
-			this.spouseName = user.spouseName
-			this.spouseUserId = parseInt(user.spouseUserId)
+			
 			this.loadModule();
 			if (this.isActive) {
 				this.loadUserInfo();
@@ -257,19 +256,10 @@
 					if (res.data.code === 200) {
 						this.userCardList = res.data.data.userCardList
 						for (let i = 0; i < this.userCardList.length; i++) {
-							this.userCardList[i].sex = this.userCardList[i].sex === 1 ? '男' : '女'
 							if (this.userCardList[i].headUrl) {
 								this.userCardList[i].headUrl = this.$common.picPrefix() + this.userCardList[i].headUrl + this.suffixUrl
 							} else {
 								this.userCardList[i].headUrl = this.defaultUrl
-							}
-							if (this.userCardList[i].zodiac) {
-								let item = this.$t('selData').zodiac.find(item => item.key === this.userCardList[i].zodiac)
-								if (item) {
-									this.userCardList[i].zodiac = item.value
-								}
-							} else {
-								this.userCardList[i].zodiac = ''
 							}
 							if (this.userCardList[i].nationality) {
 								let item = this.$t('selData').nationality.find(item => item.key === this.userCardList[i].nationality)

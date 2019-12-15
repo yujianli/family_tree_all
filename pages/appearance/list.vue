@@ -4,8 +4,8 @@
 		<view class="float_btn" @tap="add">+</view>
 		<view v-if="appearanceList.length>0">
 			<view v-for="appearance in appearanceList" v-bind:key="appearance.id" style="padding-top: 40upx;">
-				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @click="remove(appearance.id)">
+<!-- 				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="remove(appearance.id)"> -->
 						<view class="container" @tap="jumpToDetail(appearance.id)">
 							<view style="box-shadow: 2upx 0 18upx #E5E5E5;border-radius: 15upx;padding: 30upx;background-color: #fff;">
 								<view>{{appearance.age}}{{i18n.years}}</view>
@@ -39,8 +39,8 @@
 								</view>
 							</view>
 						</view>
-					</uni-swipe-action-item>
-				</uni-swipe-action>
+<!-- 					</uni-swipe-action-item>
+				</uni-swipe-action> -->
 			</view>
 		</view>
 		
@@ -48,8 +48,8 @@
 </template>
 
 <script>
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	// import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import dataJson from '@/static/appData.json';
 	import util from '@/common/util.js'
 	export default {
@@ -71,10 +71,10 @@
 			}
 
 		},
-		components: {
-			uniSwipeAction,
-			uniSwipeActionItem
-		},
+		// components: {
+		// 	uniSwipeAction,
+		// 	uniSwipeActionItem
+		// },
 		computed: {
 			i18n() {
 				return this.$t('common')

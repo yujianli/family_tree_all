@@ -101,10 +101,6 @@
 
 		},
 		onShow: function() {
-			// if (!this.firstLoad) {
-			// 	this.loadData(this.param.familyUserId)
-			// }
-
 			this.loadData(this.param.familyUserId)
 		},
 		methods: {
@@ -121,10 +117,8 @@
 						// console.log('width=' + self.width)
 						// console.log('height=' + self.height)
 						// console.log((parseInt(self.width) - parseInt(self.windowWidth)) / 2)
-
 					}).exec()
 				}
-				// this.firstLoad = false
 			},
 			loadData: function(mainId) {
 				this.$http.get('familyUser/query', {
@@ -134,7 +128,6 @@
 					if (res.data.code === 200) {
 						this.dataSource = res.data.data.familyUserList
 						this.setIsSelf(mainId, this.dataSource)
-						// this.initPosition()
 					} else {
 						uni.showToast({
 							title: '加载失败',
@@ -158,7 +151,19 @@
 					this.isSame = false
 				}
 				if (this.isOpen && this.isSame) {
-					this.$refs.popup.open()
+					// this.$refs.popup.open()
+					uni.navigateTo({
+						url: 'person/editPerson' + util.jsonToQuery({
+							familyUserId: this.selectNode.id,
+							familyId: this.param.familyId,
+							userId: this.param.userId,
+							pname: this.selectNode.name,
+							language: this.param.language,
+							isFather: this.selectNode.isFather,
+							isMother: this.selectNode.isMother,
+							isSpouse: this.selectNode.isSpouse
+						})
+					})
 				} else {
 					// #ifdef APP-PLUS
 					this.selectNode = uni.getStorageSync('selNode')
@@ -202,41 +207,41 @@
 			// 		}
 			// 	}
 			// },
-			trigger(e) {
-				for (let i = 0; i < this.content.length; i++) {
-					this.content[i].active = e.index === i
-				}
-				let url = null
-				switch (e.index) {
-					case 0:
-						url = 'person/create' + util.jsonToQuery({
-							familyUserId: this.selectNode.id,
-							familyId: this.param.familyId,
-							userId: this.param.userId,
-							pname: this.selectNode.name,
-							language: this.param.language
-						});
-						break;
-					case 1:
-						url = 'person/edit' + util.jsonToQuery({
-							familyUserId: this.selectNode.id,
-							familyId: this.param.familyId,
-							userId: this.param.userId,
-							language: this.param.language
-						});
-						break;
-					case 2:
-						url = 'person/info' + util.jsonToQuery({
-							familyUserId: this.selectNode.id,
-							userId: this.param.userId,
-							language: this.param.language
-						});
-						break;
-				}
-				uni.navigateTo({
-					url: url
-				})
-			},
+			// trigger(e) {
+			// 	for (let i = 0; i < this.content.length; i++) {
+			// 		this.content[i].active = e.index === i
+			// 	}
+			// 	let url = null
+			// 	switch (e.index) {
+			// 		case 0:
+			// 			url = 'person/create' + util.jsonToQuery({
+			// 				familyUserId: this.selectNode.id,
+			// 				familyId: this.param.familyId,
+			// 				userId: this.param.userId,
+			// 				pname: this.selectNode.name,
+			// 				language: this.param.language
+			// 			});
+			// 			break;
+			// 		case 1:
+			// 			url = 'person/edit' + util.jsonToQuery({
+			// 				familyUserId: this.selectNode.id,
+			// 				familyId: this.param.familyId,
+			// 				userId: this.param.userId,
+			// 				language: this.param.language
+			// 			});
+			// 			break;
+			// 		case 2:
+			// 			url = 'person/info' + util.jsonToQuery({
+			// 				familyUserId: this.selectNode.id,
+			// 				userId: this.param.userId,
+			// 				language: this.param.language
+			// 			});
+			// 			break;
+			// 	}
+			// 	uni.navigateTo({
+			// 		url: url
+			// 	})
+			// },
 			operate(type) {
 				let url = null
 				switch (type) {

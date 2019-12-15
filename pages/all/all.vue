@@ -3,7 +3,7 @@
 		<view class="types_wrapper">
 			<view v-for="(module,index) in selectedModules">{{module.name}}</view>
 		</view>
-		<uni-search-bar :radius="200" class="search_info" @confirm="search"/>
+		<uni-search-bar :radius="200" class="search_info" @confirm="search" @cancel="cancelSearch" />
 		<view class="card_list" v-if="contentList.length">
 			<view v-for="(contentInfo,i) in contentList" v-bind:key="contentInfo.id">
 				<!-- 				<uni-swipe-action>
@@ -65,8 +65,8 @@
 
 <script>
 	import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
-	import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-	import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+	// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+	// import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 	import uniDrawer from '@/components/uni-ui/uni-drawer/uni-drawer.vue'
 	import util from '@/common/util.js'
 	export default {
@@ -91,12 +91,11 @@
 				modules: [],
 				contentList: [],
 				suffixUrl: '&style=image/resize,m_fill,w_123,h_92',
+				searchContent:''
 			}
 		},
 		components: {
 			uniSearchBar,
-			uniSwipeAction,
-			uniSwipeActionItem,
 			uniDrawer
 		},
 		computed: {
@@ -190,7 +189,12 @@
 				})
 			},
 			search:function(e){
+				this.searchContent=e.value
 				this.loadIndexContent(e.value)
+			},
+			cancelSearch:function(e){
+				this.searchContent=''
+				this.loadIndexContent('')
 			},
 			show: function() {
 				this.showDrawer = true
@@ -223,6 +227,7 @@
 				this.activeModuleIndex = null;
 				this.modules.forEach(module => module.hasActive = false)
 				this.closeDrawer();
+				this.loadIndexContent(this.searchContent)
 			},
 			confirmCondition: function() {
 				let activeArr = this.modules.filter((module) => {
@@ -312,7 +317,7 @@
 	}
 
 	.search_info {
-		margin-top: 40upx;
+		// margin-top: 40upx;
 		margin-bottom: 40upx;
 		height: 68upx;
 	}

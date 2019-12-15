@@ -3,13 +3,13 @@
 		<view class="status_bar">
 			<view class="top_view"></view>
 		</view>
-		<view class="family_select_container">
-			<view @tap="tabSelect">
+		<view class="family_select_container" >
+<!-- 			<view @tap="tabSelect">
 				<text>{{familyTitle}}</text>
-				<!-- <image src="../../static/images/arrow.png"></image> -->
-			</view>
+			</view> -->
+			<view @tap="open"><text>{{familyTitle}}</text></view>
 		</view>
-
+		<w-picker mode="selector" @confirm="selVal" ref="selector" themeColor="#f00" :selectList="familyList"></w-picker>
 		<funchead :basicFuncList="basicFuncList" :language="param.language" @gotoList="jumpToList"></funchead>
 		<view style="padding: 34upx;margin-top:480upx">
 			<view class="family_training_container">
@@ -22,12 +22,12 @@
 		</view>
 		
  		<indexContentList ref="indexContent" :userId="param.userId" :isFamily="param.isFamily" :language="param.language" ></indexContentList>
-		<uni-popup ref="popup" type="center" class="my_popup">
+<!-- 		<uni-popup ref="popup" type="center" class="my_popup">
 			<view class="inner_select">
 				<view v-for="(item, i) in familyList" v-bind:key="item.id"  @tap="selFamily(item)">{{item.name}}</view>
 				<view style="border: 14upx solid transparent;border-bottom-color:#fff; position: absolute;left: 142upx;top: -94upx;"></view>
 			</view>
-		</uni-popup>
+		</uni-popup> -->
 	</view>
 
 </template>
@@ -36,6 +36,7 @@
 	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue'
 	import funchead from '@/components/funchead.vue'
 	import indexContentList from '@/components/index-content-list.vue'
+	import wPicker from "@/components/w-picker/w-picker.vue";
 	import moduleLink from '@/common/moduleLink.js';
 	import util from '@/common/util.js';
 	export default {
@@ -49,7 +50,7 @@
 				},
 				//showSelect: false,
 				familyUserId:null,
-				familyTitle: this.$t('common').family,
+				familyTitle: '',
 				familyList:[],
 				instruction: '',
 				basicFuncList: [],
@@ -61,7 +62,7 @@
 				return this.$t('common')
 			}
 		},
-		components: {funchead,indexContentList,uniPopup},
+		components: {funchead,indexContentList,uniPopup,wPicker},
 		onLoad: function() {
 			let user = uni.getStorageSync("USER");
 			this.param.language = this.$common.language
@@ -160,10 +161,17 @@
 				//this.showSelect = !this.showSelect;
 				this.$refs.popup.open()
 			},
+			open:function(){
+				this.$refs.selector.show()
+			},
+			selVal:function(e){
+				console.log(e)
+				this.selFamily(e.checkArr)
+			},
 			selFamily:function(item){
 				this.familyTitle=item.name
 				this.param.familyId=item.id
-				this.showSelect=false
+				// this.showSelect=false
 				this.loadFamilyInfo()
 			},
 			loadFamilyList:function(){
@@ -173,6 +181,9 @@
 				}).then((res)=>{
 					if(res.data.code===200){
 						this.familyList=res.data.data.familyList
+						for(let i=0;i<this.familyList.length;i++){
+							this.familyList[i].label=this.familyList[i].name
+						}
 						this.selFamily(this.familyList[0])
 					}else{
 						uni.showToast({

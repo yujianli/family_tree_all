@@ -64,6 +64,7 @@
 			},
 			clear() {
 				this.searchVal = ''
+				this.cancel()
 			},
 			cancel() {
 				this.$emit('cancel', {

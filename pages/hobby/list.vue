@@ -9,12 +9,12 @@
 			</view>
 			<view class="intro_detail">{{ selfDesc }}</view>
 		</view>
-		<view v-if="['4', '14', '15', '16'].indexOf(param.moduleId) === -1"><uni-search-bar :radius="100" class="search_info" @confirm="search" /></view>
+		<view v-if="['4', '14', '15', '16'].indexOf(param.moduleId) === -1"><uni-search-bar :radius="100" class="search_info" @confirm="search" @cancel="cancelSearch" /></view>
 		<!-- <contentList :param="param"></contentList> -->
 		<view class="card_list" v-if="contentList.length > 0">
 			<view v-for="(content, i) in contentList" v-bind:key="content.contentId">
-				<uni-swipe-action>
-					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)">
+<!-- 				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="deleteContent(content.contentId)"> -->
 						<view class="card_item" @tap="jumpToDetail(content)">
 							<view v-if="content.isMyMotto" style="position: absolute;left: 0;top:0;height: 37upx;line-height: 37upx;text-align: center;background: #ED4848;color: #fff;
 							border-bottom-left-radius: 8upx;border-bottom-right-radius: 8upx;font-size: 20upx;left: 30upx;padding-left: 8upx;padding-right: 8upx;">我的格言</view>
@@ -34,8 +34,8 @@
 								</view>
 							</view>
 						</view>
-					</uni-swipe-action-item>
-				</uni-swipe-action>
+<!-- 					</uni-swipe-action-item>
+				</uni-swipe-action> -->
 			</view>
 			<view @tap="loadMore"><uni-load-more :status="status" style="height: 100upx;"></uni-load-more></view>
 		</view>
@@ -48,8 +48,8 @@
 
 <script>
 import uniSearchBar from '@/components/uni-ui/uni-search-bar/uni-search-bar';
-import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
-import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
+// import uniSwipeAction from '@/components/uni-ui/uni-swipe-action/uni-swipe-action';
+// import uniSwipeActionItem from '@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item';
 import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 import myTab from '@/components/xyz-tab';
 import util from '@/common/util.js';
@@ -97,8 +97,6 @@ export default {
 	},
 	components: {
 		uniSearchBar,
-		uniSwipeAction,
-		uniSwipeActionItem,
 		uniLoadMore,
 		myTab
 	},
@@ -299,6 +297,10 @@ export default {
 				}
 			});
 		},
+		cancelSearch:function(e){
+			// this.keyWord=''
+			this.search('')
+		},
 		search: function(e) {
 			this.keyWord=e
 			uni.showLoading({
@@ -310,7 +312,7 @@ export default {
 			this.isSearch = true;
 			let searchParam = this.param;
 			searchParam.page = this.page;
-			searchParam['content'] = encodeURIComponent(e.value);
+			searchParam['content'] = e?encodeURIComponent(e.value):'';
 			searchParam['flagId']=this.seledFlagId
 			this.$http.get('content/queryLike', searchParam).then(res => {
 				if (res.data.code === 200) {
