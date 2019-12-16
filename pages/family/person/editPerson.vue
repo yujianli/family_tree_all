@@ -3,70 +3,77 @@
 		<view style="position:relative">
 			<myTab :tabList="tabList" @tabSelect="tabSelect" :tabActiveIdx="tabActiveIdx" />
 		</view>
-		<view class="container" v-if="tabActiveIdx==1">
-			<view class="wrapper avatar_wrapper" style="position: relative;">
-				<image :src="eimageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum"></image>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.name}}</text>
-				<input class="input" type="text" v-model="ebaseInfo.name" placeholder-style="color:#999" :placeholder="i18n.name" />
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.mobile}}</text>
-				<input class="input" type="text" v-model="ebaseInfo.mobile" placeholder-style="color:#999" :placeholder="i18n.mobile" />
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.gender}}</text>
-				<picker @change="sexBindPickerChange" :value="idx.esex" :range=" arr.sex" range-key="value">
-					<view class="input">{{ arr.sex[idx.esex].value }}</view>
-				</picker>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.birth}}</text>
-				<picker mode="date" :value="ebaseInfo.birth !='' ? ebaseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate"
-				 @change="bindDateChange" :fields="'day'">
-					<view class="input">{{birth}}</view>
-				</picker>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.birthTime}}</text>
-				<picker @change="birthTimeBindPickerChange" :value="idx.ebirthTime" :range=" arr.birthTime" range-key="value">
-					<view class="input">{{ arr.birthTime[idx.ebirthTime].value }}</view>
-				</picker>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.nationality}}</text>
-				<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
-					<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
-				</picker>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.zodiac}}</text>
-				<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
-					<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
-				</picker>
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.birthPlace}}</text>
-				<input class="input" type="text" v-model="ebaseInfo.birthPlace" placeholder-style="color:#999" :placeholder="i18n.birthPlace" />
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.placeResidence}}</text>
-				<input class="input" type="text" v-model="ebaseInfo.updateBy" placeholder-style="color:#999" :placeholder="i18n.placeResidence" />
-			</view>
-			<view class="wrapper">
-				<text class="inner_title">{{i18n.career}}</text>
-				<input class="input" type="text" v-model="ebaseInfo.createBy" placeholder-style="color:#999" :placeholder="i18n.career" />
-			</view>
-			<view class="mul_wrapper">
-				<text class="inner_title">{{i18n.brief}}</text>
-				<textarea class="mul_input" v-model="ebaseInfo.brief" placeholder-style="color:#999" :placeholder="i18n.brief" />
+		<view class="container">
+			<view class="wrapper avatar_wrapper" style="position: relative;" >
+				<view v-if="tabActiveIdx==0">
+					<image :src="cimageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('add')"></image>
 				</view>
-	</view>
-	<view class="container" v-else-if="tabActiveIdx===0">
-		<view class="wrapper avatar_wrapper" style="position: relative;">
-				<image :src="cimageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum"></image>
+				<view v-else>
+					<image :src="eimageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum('edit')"></image>
 				</view>
+			</view>
+			<view v-if="tabActiveIdx==1">
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.name}}</text>
+					<input class="input" type="text" v-model="ebaseInfo.name" placeholder-style="color:#999" :placeholder="i18n.name" />
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.mobile}}</text>
+					<input class="input" type="text" v-model="ebaseInfo.mobile" placeholder-style="color:#999" :placeholder="i18n.mobile" />
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.gender}}</text>
+					<picker @change="sexBindPickerChange" :value="idx.esex" :range=" arr.sex" range-key="value">
+						<view class="input">{{ arr.sex[idx.esex].value }}</view>
+					</picker>
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.birth}}</text>
+					<picker mode="date" :value="ebaseInfo.birth !='' ? ebaseInfo.birth : defaultText.ctrl" :start="startDate" :end="endDate"
+					 @change="bindDateChange" :fields="'day'">
+						<view class="input">{{birth}}</view>
+					</picker>
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.birthTime}}</text>
+					<picker @change="birthTimeBindPickerChange" :value="idx.ebirthTime" :range=" arr.birthTime" range-key="value">
+						<view class="input">{{ arr.birthTime[idx.ebirthTime].value }}</view>
+					</picker>
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.nationality}}</text>
+					<picker @change="nationalityBindPickerChange" :value="idx.nationality" :range=" arr.nationality" range-key="value">
+						<view class="input">{{ arr.nationality[idx.nationality].value }}</view>
+					</picker>
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.zodiac}}</text>
+					<picker @change="zodiacBindPickerChange" :value="idx.zodiac" :range=" arr.zodiac" range-key="value">
+						<view class="input">{{ arr.zodiac[idx.zodiac].value }}</view>
+					</picker>
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.birthPlace}}</text>
+					<input class="input" type="text" v-model="ebaseInfo.birthPlace" placeholder-style="color:#999" :placeholder="i18n.birthPlace" />
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.placeResidence}}</text>
+					<input class="input" type="text" v-model="ebaseInfo.updateBy" placeholder-style="color:#999" :placeholder="i18n.placeResidence" />
+				</view>
+				<view class="wrapper">
+					<text class="inner_title">{{i18n.career}}</text>
+					<input class="input" type="text" v-model="ebaseInfo.createBy" placeholder-style="color:#999" :placeholder="i18n.career" />
+				</view>
+				<view class="mul_wrapper">
+					<text class="inner_title">{{i18n.brief}}</text>
+					<textarea class="mul_input" v-model="ebaseInfo.brief" placeholder-style="color:#999" :placeholder="i18n.brief" />
+					</view>
+			</view>
+		
+			<view v-else-if="tabActiveIdx===0">
+				<!-- <view class="wrapper avatar_wrapper" style="position: relative;">
+					<image :src="cimageUrl" style="width: 154upx;height: 154upx;" @tap="openAlbum"></image>
+				</view> -->
 				<view class="wrapper">
 					<text class="inner_title">{{i18n.name}}</text>
 					<input class="input" type="text" v-model="cbaseInfo.name" placeholder-style="color:#999" :placeholder="i18n.name" />
@@ -109,7 +116,8 @@
 					<text class="inner_title">{{i18n.rank}}</text>
 					<input class="input" type="text" v-model="cbaseInfo.ranking" placeholder-style="color:#999" :placeholder="i18n.rank" />
 				</view>
-	</view>
+			</view>
+		</view>	
 	</view>
 </template>
 
@@ -189,7 +197,9 @@
 				defaultAvatar:'../../../static/images/avatar.png',
 				isFather: null,
 				isMother: null,
-				isSpouse: null
+				isSpouse: null,
+				suffixUrl: '&style=image/resize,m_fill,w_77,h_77',
+				imgObj:{}
 			}
 		},
 		components:{avatar,myTab},
@@ -201,15 +211,21 @@
 				return this.$t('defaultText')
 			},
 			cimageUrl:function(){
-				if(this.cbaseInfo.headUrl){
-					return this.$common.picPrefix()+this.cbaseInfo.headUrl
-				} else {
-					return this.defaultAvatar
-				}
+					console.log(1)
+					if(this.cbaseInfo.headUrl){
+						let url=this.$common.picPrefix()+this.cbaseInfo.headUrl+this.suffixUrl
+						console.log(url)
+						return url
+					} else {
+						return this.defaultAvatar
+					}
 			},
 			eimageUrl:function(){
+				console.log(2)
 				if(this.ebaseInfo.headUrl){
-					return this.$common.picPrefix()+this.ebaseInfo.headUrl
+					let url=this.$common.picPrefix()+this.ebaseInfo.headUrl+this.suffixUrl
+					console.log(url)
+					return url
 				} else {
 					return this.defaultAvatar
 				}
@@ -238,6 +254,13 @@
 		methods: {
 			tabSelect(idx) {
 				this.tabActiveIdx = idx;
+				// if(this.tabActiveIdx===0 && this.imgObj.create){
+				// 	this.cbaseInfo.headUrl=this.imgObj.create
+				// }else{
+				// 	if(this.imgObj.edit){
+				// 		this.ebaseInfo.headUrl=this.imgObj.edit
+				// 	}
+				// }
 			},
 			loadData: function(){
 				this.$http.post('familyUser/detilFamilyUser', {
@@ -350,7 +373,7 @@
 				this.url = rsp.path; //更新头像方式一
 				
 			},
-			openAlbum:function(){
+			openAlbum:function(type){
 				let url = this.$common.uploadUrl(); 
 				let self = this;
 				uni.chooseImage({
@@ -378,10 +401,14 @@
 								}
 							})
 						}).then((res)=>{
-							if(this.tabActiveIdx===0){
+							if(type==='add'){
+								// self.imgObj.create=res
 								self.cbaseInfo.headUrl=res
+								// console.log(self.cbaseInfo)
 							}else{
+								// self.imgObj.edit=res
 								self.ebaseInfo.headUrl=res
+								// console.log(self.ebaseInfo)
 							}
 							// console.log(res)
 						})
